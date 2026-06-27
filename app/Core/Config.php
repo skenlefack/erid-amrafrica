@@ -21,7 +21,11 @@ final class Config
                     continue;
                 }
                 [$k, $v] = explode('=', $line, 2);
-                $env[trim($k)] = trim($v);
+                $v = trim($v);
+                if (strlen($v) >= 2 && $v[0] === '"' && $v[-1] === '"') {
+                    $v = substr($v, 1, -1);
+                }
+                $env[trim($k)] = $v;
             }
         }
 

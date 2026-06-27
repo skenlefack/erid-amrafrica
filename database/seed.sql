@@ -2,6 +2,7 @@
 --  ERID-AMRAfrica — Données de démonstration / Seed data
 --  Lancer APRÈS schema.sql.  Run AFTER schema.sql.
 -- =====================================================================
+SET NAMES utf8mb4;
 
 -- Compte super-admin de démonstration
 -- Mot de passe / password : "ChangeMe!2026"  (hash bcrypt — à régénérer en prod)

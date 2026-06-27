@@ -18,14 +18,19 @@
 # 1. Configuration
 cp .env.example .env          # puis éditez les identifiants DB
 
-# 2. Base de données
+# 2. Base de données (IMPORTANT : forcer UTF-8 à l'import)
 mysql -u root -p -e "CREATE DATABASE erid_amrafrica CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -u root -p erid_amrafrica < database/schema.sql
-mysql -u root -p erid_amrafrica < database/seed.sql
+mysql --default-character-set=utf8mb4 -u root -p erid_amrafrica < database/schema.sql
+mysql --default-character-set=utf8mb4 -u root -p erid_amrafrica < database/seed.sql
 
 # 3. Lancement (développement)
 php -S localhost:8080 -t public
 ```
+
+> **⚠ Utilisateurs Windows :** n'importez **jamais** les fichiers SQL depuis
+> `cmd.exe` en page de code OEM (CP850/CP437) — les accents seront corrompus.
+> Utilisez **toujours** l'option `--default-character-set=utf8mb4` ou un client
+> graphique configuré en UTF-8 (HeidiSQL, DBeaver, phpMyAdmin).
 
 Ouvrez **http://localhost:8080** (site public) et **http://localhost:8080/admin/login** (console).
 
@@ -45,10 +50,14 @@ réécriture d'URL et bloque l'accès à `.env`, `.sql`, `.md`.
 ```bash
 cp .env.example .env          # then edit DB credentials
 mysql -u root -p -e "CREATE DATABASE erid_amrafrica CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -u root -p erid_amrafrica < database/schema.sql
-mysql -u root -p erid_amrafrica < database/seed.sql
+mysql --default-character-set=utf8mb4 -u root -p erid_amrafrica < database/schema.sql
+mysql --default-character-set=utf8mb4 -u root -p erid_amrafrica < database/seed.sql
 php -S localhost:8080 -t public
 ```
+
+> **Warning (Windows):** never import SQL files from `cmd.exe` under OEM code
+> page (CP850/CP437) — accented characters will be corrupted. Always use
+> `--default-character-set=utf8mb4` or a UTF-8 aware client (HeidiSQL, DBeaver).
 
 Demo login: `admin@erid-amrafrica.org` / `ChangeMe!2026`. In production, point the
 web root at `public/` only and change all credentials.
@@ -111,6 +120,27 @@ erid-amrafrica/
 - **Tunnel de conversion** — Media Engine (haut de tunnel) → interactivité →
   CTA → `leads` (CRM) → contrat. Chaque lead porte une `est_value_usd` pour
   suivre le pipeline depuis le tableau de bord.
+
+---
+
+## Réparation UTF-8 (données corrompues)
+
+Si les accents apparaissent cassés (ex : "├®pid├®miologie" au lieu de
+"épidémiologie"), les données ont été importées sous une mauvaise page de code.
+La seule réparation fiable est de recréer la base :
+
+```bash
+# 1. Supprimer et recréer la base
+mysql -u root -p -e "DROP DATABASE erid_amrafrica;"
+mysql -u root -p -e "CREATE DATABASE erid_amrafrica CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# 2. Réimporter avec le charset forcé
+mysql --default-character-set=utf8mb4 -u root -p erid_amrafrica < database/schema.sql
+mysql --default-character-set=utf8mb4 -u root -p erid_amrafrica < database/seed.sql
+```
+
+> Sur Infomaniak ou tout hébergement distant, adaptez l'hôte, le user et le nom
+> de la base selon votre `.env`.
 
 ---
 
