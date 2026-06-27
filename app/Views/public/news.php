@@ -7,6 +7,7 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
 ?>
 <section class="section">
   <div class="container">
+    <span class="eyebrow"><?= $e(Lang::t('hero_eyebrow')) ?></span>
     <h1 class="page-title"><?= $e(Lang::t('news_hub')) ?></h1>
     <div class="news-channels">
       <a href="/news" class="channel <?= !$activeCat ? 'on' : '' ?>"><?= $e(Lang::t('all')) ?></a>
@@ -16,16 +17,22 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
            style="--accent:<?= $e($c['accent_color']) ?>"><?= $e($pick($c, 'name')) ?></a>
       <?php endforeach; ?>
     </div>
+    <?php if ($articles): ?>
     <div class="grid-2">
       <?php foreach ($articles as $a): ?>
         <article class="card news-card" style="--accent:<?= $e($a['accent_color']) ?>">
           <span class="tag"><?= $e($pick($a, 'cat')) ?></span>
           <h3><a href="/news/<?= $e($a['slug']) ?>"><?= $e($pick($a, 'title')) ?></a></h3>
           <p><?= $e($pick($a, 'excerpt')) ?></p>
-          <small class="muted"><?= $e($a['published_at']) ?> · <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></small>
+          <small class="muted"><?= $e($a['published_at']) ?> &middot; <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></small>
         </article>
       <?php endforeach; ?>
-      <?php if (!$articles): ?><p class="muted"><?= $e(Lang::t('no_content')) ?></p><?php endif; ?>
     </div>
+    <?php else: ?>
+    <div class="empty-state">
+        <div class="empty-icon">&#128240;</div>
+        <p><?= $e(Lang::t('no_content')) ?></p>
+    </div>
+    <?php endif; ?>
   </div>
 </section>
