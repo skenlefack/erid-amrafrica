@@ -1,0 +1,11 @@
+# Routage : toutes les requêtes vers index.php (sauf fichiers réels)
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# Sécurité
+Options -Indexes
+<FilesMatch "\.(env|sql|md)$">
+    Require all denied
+</FilesMatch>
