@@ -11,23 +11,28 @@ $setting = function (string $key) use ($settings, $lang) {
 ?>
 <section class="hero">
     <div class="container">
-        <span class="eyebrow"><?= $e(Lang::t('hero_eyebrow')) ?></span>
-        <h1><?= $e($setting('site_name') ?: 'ERID-AMRAfrica') ?></h1>
-        <p class="lead"><?= $e($setting('tagline')) ?></p>
-        <div class="hero-cta">
-            <a class="btn btn-gold lg" href="/intake/analytics"><?= $e(Lang::t('hero_cta')) ?></a>
-            <a class="btn btn-outline lg" href="/services"><?= $e(Lang::t('hero_secondary')) ?></a>
+        <div class="hero-inner">
+            <div class="hero-text">
+                <span class="eyebrow"><?= $e(Lang::t('hero_eyebrow')) ?></span>
+                <h1><?= $e($setting('site_name') ?: 'ERID-AMRAfrica') ?></h1>
+                <p class="lead"><?= $e($setting('tagline')) ?></p>
+                <div class="hero-cta">
+                    <a class="btn btn-gold lg" href="/intake/analytics"><?= $e(Lang::t('hero_cta')) ?></a>
+                    <a class="btn btn-outline lg" href="/services"><?= $e(Lang::t('hero_secondary')) ?></a>
+                </div>
+            </div>
+            <div></div>
         </div>
-        <div class="kpi-strip" aria-label="<?= $e($lang === 'fr' ? 'Indicateurs clés' : 'Key indicators') ?>">
-            <div class="kpi-stat">
+        <div class="hero-kpi" aria-label="<?= $e($lang === 'fr' ? 'Indicateurs' : 'Indicators') ?>">
+            <div class="kpi-item">
                 <strong><?= number_format($kpis['signals']) ?></strong>
                 <span><?= $e(Lang::t('kpi_signals')) ?></span>
             </div>
-            <div class="kpi-stat">
+            <div class="kpi-item">
                 <strong><?= number_format($kpis['articles']) ?></strong>
                 <span><?= $e(Lang::t('kpi_articles')) ?></span>
             </div>
-            <div class="kpi-stat">
+            <div class="kpi-item">
                 <strong><?= number_format($kpis['leads']) ?></strong>
                 <span><?= $e(Lang::t('kpi_engagements')) ?></span>
             </div>
@@ -35,11 +40,13 @@ $setting = function (string $key) use ($settings, $lang) {
     </div>
 </section>
 
-<section class="section" aria-labelledby="pillars-heading">
+<section class="section section-warm" aria-labelledby="pillars-heading">
     <div class="container">
-        <span class="eyebrow"><?= $e($lang === 'fr' ? 'Nos expertises' : 'Our expertise') ?></span>
-        <h2 class="section-title" id="pillars-heading"><?= $e(Lang::t('home_services_title')) ?></h2>
-        <p class="section-sub"><?= $e(Lang::t('home_services_sub')) ?></p>
+        <div class="section-header">
+            <span class="eyebrow"><?= $e($lang === 'fr' ? 'Nos expertises' : 'Our expertise') ?></span>
+            <h2 class="section-title" id="pillars-heading"><?= $e(Lang::t('home_services_title')) ?></h2>
+            <p class="section-sub"><?= $e(Lang::t('home_services_sub')) ?></p>
+        </div>
         <div class="grid-3">
             <?php foreach ($services as $s): ?>
             <article class="card pillar pillar-<?= $e($s['pillar']) ?>">
@@ -73,10 +80,12 @@ $setting = function (string $key) use ($settings, $lang) {
     </div>
 </div>
 
-<section class="section section-alt" aria-labelledby="news-heading">
+<section class="section" aria-labelledby="news-heading">
     <div class="container">
-        <span class="eyebrow"><?= $e($lang === 'fr' ? 'Veille stratégique' : 'Strategic intelligence') ?></span>
-        <h2 class="section-title" id="news-heading"><?= $e(Lang::t('home_news_title')) ?></h2>
+        <div class="section-header">
+            <span class="eyebrow"><?= $e($lang === 'fr' ? 'Veille stratégique' : 'Strategic intelligence') ?></span>
+            <h2 class="section-title" id="news-heading"><?= $e(Lang::t('home_news_title')) ?></h2>
+        </div>
         <div class="news-channels">
             <?php foreach ($categories as $c): ?>
                 <a href="/news?cat=<?= $e($c['slug']) ?>" class="channel" style="--accent:<?= $e($c['accent_color']) ?>">
@@ -103,9 +112,10 @@ $setting = function (string $key) use ($settings, $lang) {
     </div>
 </section>
 
-<section class="section cta-band" aria-labelledby="cta-heading">
+<section class="section section-navy" aria-labelledby="cta-heading">
     <div class="container cta-inner">
         <div>
+            <span class="eyebrow"><?= $e($lang === 'fr' ? 'Partenariat' : 'Partnership') ?></span>
             <h2 id="cta-heading"><?= $e(Lang::t('cta_band_title')) ?></h2>
             <p><?= $e(Lang::t('cta_band_sub')) ?></p>
         </div>

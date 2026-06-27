@@ -47,8 +47,8 @@ $uri = strtok($_SERVER['REQUEST_URI'] ?? '', '?');
 <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
         <div>
-            <div class="brand"><span class="brand-mark">ERID</span><span class="brand-sub">-AMRAfrica</span></div>
-            <p class="muted" style="margin-top:var(--sp-3)"><?= $e(Lang::t('footer_tagline')) ?></p>
+            <div class="brand footer-brand"><span class="brand-mark">ERID</span><span class="brand-sub">-AMRAfrica</span></div>
+            <p class="footer-desc"><?= $e(Lang::t('footer_tagline')) ?></p>
         </div>
         <div>
             <h4>One Health Intelligence</h4>
