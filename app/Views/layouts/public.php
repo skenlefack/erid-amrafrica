@@ -4,6 +4,7 @@ use App\Core\Lang;
 use App\Core\View;
 $e = fn($s) => View::e($s);
 $uri = strtok($_SERVER['REQUEST_URI'] ?? '', '?');
+$isHome = ($uri === '/' || $uri === '');
 ?>
 <!DOCTYPE html>
 <html lang="<?= $e($lang) ?>">
@@ -14,7 +15,7 @@ $uri = strtok($_SERVER['REQUEST_URI'] ?? '', '?');
     <meta name="description" content="<?= $e(Lang::t('meta_desc')) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap">
     <link rel="stylesheet" href="/assets/css/app.css">
 </head>
 <body class="public">
@@ -41,6 +42,17 @@ $uri = strtok($_SERVER['REQUEST_URI'] ?? '', '?');
         <div class="menu-overlay" id="menuOverlay"></div>
     </div>
 </header>
+
+<?php if ($isHome): ?>
+<div class="ticker" aria-label="<?= $e($lang === 'fr' ? 'Fil d\'actualité' : 'News ticker') ?>">
+    <div class="container ticker-inner">
+        <span class="ticker-label"><?= $e($lang === 'fr' ? 'Alerte' : 'Alert') ?></span>
+        <span class="ticker-text"><?= $e($lang === 'fr'
+            ? 'Surveillance active — Signaux RAM & maladies émergentes sur le continent africain'
+            : 'Active surveillance — AMR & emerging disease signals across the African continent') ?></span>
+    </div>
+</div>
+<?php endif; ?>
 
 <main><?= $content ?></main>
 

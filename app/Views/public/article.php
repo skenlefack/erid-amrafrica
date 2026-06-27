@@ -7,7 +7,7 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
 ?>
 <article class="section article-single">
   <div class="container narrow">
-    <a class="back" href="/news">← <?= $e(Lang::t('news_hub')) ?></a>
+    <a class="back" href="/news">&larr; <?= $e(Lang::t('news_hub')) ?></a>
     <h1 class="page-title"><?= $e($pick($article, 'title')) ?></h1>
     <p class="lead"><?= $e($pick($article, 'excerpt')) ?></p>
     <div class="article-body"><?= nl2br($e($pick($article, 'body') ?: $pick($article, 'excerpt'))) ?></div>
