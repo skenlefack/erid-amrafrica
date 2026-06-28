@@ -27,6 +27,11 @@ $isHome = ($uri === '/' || $uri === '');
             <span class="top-bar__date"><?= $e(date($lang === 'fr' ? 'l d F Y' : 'l, F d, Y')) ?></span>
         </div>
         <div class="top-bar__right">
+            <a class="top-bar__btn" href="/intake/analytics"><?= $e(Lang::t('nav_cta')) ?></a>
+            <span class="top-bar__sep">|</span>
+            <a class="top-bar__link" href="/admin/login"><?= $e($lang === 'fr' ? 'Connexion' : 'Login') ?></a>
+            <a class="top-bar__link top-bar__link--accent" href="/intake/analytics"><?= $e($lang === 'fr' ? 'Inscription' : 'Sign up') ?></a>
+            <span class="top-bar__sep">|</span>
             <span class="lang-switch">
                 <a href="?lang=fr" class="<?= $lang === 'fr' ? 'on' : '' ?>">FR</a>
                 <a href="?lang=en" class="<?= $lang === 'en' ? 'on' : '' ?>">EN</a>
@@ -35,7 +40,7 @@ $isHome = ($uri === '/' || $uri === '');
     </div>
 </div>
 
-<!-- HEADER -->
+<!-- HEADER — logo left + banner right -->
 <header class="site-header" role="banner">
     <div class="container header__inner">
         <button class="menu-toggle" id="menuToggle" aria-label="<?= $lang === 'fr' ? 'Menu' : 'Menu' ?>" aria-expanded="false" aria-controls="mainMenu">
@@ -45,7 +50,16 @@ $isHome = ($uri === '/' || $uri === '');
             <span class="brand-mark">ERID</span><span class="brand-sub">-AMRAfrica</span>
             <span class="brand-tagline">One Health Intelligence</span>
         </a>
-        <a class="header__cta btn btn-accent sm" href="/intake/analytics"><?= $e(Lang::t('nav_cta')) ?></a>
+        <div class="header-banner">
+            <div class="header-banner__inner">
+                <span class="header-banner__label">Ad</span>
+                <div class="header-banner__content">
+                    <strong>ERID-AMRAfrica Intelligence</strong>
+                    <span><?= $e($lang === 'fr' ? 'Abonnez-vous aux alertes RAM en temps réel' : 'Subscribe to real-time AMR alerts') ?></span>
+                </div>
+                <a class="btn btn-accent sm" href="/pricing"><?= $e(Lang::t('subscribe')) ?></a>
+            </div>
+        </div>
     </div>
 </header>
 
