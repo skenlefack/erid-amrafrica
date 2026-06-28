@@ -8,42 +8,106 @@ $setting = function (string $key) use ($settings, $lang) {
     $row = $settings[$key] ?? null;
     return $row ? ($row['value_' . $lang] ?? $row['value_fr']) : '';
 };
+$pillarColors = ['quant' => 'var(--navy)', 'qual' => 'var(--teal)', 'systems' => 'var(--gold)'];
 ?>
 
-<!-- HERO — editorial masthead -->
-<section class="hero">
-    <div class="container">
-        <div class="hero-editorial">
-            <div class="hero-text">
-                <div class="dateline"><?= $e(date($lang === 'fr' ? 'd F Y' : 'F d, Y')) ?></div>
-                <h1><?= $e($setting('site_name') ?: 'ERID-AMRAfrica') ?></h1>
-                <p class="lead"><?= $e($setting('tagline')) ?></p>
-                <div class="hero-cta">
+<!-- ========== SLIDESHOW ========== -->
+<section class="slideshow" aria-roledescription="carousel" aria-label="<?= $e($lang === 'fr' ? 'Diaporama principal' : 'Main slideshow') ?>">
+
+    <!-- Slide 1 — Mission -->
+    <div class="slide slide--active" data-slide="0" aria-roledescription="slide" aria-label="1 / 3">
+        <div class="slide__bg slide__bg--mission"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__content container">
+            <div class="slide__body">
+                <span class="slide__eyebrow"><?= $e(Lang::t('hero_eyebrow')) ?></span>
+                <h1 class="slide__title slide__title--huge"><?= $e($setting('site_name') ?: 'ERID-AMRAfrica') ?></h1>
+                <p class="slide__lead"><?= $e($setting('tagline')) ?></p>
+                <div class="slide__actions">
                     <a class="btn btn-gold lg" href="/intake/analytics"><?= $e(Lang::t('hero_cta')) ?></a>
-                    <a class="btn btn-dark lg" href="/services"><?= $e(Lang::t('hero_secondary')) ?></a>
+                    <a class="btn btn-outline lg" href="/services"><?= $e(Lang::t('hero_secondary')) ?></a>
                 </div>
             </div>
-
-            <aside class="hero-sidebar">
-                <h2><?= $e($lang === 'fr' ? 'Tableau de bord' : 'Dashboard') ?></h2>
-                <div class="kpi-editorial">
+            <div class="slide__kpis">
+                <div class="kpi-glass">
                     <strong><?= number_format($kpis['signals']) ?></strong>
                     <span><?= $e(Lang::t('kpi_signals')) ?></span>
                 </div>
-                <div class="kpi-editorial">
+                <div class="kpi-glass">
                     <strong><?= number_format($kpis['articles']) ?></strong>
                     <span><?= $e(Lang::t('kpi_articles')) ?></span>
                 </div>
-                <div class="kpi-editorial">
+                <div class="kpi-glass">
                     <strong><?= number_format($kpis['leads']) ?></strong>
                     <span><?= $e(Lang::t('kpi_engagements')) ?></span>
                 </div>
-            </aside>
+            </div>
         </div>
     </div>
+
+    <!-- Slide 2 — Expertise -->
+    <div class="slide" data-slide="1" aria-roledescription="slide" aria-label="2 / 3">
+        <div class="slide__bg slide__bg--expertise"></div>
+        <div class="slide__overlay slide__overlay--teal"></div>
+        <div class="slide__content container">
+            <div class="slide__body">
+                <span class="slide__eyebrow"><?= $e($lang === 'fr' ? 'Nos 3 piliers' : 'Our 3 pillars') ?></span>
+                <h2 class="slide__title"><?= $e(Lang::t('home_services_title')) ?></h2>
+                <p class="slide__lead"><?= $e(Lang::t('home_services_sub')) ?></p>
+                <div class="slide__actions">
+                    <a class="btn btn-gold lg" href="/services"><?= $e(Lang::t('hero_secondary')) ?></a>
+                    <a class="btn btn-outline lg" href="/pricing"><?= $e(Lang::t('nav_pricing')) ?></a>
+                </div>
+            </div>
+            <div class="slide__pillars">
+                <?php foreach ($services as $i => $s): ?>
+                <div class="pillar-mini" style="--accent:<?= $e($pillarColors[$s['pillar']] ?? 'var(--teal)') ?>">
+                    <span class="pillar-mini__tag"><?= $e(strtoupper($s['pillar'])) ?></span>
+                    <h3><?= $e($pick($s, 'title')) ?></h3>
+                    <?php if ($s['price_from_usd']): ?>
+                    <span class="pillar-mini__price"><?= $e(Lang::t('from')) ?> $<?= number_format((float)$s['price_from_usd']) ?></span>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3 — Intelligence -->
+    <div class="slide" data-slide="2" aria-roledescription="slide" aria-label="3 / 3">
+        <div class="slide__bg slide__bg--intel"></div>
+        <div class="slide__overlay slide__overlay--dark"></div>
+        <div class="slide__content container">
+            <div class="slide__body">
+                <span class="slide__eyebrow"><?= $e($lang === 'fr' ? 'Veille stratégique' : 'Strategic intelligence') ?></span>
+                <h2 class="slide__title"><?= $e(Lang::t('home_news_title')) ?></h2>
+                <p class="slide__lead"><?= $e($lang === 'fr'
+                    ? 'Surveillance RAM, spillover zoonotique, politique sanitaire et innovation — quatre canaux de veille alimentés en continu.'
+                    : 'AMR surveillance, zoonotic spillover, health policy and innovation — four continuously updated intelligence channels.') ?></p>
+                <div class="slide__actions">
+                    <a class="btn btn-gold lg" href="/news"><?= $e(Lang::t('nav_news')) ?></a>
+                    <a class="btn btn-outline lg" href="/intake/advisory"><?= $e(Lang::t('cta_band_btn')) ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="slide-controls">
+        <button class="slide-arrow slide-arrow--prev" aria-label="<?= $e($lang === 'fr' ? 'Précédent' : 'Previous') ?>">&#8592;</button>
+        <div class="slide-dots">
+            <button class="slide-dot slide-dot--active" data-goto="0" aria-label="Slide 1"></button>
+            <button class="slide-dot" data-goto="1" aria-label="Slide 2"></button>
+            <button class="slide-dot" data-goto="2" aria-label="Slide 3"></button>
+        </div>
+        <button class="slide-arrow slide-arrow--next" aria-label="<?= $e($lang === 'fr' ? 'Suivant' : 'Next') ?>">&#8594;</button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="slide-progress"><div class="slide-progress__bar"></div></div>
 </section>
 
-<!-- NEWS — editorial magazine grid -->
+<!-- ========== NEWS — editorial grid ========== -->
 <section class="section" aria-labelledby="news-heading">
     <div class="container">
         <div class="section-divider">
@@ -81,15 +145,13 @@ $setting = function (string $key) use ($settings, $lang) {
 
         <div class="news-channels" style="margin-top:var(--sp-7)">
             <?php foreach ($categories as $c): ?>
-                <a href="/news?cat=<?= $e($c['slug']) ?>" class="channel" style="--accent:<?= $e($c['accent_color']) ?>">
-                    <?= $e($pick($c, 'name')) ?>
-                </a>
+                <a href="/news?cat=<?= $e($c['slug']) ?>" class="channel"><?= $e($pick($c, 'name')) ?></a>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
 
-<!-- SERVICES — pillar blocks -->
+<!-- ========== SERVICES — full-bleed pillar blocks ========== -->
 <section class="section section-warm" aria-labelledby="pillars-heading">
     <div class="container">
         <div class="section-divider">
