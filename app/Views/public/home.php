@@ -88,20 +88,21 @@ $block3 = array_slice($allArticles, 13, 6);
     </div>
     <?php endif; ?>
 
-    <!-- BLOCK: By channel (2 col with image left) -->
+    <!-- BLOCK: Veille strategique (3 colonnes, image top + titre) -->
     <?php if ($block2): ?>
     <div class="td-block">
-        <div class="block-title"><span><?= $e($lang === 'fr' ? 'Veille stratégique' : 'Strategic intelligence') ?></span></div>
-        <?php foreach ($block2 as $a): ?>
-        <article class="td-module-horiz">
-            <a href="/news/<?= $e($a['slug']) ?>" class="td-thumb-sm" style="background-image:url('<?= $e($a['cover_image'] ?? '') ?>')"></a>
-            <div class="td-mod-right">
-                <span class="cat-badge cat-badge--sm" style="background:<?= $e($a['accent_color']) ?>"><?= $e($pick($a, 'cat')) ?></span>
+        <div class="block-title"><span><?= $e($lang === 'fr' ? 'Veille strat&eacute;gique' : 'Strategic intelligence') ?></span></div>
+        <div class="module-row module-row--3">
+            <?php foreach ($block2 as $a): ?>
+            <article class="td-module">
+                <a href="/news/<?= $e($a['slug']) ?>" class="td-thumb" style="background-image:url('<?= $e($a['cover_image'] ?? '') ?>')">
+                    <span class="cat-badge" style="background:<?= $e($a['accent_color']) ?>"><?= $e($pick($a, 'cat')) ?></span>
+                </a>
                 <h3 class="td-mod-title"><a href="/news/<?= $e($a['slug']) ?>"><?= $e($pick($a, 'title')) ?></a></h3>
                 <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> &middot; <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
-            </div>
-        </article>
-        <?php endforeach; ?>
+            </article>
+            <?php endforeach; ?>
+        </div>
     </div>
     <?php endif; ?>
 

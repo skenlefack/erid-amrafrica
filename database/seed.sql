@@ -12,10 +12,10 @@ INSERT INTO users (full_name, email, password_hash, role, locale) VALUES
 
 -- Taxonomie News Hub (4 canaux du brief)
 INSERT INTO categories (slug, name_fr, name_en, accent_color, sort_order) VALUES
-('spillover',      'Interface Spillover',     'Spillover Interface',      '#1F3A5F', 1),
-('amr_residues',   'RAM & Résidus',           'AMR & Residues',           '#0E7C7B', 2),
-('policy_trade',   'Politique & Sécurité commerciale', 'Policy & Trade Security', '#C9A227', 3),
-('tech_innovation','Tech & Innovation',       'Tech & Innovation',        '#5B8C5A', 4);
+('spillover',      'Interface Spillover',     'Spillover Interface',      '#1565C0', 1),
+('amr_residues',   'RAM & Résidus',           'AMR & Residues',           '#00897B', 2),
+('policy_trade',   'Politique & Sécurité commerciale', 'Policy & Trade Security', '#F9A825', 3),
+('tech_innovation','Tech & Innovation',       'Tech & Innovation',        '#43A047', 4);
 
 -- Services — 3 piliers (avec packaging monétisation)
 INSERT INTO services (pillar, routing_tag, title_fr, title_en, summary_fr, summary_en, price_model, price_from_usd, sort_order) VALUES
