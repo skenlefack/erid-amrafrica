@@ -15,7 +15,7 @@ $u = Auth::user();
 </head>
 <body class="admin">
 <aside class="sidebar">
-    <div class="brand brand-light"><span class="brand-mark">ERID</span><span class="brand-sub">Console</span></div>
+    <div class="brand brand-light"><img src="/assets/logo.png" alt="ERID-AMRAfrica" style="max-width:180px;height:auto;margin:0 auto;display:block"></div>
     <nav>
         <a href="/admin">📊 Tableau de bord</a>
         <a href="/admin/leads">💼 Leads / CRM</a>

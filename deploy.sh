@@ -21,7 +21,7 @@ upload_file() {
     local local_path="$1"
     local remote_path="$2"
     echo "  Uploading: ${remote_path}"
-    curl -s ${CURL_OPTS} -T "${local_path}" "${FTP_URL}/${remote_path}" 2>/dev/null
+    curl -s --ftp-ssl --ftp-create-dirs --user "${FTP_USER}:${FTP_PASS}" -T "${local_path}" "${FTP_URL}/${remote_path}" 2>/dev/null
 }
 
 echo "=== ERID-AMRAfrica Deployment ==="

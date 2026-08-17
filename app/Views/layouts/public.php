@@ -20,7 +20,7 @@ $isHome = ($uri === '/' || $uri === '');
     <?php if (!empty($ogImage)): ?><meta property="og:image" content="<?= $e($ogImage) ?>"><?php endif; ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="/assets/css/app.css">
 </head>
 <body class="public">
@@ -52,8 +52,7 @@ $isHome = ($uri === '/' || $uri === '');
             <span></span>
         </button>
         <a class="brand" href="/" aria-label="ERID-AMRAfrica">
-            <span class="brand-mark">ERID</span><span class="brand-sub">-AMRAfrica</span>
-            <span class="brand-tagline">One Health Intelligence</span>
+            <img src="/assets/logo.png" alt="ERID-AMRAfrica — One Health Intelligence Afrique" class="brand-logo">
         </a>
         <div class="header-banner">
             <div class="header-banner__inner">
@@ -86,11 +85,13 @@ $isHome = ($uri === '/' || $uri === '');
 
 <?php if ($isHome): ?>
 <div class="ticker">
-    <div class="container ticker__inner">
+    <div class="ticker__inner">
         <span class="ticker__label"><?= $e($lang === 'fr' ? 'Alerte' : 'Alert') ?></span>
-        <span class="ticker__text"><?= $e($lang === 'fr'
-            ? 'Surveillance active — Signaux RAM & maladies infectieuses émergentes sur le continent africain'
-            : 'Active surveillance — AMR & emerging infectious disease signals across the African continent') ?></span>
+        <div class="ticker__scroll">
+            <span class="ticker__text"><?= $e($lang === 'fr'
+                ? 'Surveillance active — Signaux RAM & maladies infectieuses émergentes sur le continent africain — Veille épidémiologique continue — Réseau continental One Health — Alertes en temps réel'
+                : 'Active surveillance — AMR & emerging infectious disease signals across the African continent — Continuous epidemiological monitoring — Continental One Health network — Real-time alerts') ?></span>
+        </div>
     </div>
 </div>
 <?php endif; ?>
@@ -102,7 +103,7 @@ $isHome = ($uri === '/' || $uri === '');
     <div class="footer-top">
         <div class="container footer-grid">
             <div class="footer-col">
-                <div class="brand footer-brand"><span class="brand-mark">ERID</span><span class="brand-sub">-AMRAfrica</span></div>
+                <div class="brand footer-brand"><img src="/assets/logo.png" alt="ERID-AMRAfrica" class="footer-logo"></div>
                 <p class="footer-desc"><?= $e(Lang::t('footer_tagline')) ?></p>
             </div>
             <div class="footer-col">

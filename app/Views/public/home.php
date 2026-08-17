@@ -20,28 +20,31 @@ $block2 = array_slice($allArticles, 7, 6);
 $block3 = array_slice($allArticles, 13, 6);
 ?>
 
-<!-- ===== BIG GRID HERO ===== -->
-<?php if (count($hero) >= 3): ?>
-<section class="big-grid">
-    <a href="/news/<?= $e($hero[0]['slug']) ?>" class="big-grid__main" style="background-image:url('<?= $e($hero[0]['cover_image'] ?? '') ?>')">
-        <div class="big-grid__gradient"></div>
-        <div class="big-grid__text">
-            <span class="cat-badge" style="background:<?= $e($hero[0]['accent_color']) ?>"><?= $e($pick($hero[0], 'cat')) ?></span>
-            <h2><?= $e($pick($hero[0], 'title')) ?></h2>
-            <p><?= $e($pick($hero[0], 'excerpt')) ?></p>
-        </div>
-    </a>
-    <div class="big-grid__side">
-        <?php for ($i = 1; $i <= 2; $i++): if (isset($hero[$i])): ?>
-        <a href="/news/<?= $e($hero[$i]['slug']) ?>" class="big-grid__card" style="background-image:url('<?= $e($hero[$i]['cover_image'] ?? '') ?>')">
-            <div class="big-grid__gradient"></div>
-            <div class="big-grid__text">
-                <span class="cat-badge" style="background:<?= $e($hero[$i]['accent_color']) ?>"><?= $e($pick($hero[$i], 'cat')) ?></span>
-                <h3><?= $e($pick($hero[$i], 'title')) ?></h3>
+<!-- ===== SLIDESHOW HERO (image left + text right) ===== -->
+<?php if ($hero): ?>
+<section class="hero-slideshow">
+    <div class="slideshow-track">
+        <?php foreach ($hero as $idx => $slide): ?>
+        <div class="slide <?= $idx === 0 ? 'active' : '' ?>">
+            <div class="slide__image">
+                <div class="slide__image-bg" style="background-image:url('<?= $e($slide['cover_image'] ?? '') ?>')"></div>
             </div>
-        </a>
-        <?php endif; endfor; ?>
+            <div class="slide__content">
+                <span class="cat-badge" style="background:<?= $e($slide['accent_color']) ?>"><?= $e($pick($slide, 'cat')) ?></span>
+                <h2><?= $e($pick($slide, 'title')) ?></h2>
+                <p><?= $e($pick($slide, 'excerpt')) ?></p>
+                <a class="btn btn-gold" href="/news/<?= $e($slide['slug']) ?>"><?= $e($lang === 'fr' ? 'Lire l\'article' : 'Read article') ?> &rarr;</a>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
+    <div class="slideshow-dots">
+        <?php foreach ($hero as $idx => $slide): ?>
+        <button class="dot <?= $idx === 0 ? 'active' : '' ?>" data-slide="<?= $idx ?>" aria-label="Slide <?= $idx + 1 ?>"></button>
+        <?php endforeach; ?>
+    </div>
+    <button class="slide-arrow slide-prev" aria-label="Previous">&lsaquo;</button>
+    <button class="slide-arrow slide-next" aria-label="Next">&rsaquo;</button>
 </section>
 <?php endif; ?>
 

@@ -6,7 +6,7 @@ $e = fn($s) => View::e($s);
 ?>
 <div class="login-wrap">
     <div class="login-card">
-        <div class="brand brand-light center"><span class="brand-mark">ERID</span><span class="brand-sub">Console</span></div>
+        <div class="brand brand-light center"><img src="/assets/logo.png" alt="ERID-AMRAfrica" style="max-width:220px;height:auto;margin:0 auto;display:block"></div>
         <p class="muted center">Console d'administration · Admin console</p>
         <?php if (!empty($error)): ?><div class="alert"><?= $e($error) ?></div><?php endif; ?>
         <form method="post" action="/admin/login">
