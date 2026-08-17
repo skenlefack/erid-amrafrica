@@ -15,36 +15,54 @@ $allArticles = \App\Core\Database::all(
       ORDER BY a.is_featured DESC, a.published_at DESC LIMIT 20"
 );
 $hero = array_slice($allArticles, 0, 3);
+$sidebarLatest = array_slice($allArticles, 3, 5);
 $block1 = array_slice($allArticles, 3, 4);
 $block2 = array_slice($allArticles, 7, 6);
 $block3 = array_slice($allArticles, 13, 6);
 ?>
 
-<!-- ===== SLIDESHOW HERO (image left + text right) ===== -->
+<!-- ===== HERO: Slideshow 3/4 + Sidebar latest 1/4 ===== -->
 <?php if ($hero): ?>
-<section class="hero-slideshow">
-    <div class="slideshow-track">
+<section class="hero-section container">
+  <div class="hero-grid">
+    <!-- LEFT: Slideshow 3/4 -->
+    <div class="hero-slideshow">
+      <div class="slideshow-track">
         <?php foreach ($hero as $idx => $slide): ?>
-        <div class="slide <?= $idx === 0 ? 'active' : '' ?>">
-            <div class="slide__image">
-                <div class="slide__image-bg" style="background-image:url('<?= $e($slide['cover_image'] ?? '') ?>')"></div>
-            </div>
-            <div class="slide__content">
-                <span class="cat-badge" style="background:<?= $e($slide['accent_color']) ?>"><?= $e($pick($slide, 'cat')) ?></span>
-                <h2><?= $e($pick($slide, 'title')) ?></h2>
-                <p><?= $e($pick($slide, 'excerpt')) ?></p>
-                <a class="btn btn-gold" href="/news/<?= $e($slide['slug']) ?>"><?= $e($lang === 'fr' ? 'Lire l\'article' : 'Read article') ?> &rarr;</a>
-            </div>
+        <div class="slide <?= $idx === 0 ? 'active' : '' ?>" style="background-image:url('<?= $e($slide['cover_image'] ?? '') ?>')">
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <span class="cat-badge" style="background:<?= $e($slide['accent_color']) ?>"><?= $e($pick($slide, 'cat')) ?></span>
+            <h2><?= $e($pick($slide, 'title')) ?></h2>
+            <p><?= $e($pick($slide, 'excerpt')) ?></p>
+            <a class="btn btn-gold" href="/news/<?= $e($slide['slug']) ?>"><?= $e($lang === 'fr' ? 'Lire la suite' : 'Read more') ?> &rarr;</a>
+          </div>
         </div>
         <?php endforeach; ?>
-    </div>
-    <div class="slideshow-dots">
+      </div>
+      <div class="slideshow-dots">
         <?php foreach ($hero as $idx => $slide): ?>
-        <button class="dot <?= $idx === 0 ? 'active' : '' ?>" data-slide="<?= $idx ?>" aria-label="Slide <?= $idx + 1 ?>"></button>
+        <button class="dot <?= $idx === 0 ? 'active' : '' ?>" data-slide="<?= $idx ?>"></button>
         <?php endforeach; ?>
+      </div>
+      <button class="slide-arrow slide-prev">&lsaquo;</button>
+      <button class="slide-arrow slide-next">&rsaquo;</button>
     </div>
-    <button class="slide-arrow slide-prev" aria-label="Previous">&lsaquo;</button>
-    <button class="slide-arrow slide-next" aria-label="Next">&rsaquo;</button>
+
+    <!-- RIGHT: 5 dernieres publications 1/4 -->
+    <div class="hero-sidebar">
+      <div class="hero-sidebar__head"><?= $e($lang === 'fr' ? 'Derni&egrave;res publications' : 'Latest articles') ?></div>
+      <?php foreach ($sidebarLatest as $sa): ?>
+      <a href="/news/<?= $e($sa['slug']) ?>" class="hero-sidebar__item">
+        <div class="hero-sidebar__thumb" style="background-image:url('<?= $e($sa['cover_image'] ?? '') ?>')"></div>
+        <div class="hero-sidebar__text">
+          <h4><?= $e($pick($sa, 'title')) ?></h4>
+          <span class="hero-sidebar__date"><?= $e($sa['published_at'] ? date('d M Y', strtotime($sa['published_at'])) : '') ?></span>
+        </div>
+      </a>
+      <?php endforeach; ?>
+    </div>
+  </div>
 </section>
 <?php endif; ?>
 
