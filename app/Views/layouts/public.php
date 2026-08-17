@@ -13,6 +13,11 @@ $isHome = ($uri === '/' || $uri === '');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $e($title ?? 'ERID-AMRAfrica') ?></title>
     <meta name="description" content="<?= $e(Lang::t('meta_desc')) ?>">
+    <meta property="og:title" content="<?= $e($title ?? 'ERID-AMRAfrica') ?>">
+    <meta property="og:description" content="<?= $e(Lang::t('meta_desc')) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ERID-AMRAfrica">
+    <?php if (!empty($ogImage)): ?><meta property="og:image" content="<?= $e($ogImage) ?>"><?php endif; ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap">
@@ -70,6 +75,8 @@ $isHome = ($uri === '/' || $uri === '');
             <a href="/" <?= $isHome ? 'class="active"' : '' ?>><?= $e($lang === 'fr' ? 'Accueil' : 'Home') ?></a>
             <a href="/news" <?= $uri === '/news' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_news')) ?></a>
             <a href="/services" <?= $uri === '/services' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_services')) ?></a>
+            <a href="/media" <?= $uri === '/media' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_media')) ?></a>
+            <a href="/publications" <?= $uri === '/publications' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_publications')) ?></a>
             <a href="/pricing" <?= $uri === '/pricing' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_pricing')) ?></a>
             <a href="/intake/advisory"><?= $e(Lang::t('cta_band_btn')) ?></a>
         </div>
@@ -102,6 +109,8 @@ $isHome = ($uri === '/' || $uri === '');
                 <h4><?= $e($lang === 'fr' ? 'Rubriques' : 'Sections') ?></h4>
                 <a href="/news"><?= $e(Lang::t('nav_news')) ?></a>
                 <a href="/services"><?= $e(Lang::t('nav_services')) ?></a>
+                <a href="/media"><?= $e(Lang::t('nav_media')) ?></a>
+                <a href="/publications"><?= $e(Lang::t('nav_publications')) ?></a>
                 <a href="/pricing"><?= $e(Lang::t('nav_pricing')) ?></a>
                 <a href="/intake/advisory"><?= $e(Lang::t('cta_band_btn')) ?></a>
             </div>

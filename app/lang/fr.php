@@ -34,4 +34,11 @@ return [
     'submit_request' => 'Envoyer la demande', 'intake_privacy' => 'Données chiffrées (AES-256 / TLS 1.3). Réponse sous 48 h ouvrées.',
     'success_title' => 'Demande reçue', 'success_body' => 'Notre équipe technique vous répondra sous 48 heures ouvrées pour planifier une session de cadrage.',
     'success_routed' => 'Routée vers la file :', 'back_home' => 'Retour à l\'accueil',
+    'nav_media' => 'Médiathèque', 'nav_publications' => 'Publications',
+    'prev' => 'Précédent', 'next' => 'Suivant',
+    'password_title' => 'Changer le mot de passe', 'current_password' => 'Mot de passe actuel',
+    'new_password' => 'Nouveau mot de passe', 'confirm_password' => 'Confirmer le mot de passe',
+    'password_changed' => 'Mot de passe modifié avec succès.',
+    'password_error' => 'Mot de passe actuel incorrect.',
+    'password_mismatch' => 'Les mots de passe ne correspondent pas.',
 ];

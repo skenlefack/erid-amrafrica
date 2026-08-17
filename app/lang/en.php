@@ -34,4 +34,11 @@ return [
     'submit_request' => 'Submit request', 'intake_privacy' => 'Encrypted data (AES-256 / TLS 1.3). Reply within 48 business hours.',
     'success_title' => 'Request received', 'success_body' => 'Our technical team will reach out within 48 business hours to schedule a scoping session.',
     'success_routed' => 'Routed to queue:', 'back_home' => 'Back to home',
+    'nav_media' => 'Media Gallery', 'nav_publications' => 'Publications',
+    'prev' => 'Previous', 'next' => 'Next',
+    'password_title' => 'Change password', 'current_password' => 'Current password',
+    'new_password' => 'New password', 'confirm_password' => 'Confirm password',
+    'password_changed' => 'Password changed successfully.',
+    'password_error' => 'Current password is incorrect.',
+    'password_mismatch' => 'Passwords do not match.',
 ];

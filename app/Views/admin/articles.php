@@ -5,7 +5,7 @@ use App\Core\View; $e = fn($s) => View::e($s);
 <div class="toolbar"><a class="btn btn-gold" href="/admin/articles/new">+ Nouvel article</a></div>
 <div class="panel">
   <table class="data-table">
-    <thead><tr><th>Titre (FR)</th><th>Canal</th><th>Statut</th><th>Vues</th><th>Date</th></tr></thead>
+    <thead><tr><th>Titre (FR)</th><th>Canal</th><th>Statut</th><th>Vues</th><th>Date</th><th></th></tr></thead>
     <tbody>
     <?php foreach ($articles as $a): ?>
       <tr>
@@ -14,9 +14,10 @@ use App\Core\View; $e = fn($s) => View::e($s);
         <td><span class="status status-<?= $e($a['status']) ?>"><?= $e($a['status']) ?></span></td>
         <td><?= (int)$a['views'] ?></td>
         <td><?= $e(substr((string)($a['published_at'] ?? $a['created_at']), 0, 10)) ?></td>
+        <td><a href="/admin/articles/<?= (int)$a['id'] ?>/edit" class="btn btn-ghost sm">&Eacute;diter</a></td>
       </tr>
     <?php endforeach; ?>
-    <?php if (!$articles): ?><tr><td colspan="5" class="muted">Aucun article.</td></tr><?php endif; ?>
+    <?php if (!$articles): ?><tr><td colspan="6" class="muted">Aucun article.</td></tr><?php endif; ?>
     </tbody>
   </table>
 </div>

@@ -48,6 +48,17 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
         <?php else: ?>
         <div class="empty-state"><p><?= $e(Lang::t('no_content')) ?></p></div>
         <?php endif; ?>
+
+        <?php if (($totalPages ?? 1) > 1): ?>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:30px">
+          <?php $qs = fn($p) => '/news?' . http_build_query(array_filter(['cat' => $activeCat, 'page' => $p])); ?>
+          <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="<?= $qs($page - 1) ?>">&laquo; <?= $e(Lang::t('prev')) ?></a><?php endif; ?>
+          <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="<?= $qs($i) ?>"><?= $i ?></a>
+          <?php endfor; ?>
+          <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="<?= $qs($page + 1) ?>"><?= $e(Lang::t('next')) ?> &raquo;</a><?php endif; ?>
+        </div>
+        <?php endif; ?>
     </div>
 </div>
 <aside class="col-side">

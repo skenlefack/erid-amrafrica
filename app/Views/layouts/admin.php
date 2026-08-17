@@ -21,11 +21,18 @@ $u = Auth::user();
         <a href="/admin/leads">💼 Leads / CRM</a>
         <a href="/admin/rumours">📡 Surveillance</a>
         <a href="/admin/articles">📰 Articles</a>
+        <a href="/admin/media">🎬 Médiathèque</a>
+        <a href="/admin/publications">📚 Publications</a>
+        <a href="/admin/pages">📄 Pages</a>
+        <a href="/admin/subscribers">👥 Abonnés</a>
+        <a href="/admin/email-templates">✉️ Templates email</a>
+        <a href="/admin/audit">🔍 Journal d'audit</a>
         <a href="/admin/services">🧩 Services & Tarifs</a>
         <a href="/admin/settings">⚙️ Paramètres</a>
     </nav>
     <div class="sidebar-foot">
         <small><?= $e($u['name'] ?? '') ?> · <?= $e($u['role'] ?? '') ?></small>
+        <a class="link" href="/admin/password" style="display:block;margin-bottom:4px;font-size:.8rem">🔑 Mot de passe</a>
         <a class="logout" href="/admin/logout">Déconnexion</a>
     </div>
 </aside>

@@ -42,10 +42,12 @@ final class ContentController extends Controller
         $title = $this->input('title_fr', 'Sans titre');
         $slug  = $this->slugify($title) . '-' . substr(bin2hex(random_bytes(3)), 0, 5);
 
+        $cover = $this->uploadCover();
+
         $id = Database::exec(
             'INSERT INTO articles
-                (category_id, author_id, slug, title_fr, title_en, excerpt_fr, excerpt_en, body_fr, body_en, status, is_featured, published_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                (category_id, author_id, slug, title_fr, title_en, excerpt_fr, excerpt_en, body_fr, body_en, cover_image, status, is_featured, published_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 (int) $this->input('category_id', '1'),
                 Auth::user()['id'],
@@ -56,12 +58,73 @@ final class ContentController extends Controller
                 $this->input('excerpt_en'),
                 $this->input('body_fr'),
                 $this->input('body_en'),
+                $cover,
                 $this->input('status', 'draft'),
                 (int) ($this->input('is_featured') ? 1 : 0),
                 $this->input('status') === 'published' ? date('Y-m-d H:i:s') : null,
             ]
         );
         Audit::log('create', 'article', (string) $id);
+        $this->redirect('/admin/articles');
+    }
+
+    public function editArticle(string $id): void
+    {
+        Auth::require(['superadmin', 'editor']);
+        $article = Database::one('SELECT * FROM articles WHERE id = ?', [(int) $id]);
+        if (!$article) {
+            http_response_code(404);
+            return;
+        }
+        $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
+        $this->view('admin/article_form', [
+            'title'      => 'Éditer l\'article',
+            'article'    => $article,
+            'categories' => $categories,
+        ], 'admin');
+    }
+
+    public function updateArticle(string $id): void
+    {
+        Auth::require(['superadmin', 'editor']);
+        Csrf::verify();
+
+        $cover = $this->uploadCover();
+        $article = Database::one('SELECT cover_image FROM articles WHERE id = ?', [(int) $id]);
+        if (!$cover && $article) {
+            $cover = $article['cover_image'];
+        }
+
+        Database::exec(
+            'UPDATE articles SET category_id=?, title_fr=?, title_en=?, excerpt_fr=?, excerpt_en=?,
+                    body_fr=?, body_en=?, cover_image=?, status=?, is_featured=?,
+                    published_at = CASE WHEN ? = "published" AND published_at IS NULL THEN NOW() ELSE published_at END
+             WHERE id=?',
+            [
+                (int) $this->input('category_id', '1'),
+                $this->input('title_fr', 'Sans titre'),
+                $this->input('title_en', ''),
+                $this->input('excerpt_fr'),
+                $this->input('excerpt_en'),
+                $this->input('body_fr'),
+                $this->input('body_en'),
+                $cover,
+                $this->input('status', 'draft'),
+                (int) ($this->input('is_featured') ? 1 : 0),
+                $this->input('status', 'draft'),
+                (int) $id,
+            ]
+        );
+        Audit::log('update', 'article', $id);
+        $this->redirect('/admin/articles');
+    }
+
+    public function deleteArticle(string $id): void
+    {
+        Auth::require(['superadmin', 'editor']);
+        Csrf::verify();
+        Database::exec("UPDATE articles SET status = 'archived' WHERE id = ?", [(int) $id]);
+        Audit::log('delete', 'article', $id);
         $this->redirect('/admin/articles');
     }
 
@@ -115,6 +178,36 @@ final class ContentController extends Controller
         }
         Audit::log('update', 'settings');
         $this->redirect('/admin/settings');
+    }
+
+    private function uploadCover(): ?string
+    {
+        if (empty($_FILES['cover_image']['tmp_name'])) {
+            return null;
+        }
+        $file = $_FILES['cover_image'];
+        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        if (!in_array($mime, $allowed, true) || $file['size'] > 5 * 1024 * 1024) {
+            return null;
+        }
+
+        $ext = match ($mime) {
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp',
+            default      => 'jpg',
+        };
+        $dir = APP_ROOT . '/public/uploads/articles';
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+        $filename = 'article-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $ext;
+        move_uploaded_file($file['tmp_name'], $dir . '/' . $filename);
+        return '/uploads/articles/' . $filename;
     }
 
     private function slugify(string $s): string

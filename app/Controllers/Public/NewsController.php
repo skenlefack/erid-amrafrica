@@ -11,9 +11,12 @@ use App\Core\Database;
  */
 final class NewsController extends Controller
 {
+    private const PER_PAGE = 12;
+
     public function index(): void
     {
         $cat = $this->input('cat');
+        $page = max(1, (int) ($this->input('page') ?: 1));
         $params = [];
         $where = "a.status = 'published'";
         if ($cat) {
@@ -21,11 +24,19 @@ final class NewsController extends Controller
             $params[] = $cat;
         }
 
+        $total = (int) Database::one(
+            "SELECT COUNT(*) AS c FROM articles a JOIN categories c ON c.id = a.category_id WHERE {$where}",
+            $params
+        )['c'];
+        $totalPages = max(1, (int) ceil($total / self::PER_PAGE));
+        $offset = ($page - 1) * self::PER_PAGE;
+
         $articles = Database::all(
             "SELECT a.*, c.slug AS cat_slug, c.name_fr AS cat_fr, c.name_en AS cat_en, c.accent_color
                FROM articles a JOIN categories c ON c.id = a.category_id
               WHERE {$where}
-              ORDER BY a.published_at DESC",
+              ORDER BY a.published_at DESC
+              LIMIT " . self::PER_PAGE . " OFFSET {$offset}",
             $params
         );
 
@@ -36,6 +47,8 @@ final class NewsController extends Controller
             'articles'   => $articles,
             'categories' => $categories,
             'activeCat'  => $cat,
+            'page'       => $page,
+            'totalPages' => $totalPages,
         ], 'public');
     }
 

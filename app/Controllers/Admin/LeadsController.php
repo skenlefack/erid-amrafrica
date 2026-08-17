@@ -62,7 +62,46 @@ final class LeadsController extends Controller
     public function rumours(): void
     {
         Auth::require(['superadmin', 'analyst']);
-        $rumours = Database::all('SELECT * FROM rumours ORDER BY created_at DESC LIMIT 200');
-        $this->view('admin/rumours', ['title' => 'Surveillance — Rumeurs', 'rumours' => $rumours], 'admin');
+        $filter = $this->input('status');
+        $params = [];
+        $where  = '1=1';
+        if ($filter) {
+            $where .= ' AND triage_status = ?';
+            $params[] = $filter;
+        }
+        $rumours = Database::all("SELECT * FROM rumours WHERE {$where} ORDER BY created_at DESC LIMIT 200", $params);
+        $this->view('admin/rumours', ['title' => 'Surveillance — Rumeurs', 'rumours' => $rumours, 'filter' => $filter], 'admin');
+    }
+
+    public function rumourDetail(string $id): void
+    {
+        Auth::require(['superadmin', 'analyst']);
+        $rumour = Database::one('SELECT * FROM rumours WHERE id = ?', [(int) $id]);
+        if (!$rumour) {
+            http_response_code(404);
+            $this->view('public/404', ['title' => '404'], 'public');
+            return;
+        }
+        $analysts = Database::all("SELECT id, full_name FROM users WHERE role IN ('superadmin','analyst') AND is_active = 1 ORDER BY full_name");
+        Audit::log('read', 'rumour', $id);
+        $this->view('admin/rumour_detail', ['title' => 'Rumeur #' . $id, 'rumour' => $rumour, 'analysts' => $analysts], 'admin');
+    }
+
+    public function updateRumour(string $id): void
+    {
+        Auth::require(['superadmin', 'analyst']);
+        Csrf::verify();
+        Database::exec(
+            'UPDATE rumours SET triage_status = ?, risk_score = ?, assigned_to = ?, nlp_keywords = ? WHERE id = ?',
+            [
+                $this->input('triage_status', 'new'),
+                $this->input('risk_score') !== null && $this->input('risk_score') !== '' ? (int) $this->input('risk_score') : null,
+                $this->input('assigned_to') ?: null,
+                $this->input('nlp_keywords'),
+                (int) $id,
+            ]
+        );
+        Audit::log('update', 'rumour', $id, ['status' => $this->input('triage_status')]);
+        $this->redirect('/admin/rumours/' . $id);
     }
 }
