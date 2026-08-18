@@ -98,13 +98,41 @@ $isHome = ($uri === '/' || $uri === '');
 
 <main class="site-main"><?= $content ?></main>
 
+<!-- PRE-FOOTER CTA -->
+<div class="pre-footer">
+    <div class="container pre-footer__inner">
+        <div class="pre-footer__text">
+            <h3><?= $e($lang === 'fr' ? 'Prêt à renforcer votre capacité One Health ?' : 'Ready to strengthen your One Health capacity?') ?></h3>
+            <p><?= $e($lang === 'fr' ? 'Nos consultants sont disponibles pour accompagner votre institution.' : 'Our consultants are ready to support your institution.') ?></p>
+        </div>
+        <div class="pre-footer__actions">
+            <a class="btn btn-gold lg" href="/intake/advisory"><?= $e(Lang::t('hero_cta')) ?></a>
+            <a class="btn btn-outline lg" href="/pricing"><?= $e(Lang::t('nav_pricing')) ?></a>
+        </div>
+    </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="site-footer" role="contentinfo">
     <div class="footer-top">
         <div class="container footer-grid">
-            <div class="footer-col">
+            <div class="footer-col footer-col--brand">
                 <div class="brand footer-brand"><img src="/assets/logo.png" alt="ERID-AMRAfrica" class="footer-logo"></div>
                 <p class="footer-desc"><?= $e(Lang::t('footer_tagline')) ?></p>
+                <div class="footer-social">
+                    <a href="https://www.youtube.com/@ERID-AMRAfrica" target="_blank" rel="noopener" title="YouTube">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.5 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+                    </a>
+                    <a href="https://x.com/eridamrafrica" target="_blank" rel="noopener" title="X / Twitter">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2.25h3.51l-7.67 8.77 9.02 11.92h-7.06l-5.54-7.24-6.34 7.24H.61l8.2-9.38L.2 2.25h7.24l5.01 6.62 5.75-6.62zm-1.23 18.56h1.94L7.16 4.23H5.08l11.89 16.58z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/erid-amrafrica" target="_blank" rel="noopener" title="LinkedIn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54A1.75 1.75 0 0 0 1.77 24h20.45A1.75 1.75 0 0 0 24 22.27V1.73A1.75 1.75 0 0 0 22.22 0z"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/eridamrafrica" target="_blank" rel="noopener" title="Facebook">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.26h3.33l-.53 3.49h-2.8v8.44C19.61 23.08 24 18.09 24 12.07z"/></svg>
+                    </a>
+                </div>
             </div>
             <div class="footer-col">
                 <h4><?= $e($lang === 'fr' ? 'Rubriques' : 'Sections') ?></h4>
@@ -113,12 +141,19 @@ $isHome = ($uri === '/' || $uri === '');
                 <a href="/media"><?= $e(Lang::t('nav_media')) ?></a>
                 <a href="/publications"><?= $e(Lang::t('nav_publications')) ?></a>
                 <a href="/pricing"><?= $e(Lang::t('nav_pricing')) ?></a>
+            </div>
+            <div class="footer-col">
+                <h4><?= $e($lang === 'fr' ? 'Services' : 'Services') ?></h4>
+                <a href="/intake/quant"><?= $e($lang === 'fr' ? 'Data Science & Épidémiologie' : 'Data Science & Epidemiology') ?></a>
+                <a href="/intake/qual"><?= $e($lang === 'fr' ? 'Intelligence comportementale' : 'Behavioral Intelligence') ?></a>
+                <a href="/intake/systems"><?= $e($lang === 'fr' ? 'Simulation & Systèmes' : 'Simulation & Systems') ?></a>
                 <a href="/intake/advisory"><?= $e(Lang::t('cta_band_btn')) ?></a>
             </div>
             <div class="footer-col">
                 <h4><?= $e($lang === 'fr' ? 'Plateforme' : 'Platform') ?></h4>
                 <a href="/admin/login"><?= $e($lang === 'fr' ? 'Console admin' : 'Admin console') ?></a>
                 <a href="/intake/analytics"><?= $e(Lang::t('nav_cta')) ?></a>
+                <a href="/page/vision-mission"><?= $e($lang === 'fr' ? 'Vision & Mission' : 'Vision & Mission') ?></a>
             </div>
             <div class="footer-col">
                 <h4><?= $e(Lang::t('footer_newsletter')) ?></h4>
@@ -132,8 +167,21 @@ $isHome = ($uri === '/' || $uri === '');
             </div>
         </div>
     </div>
+    <div class="footer-mid">
+        <div class="container footer-partners">
+            <span><?= $e($lang === 'fr' ? 'Partenaires & réseaux' : 'Partners & networks') ?> :</span>
+            <span>Africa CDC</span><span>WHO AFRO</span><span>AU-IBAR</span><span>FAO</span><span>Wellcome</span><span>Institut Pasteur</span><span>KEMRI</span><span>GARDP</span>
+        </div>
+    </div>
     <div class="footer-bottom">
-        <div class="container">&copy; <?= date('Y') ?> ERID-AMRAfrica · One Health Intelligence Platform · <a href="/admin/login">Console</a></div>
+        <div class="container footer-bottom__inner">
+            <span>&copy; <?= date('Y') ?> ERID-AMRAfrica. <?= $e($lang === 'fr' ? 'Tous droits réservés.' : 'All rights reserved.') ?></span>
+            <span class="footer-bottom__links">
+                <a href="/page/vision-mission"><?= $e($lang === 'fr' ? 'À propos' : 'About') ?></a>
+                <a href="/intake/advisory"><?= $e($lang === 'fr' ? 'Contact' : 'Contact') ?></a>
+                <a href="/admin/login">Console</a>
+            </span>
+        </div>
     </div>
 </footer>
 <script src="/assets/js/app.js"></script>
