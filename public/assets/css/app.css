@@ -452,13 +452,13 @@ code{background:var(--bg-alt);padding:3px 8px;font-size:.88em;border-radius:var(
 .footer-partners__list{display:flex;gap:8px;flex-wrap:wrap}
 .footer-partners__list span{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:rgba(200,215,230,.25);padding:5px 10px;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-xs);transition:all .3s}
 .footer-partners__list span:hover{border-color:var(--gold);color:var(--gold)}
-.footer-bottom{padding:20px 0;border-top:1px solid rgba(255,255,255,.06);font-size:12px;color:rgba(200,215,230,.3)}
+.footer-bottom{padding:20px 0;border-top:1px solid rgba(255,255,255,.06);font-size:12px;color:rgba(255,255,255,.45)}
 .footer-bottom__inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .footer-bottom__links{display:flex;gap:20px}
-.footer-bottom__links a{color:rgba(200,215,230,.35);font-size:12px;padding:0;transition:color .3s}
+.footer-bottom__links a{color:rgba(255,255,255,.5);font-size:12px;padding:0;transition:color .3s}
 .footer-bottom__links a::before{display:none}
 .footer-bottom__links a:hover{color:var(--gold)}
-.footer-bottom__credit{font-style:italic;color:rgba(200,215,230,.2);font-family:var(--font-d);font-size:11px}
+.footer-bottom__logo{height:28px;width:auto;filter:brightness(0) invert(1);opacity:.4}
 
 /* ===== ADMIN ===== */
 body.admin{display:flex;background:var(--bg)}

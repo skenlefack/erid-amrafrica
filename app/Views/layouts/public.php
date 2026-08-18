@@ -185,7 +185,7 @@ $isHome = ($uri === '/' || $uri === '');
                 <a href="/intake/advisory"><?= $e($lang === 'fr' ? 'Contact' : 'Contact') ?></a>
                 <a href="/admin/login">Console</a>
             </span>
-            <span class="footer-bottom__credit"><?= $e($lang === 'fr' ? 'Plateforme One Health Intelligence pour l\'Afrique' : 'One Health Intelligence Platform for Africa') ?></span>
+            <span class="footer-bottom__brand"><img src="/assets/logo.png" alt="ERID-AMRAfrica" class="footer-bottom__logo"></span>
         </div>
     </div>
 </footer>
