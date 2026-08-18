@@ -4,7 +4,7 @@ use App\Core\View; use App\Core\Csrf;
 $e = fn($s) => View::e($s);
 $m = $item ?? null;
 ?>
-<a class="back" href="/admin/media">&larr; M&eacute;diath&egrave;que</a>
+<a class="back" href="/admin/media">← Médiathèque</a>
 <div class="panel">
   <form method="post" action="<?= $m ? '/admin/media/'.(int)$m['id'] : '/admin/media' ?>" enctype="multipart/form-data">
     <?= Csrf::field() ?>
@@ -34,12 +34,12 @@ $m = $item ?? null;
     </label>
     <label>Statut
       <select name="status">
-        <option value="published" <?= ($m && $m['status'] === 'published') ? 'selected' : '' ?>>Publi&eacute;</option>
+        <option value="published" <?= ($m && $m['status'] === 'published') ? 'selected' : '' ?>>Publié</option>
         <option value="draft" <?= ($m && $m['status'] === 'draft') ? 'selected' : '' ?>>Brouillon</option>
       </select>
     </label>
     <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
-      <button class="btn btn-gold lg" type="submit"><?= $m ? 'Mettre &agrave; jour' : 'Enregistrer' ?></button>
+      <button class="btn btn-gold lg" type="submit"><?= $m ? 'Mettre à jour' : 'Enregistrer' ?></button>
       <?php if ($m): ?>
         <a href="/admin/media/<?= (int)$m['id'] ?>/delete" class="btn btn-ghost"
            onclick="event.preventDefault();if(confirm('Supprimer ce m\u00e9dia ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t=document.createElement('input');t.type='hidden';t.name='csrf_token';t.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t);document.body.appendChild(f);f.submit();}">Supprimer</a>

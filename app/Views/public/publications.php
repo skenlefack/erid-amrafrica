@@ -29,7 +29,7 @@ $types = ['peer_reviewed'=>'Peer-reviewed','whitepaper'=>'Whitepaper','field_blo
             <h3 style="margin:0 0 6px;font-size:1.1rem"><?= $e(Lang::pick($p, 'title')) ?></h3>
             <?php if ($p['authors']): ?><p style="font-size:.85rem;color:var(--text-muted);margin:0 0 6px"><?= $e($p['authors']) ?></p><?php endif; ?>
             <?php $abstract = Lang::pick($p, 'abstract'); if ($abstract): ?>
-              <p style="font-size:.9rem;margin:0 0 10px"><?= $e(mb_substr($abstract, 0, 200)) ?>&hellip;</p>
+              <p style="font-size:.9rem;margin:0 0 10px"><?= $e(mb_substr($abstract, 0, 200)) ?>…</p>
             <?php endif; ?>
             <div style="display:flex;gap:16px;align-items:center;font-size:.85rem">
               <?php if ($p['published_at']): ?><span class="muted"><?= $e($p['published_at']) ?></span><?php endif; ?>

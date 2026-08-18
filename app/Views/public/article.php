@@ -10,11 +10,11 @@ $img = $article['cover_image'] ?? '';
 <div class="container layout-2col" style="padding-top:30px;padding-bottom:48px">
 <div class="col-main">
   <article class="article-single">
-    <a class="back" href="/news">&larr; <?= $e(Lang::t('news_hub')) ?></a>
+    <a class="back" href="/news">← <?= $e(Lang::t('news_hub')) ?></a>
 
     <span class="cat-badge" style="background:<?= $e($article['accent_color'] ?? 'var(--teal)') ?>;margin-bottom:12px"><?= $e($pick($article, 'cat') ?? '') ?></span>
     <h1 class="page-title" style="margin-bottom:10px"><?= $e($pick($article, 'title')) ?></h1>
-    <div class="td-mod-meta" style="margin-bottom:20px"><?= $e($article['published_at'] ? date('d M Y', strtotime($article['published_at'])) : '') ?> &middot; <?= (int)$article['views'] ?> <?= $e(Lang::t('views')) ?></div>
+    <div class="td-mod-meta" style="margin-bottom:20px"><?= $e($article['published_at'] ? date('d M Y', strtotime($article['published_at'])) : '') ?> · <?= (int)$article['views'] ?> <?= $e(Lang::t('views')) ?></div>
 
     <?php if ($img): ?>
     <div class="article-cover">

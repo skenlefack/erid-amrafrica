@@ -18,7 +18,7 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
 
 <!-- LEFT: Formulaire -->
 <div class="intake-main">
-    <a class="back" href="/services">&larr; <?= $e(Lang::t('nav_services')) ?></a>
+    <a class="back" href="/services">← <?= $e(Lang::t('nav_services')) ?></a>
 
     <div class="intake-header" style="border-left:5px solid <?= $e($currentColor) ?>">
         <div class="intake-header__icon" style="background:<?= $e($currentColor) ?>"><?= $pillarIcons[$pillar] ?? '📋' ?></div>
@@ -36,10 +36,10 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
         <input type="hidden" name="pillar" value="<?= $e($pillar) ?>">
 
         <div class="intake-section">
-            <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Vos coordonn&eacute;es' : 'Your details') ?></h3>
+            <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Vos coordonnées' : 'Your details') ?></h3>
             <div class="form-grid">
                 <label><?= $e(Lang::t('f_lead')) ?> *
-                    <input type="text" name="lead_name" required placeholder="<?= $e($lang === 'fr' ? 'Dr. Nom Pr&eacute;nom' : 'Dr. First Last') ?>"></label>
+                    <input type="text" name="lead_name" required placeholder="<?= $e($lang === 'fr' ? 'Dr. Nom Prénom' : 'Dr. First Last') ?>"></label>
                 <label><?= $e(Lang::t('f_org')) ?> *
                     <input type="text" name="organisation" required placeholder="<?= $e($lang === 'fr' ? 'Institution / Organisation' : 'Institution / Organization') ?>"></label>
                 <label><?= $e(Lang::t('f_email')) ?> *
@@ -54,11 +54,11 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
             <label><?= $e(Lang::t('f_project')) ?> *
                 <input type="text" name="project_title" required placeholder="<?= $e($lang === 'fr' ? 'Titre du projet ou de la mission' : 'Project or mission title') ?>"></label>
             <label><?= $e(Lang::t('f_desc')) ?> *
-                <textarea name="description" rows="5" required placeholder="<?= $e($lang === 'fr' ? 'D&eacute;crivez vos objectifs, le contexte et les r&eacute;sultats attendus...' : 'Describe your objectives, context and expected outcomes...') ?>"></textarea></label>
+                <textarea name="description" rows="5" required placeholder="<?= $e($lang === 'fr' ? 'Décrivez vos objectifs, le contexte et les résultats attendus...' : 'Describe your objectives, context and expected outcomes...') ?>"></textarea></label>
 
             <?php if ($isQuant): ?>
             <label><?= $e(Lang::t('f_dap')) ?>
-                <textarea name="dap" rows="3" placeholder="<?= $e($lang === 'fr' ? 'D&eacute;crivez votre plan d\'analyse...' : 'Describe your analysis plan...') ?>"></textarea></label>
+                <textarea name="dap" rows="3" placeholder="<?= $e($lang === 'fr' ? 'Décrivez votre plan d\'analyse...' : 'Describe your analysis plan...') ?>"></textarea></label>
             <?php endif; ?>
 
             <?php if ($isSystems): ?>
@@ -92,7 +92,7 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
     <!-- Service actuel -->
     <?php if ($service): ?>
     <div class="widget">
-        <div class="widget-title" style="background:<?= $e($currentColor) ?>"><span><?= $e($lang === 'fr' ? 'Service s&eacute;lectionn&eacute;' : 'Selected service') ?></span></div>
+        <div class="widget-title" style="background:<?= $e($currentColor) ?>"><span><?= $e($lang === 'fr' ? 'Service sélectionné' : 'Selected service') ?></span></div>
         <div class="widget-body">
             <h4 style="font-family:var(--font-d);font-size:15px;margin:0 0 8px;color:var(--ink)"><?= $e($pick($service, 'title')) ?></h4>
             <p style="font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.5"><?= $e($pick($service, 'summary')) ?></p>
@@ -106,7 +106,7 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
 
     <!-- Processus -->
     <div class="widget">
-        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Comment &ccedil;a marche' : 'How it works') ?></span></div>
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Comment ça marche' : 'How it works') ?></span></div>
         <div class="widget-body">
             <div class="process-steps">
                 <div class="process-step">
@@ -120,21 +120,21 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
                     <span class="process-step__num" style="background:<?= $e($currentColor) ?>">2</span>
                     <div>
                         <strong><?= $e($lang === 'fr' ? 'Triage (48h)' : 'Triage (48h)') ?></strong>
-                        <p><?= $e($lang === 'fr' ? 'Routage automatique vers l\'expert ad&eacute;quat' : 'Auto-routing to the right expert') ?></p>
+                        <p><?= $e($lang === 'fr' ? 'Routage automatique vers l\'expert adéquat' : 'Auto-routing to the right expert') ?></p>
                     </div>
                 </div>
                 <div class="process-step">
                     <span class="process-step__num" style="background:<?= $e($currentColor) ?>">3</span>
                     <div>
                         <strong><?= $e($lang === 'fr' ? 'Cadrage' : 'Scoping') ?></strong>
-                        <p><?= $e($lang === 'fr' ? 'Session de cadrage pour d&eacute;finir le p&eacute;rim&egrave;tre' : 'Scoping session to define the scope') ?></p>
+                        <p><?= $e($lang === 'fr' ? 'Session de cadrage pour définir le périmètre' : 'Scoping session to define the scope') ?></p>
                     </div>
                 </div>
                 <div class="process-step">
                     <span class="process-step__num" style="background:<?= $e($currentColor) ?>">4</span>
                     <div>
                         <strong><?= $e($lang === 'fr' ? 'Proposition' : 'Proposal') ?></strong>
-                        <p><?= $e($lang === 'fr' ? 'Offre technique et financi&egrave;re d&eacute;taill&eacute;e' : 'Detailed technical and financial proposal') ?></p>
+                        <p><?= $e($lang === 'fr' ? 'Offre technique et financière détaillée' : 'Detailed technical and financial proposal') ?></p>
                     </div>
                 </div>
             </div>
@@ -169,10 +169,10 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Garanties' : 'Guarantees') ?></span></div>
         <div class="widget-body">
             <div class="guarantee-list">
-                <div class="guarantee-item">🔒 <span><?= $e($lang === 'fr' ? 'Donn&eacute;es chiffr&eacute;es AES-256' : 'AES-256 encrypted data') ?></span></div>
-                <div class="guarantee-item">⏱️ <span><?= $e($lang === 'fr' ? 'R&eacute;ponse sous 48h ouvr&eacute;es' : 'Reply within 48 business hours') ?></span></div>
+                <div class="guarantee-item">🔒 <span><?= $e($lang === 'fr' ? 'Données chiffrées AES-256' : 'AES-256 encrypted data') ?></span></div>
+                <div class="guarantee-item">⏱️ <span><?= $e($lang === 'fr' ? 'Réponse sous 48h ouvrées' : 'Reply within 48 business hours') ?></span></div>
                 <div class="guarantee-item">🌍 <span><?= $e($lang === 'fr' ? 'Expertise pan-africaine' : 'Pan-African expertise') ?></span></div>
-                <div class="guarantee-item">📋 <span><?= $e($lang === 'fr' ? 'Confidentialit&eacute; totale' : 'Full confidentiality') ?></span></div>
+                <div class="guarantee-item">📋 <span><?= $e($lang === 'fr' ? 'Confidentialité totale' : 'Full confidentiality') ?></span></div>
             </div>
         </div>
     </div>

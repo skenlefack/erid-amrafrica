@@ -14,7 +14,7 @@ use App\Core\View; $e = fn($s) => View::e($s);
         <td><span class="status status-<?= $e($a['status']) ?>"><?= $e($a['status']) ?></span></td>
         <td><?= (int)$a['views'] ?></td>
         <td><?= $e(substr((string)($a['published_at'] ?? $a['created_at']), 0, 10)) ?></td>
-        <td><a href="/admin/articles/<?= (int)$a['id'] ?>/edit" class="btn btn-ghost sm">&Eacute;diter</a></td>
+        <td><a href="/admin/articles/<?= (int)$a['id'] ?>/edit" class="btn btn-ghost sm">Éditer</a></td>
       </tr>
     <?php endforeach; ?>
     <?php if (!$articles): ?><tr><td colspan="6" class="muted">Aucun article.</td></tr><?php endif; ?>

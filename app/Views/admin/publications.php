@@ -12,7 +12,7 @@ $types = ['peer_reviewed'=>'Peer-reviewed','whitepaper'=>'Whitepaper','field_blo
 </div>
 <div class="panel">
   <table class="data-table">
-    <thead><tr><th>Titre (FR)</th><th>Type</th><th>Auteurs</th><th>T&eacute;l&eacute;ch.</th><th>Acc&egrave;s</th><th>Date</th><th></th></tr></thead>
+    <thead><tr><th>Titre (FR)</th><th>Type</th><th>Auteurs</th><th>Téléch.</th><th>Accès</th><th>Date</th><th></th></tr></thead>
     <tbody>
     <?php foreach ($publications as $p): ?>
       <tr>
@@ -22,7 +22,7 @@ $types = ['peer_reviewed'=>'Peer-reviewed','whitepaper'=>'Whitepaper','field_blo
         <td><?= (int)$p['downloads'] ?></td>
         <td><?= $p['is_gated'] ? '<span class="badge">Premium</span>' : 'Libre' ?></td>
         <td><?= $e($p['published_at'] ?? '—') ?></td>
-        <td><a href="/admin/publications/<?= (int)$p['id'] ?>/edit" class="btn btn-ghost sm">&Eacute;diter</a></td>
+        <td><a href="/admin/publications/<?= (int)$p['id'] ?>/edit" class="btn btn-ghost sm">Éditer</a></td>
       </tr>
     <?php endforeach; ?>
     <?php if (!$publications): ?><tr><td colspan="7" class="muted">Aucune publication.</td></tr><?php endif; ?>

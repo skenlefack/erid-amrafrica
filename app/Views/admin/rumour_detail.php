@@ -3,22 +3,22 @@
 use App\Core\View; use App\Core\Csrf;
 $e = fn($s) => View::e($s);
 ?>
-<a class="back" href="/admin/rumours">&larr; Surveillance</a>
+<a class="back" href="/admin/rumours">← Surveillance</a>
 <div class="two-col">
   <div class="panel">
     <h2>Signal #<?= (int)$rumour['id'] ?></h2>
     <dl class="defs">
       <dt>Canal source</dt><dd><span class="badge"><?= $e($rumour['source_channel']) ?></span></dd>
       <dt>Secteur</dt><dd><?= $e($rumour['sector']) ?></dd>
-      <dt>Pays</dt><dd><?= $e($rumour['country'] ?: '&mdash;') ?></dd>
+      <dt>Pays</dt><dd><?= $e($rumour['country'] ?: '—') ?></dd>
       <dt>Anonyme</dt><dd><?= $rumour['is_anonymous'] ? 'Oui' : 'Non' ?></dd>
       <?php if (!$rumour['is_anonymous'] && $rumour['reporter_contact']): ?>
         <dt>Contact</dt><dd><?= $e($rumour['reporter_contact']) ?></dd>
       <?php endif; ?>
-      <dt>Date de r&eacute;ception</dt><dd><?= $e($rumour['created_at']) ?></dd>
+      <dt>Date de réception</dt><dd><?= $e($rumour['created_at']) ?></dd>
       <dt>Signal brut</dt><dd style="white-space:pre-wrap"><?= $e($rumour['raw_signal']) ?></dd>
       <?php if ($rumour['nlp_keywords']): ?>
-        <dt>Mots-cl&eacute;s NLP</dt><dd><?= $e($rumour['nlp_keywords']) ?></dd>
+        <dt>Mots-clés NLP</dt><dd><?= $e($rumour['nlp_keywords']) ?></dd>
       <?php endif; ?>
     </dl>
   </div>
@@ -33,18 +33,18 @@ $e = fn($s) => View::e($s);
           <?php endforeach; ?>
         </select>
       </label>
-      <label>Score de risque (0&ndash;100)
+      <label>Score de risque (0–100)
         <input type="number" name="risk_score" min="0" max="100" value="<?= $rumour['risk_score'] !== null ? (int)$rumour['risk_score'] : '' ?>">
       </label>
-      <label>Assign&eacute; &agrave;
+      <label>Assigné à
         <select name="assigned_to">
-          <option value="">-- Non assign&eacute; --</option>
+          <option value="">-- Non assigné --</option>
           <?php foreach ($analysts as $u): ?>
             <option value="<?= (int)$u['id'] ?>" <?= (int)($rumour['assigned_to'] ?? 0) === (int)$u['id'] ? 'selected' : '' ?>><?= $e($u['full_name']) ?></option>
           <?php endforeach; ?>
         </select>
       </label>
-      <label>Mots-cl&eacute;s NLP
+      <label>Mots-clés NLP
         <textarea name="nlp_keywords" rows="2"><?= $e($rumour['nlp_keywords'] ?? '') ?></textarea>
       </label>
       <button class="btn btn-gold full" type="submit">Enregistrer le triage</button>

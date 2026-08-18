@@ -28,7 +28,7 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
                 </a>
                 <h3 class="td-mod-title td-mod-title--lg"><a href="/news/<?= $e($a['slug']) ?>"><?= $e($pick($a, 'title')) ?></a></h3>
                 <p class="td-mod-excerpt"><?= $e($pick($a, 'excerpt')) ?></p>
-                <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> &middot; <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
+                <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> · <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
             </article>
             <?php endforeach; ?>
         </div>
@@ -40,7 +40,7 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
                 <span class="cat-badge cat-badge--sm" style="background:<?= $e($a['accent_color']) ?>"><?= $e($pick($a, 'cat')) ?></span>
                 <h3 class="td-mod-title"><a href="/news/<?= $e($a['slug']) ?>"><?= $e($pick($a, 'title')) ?></a></h3>
                 <p class="td-mod-excerpt"><?= $e($pick($a, 'excerpt')) ?></p>
-                <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> &middot; <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
+                <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> · <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
             </div>
         </article>
         <?php endforeach; ?>
@@ -52,11 +52,11 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
         <?php if (($totalPages ?? 1) > 1): ?>
         <div style="display:flex;gap:8px;justify-content:center;margin-top:30px">
           <?php $qs = fn($p) => '/news?' . http_build_query(array_filter(['cat' => $activeCat, 'page' => $p])); ?>
-          <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="<?= $qs($page - 1) ?>">&laquo; <?= $e(Lang::t('prev')) ?></a><?php endif; ?>
+          <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="<?= $qs($page - 1) ?>">« <?= $e(Lang::t('prev')) ?></a><?php endif; ?>
           <?php for ($i = 1; $i <= $totalPages; $i++): ?>
             <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="<?= $qs($i) ?>"><?= $i ?></a>
           <?php endfor; ?>
-          <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="<?= $qs($page + 1) ?>"><?= $e(Lang::t('next')) ?> &raquo;</a><?php endif; ?>
+          <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="<?= $qs($page + 1) ?>"><?= $e(Lang::t('next')) ?> »</a><?php endif; ?>
         </div>
         <?php endif; ?>
     </div>

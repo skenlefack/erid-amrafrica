@@ -4,7 +4,7 @@ use App\Core\View; use App\Core\Csrf;
 $e = fn($s) => View::e($s);
 $a = $article ?? null;
 ?>
-<a class="back" href="/admin/articles">&larr; Articles</a>
+<a class="back" href="/admin/articles">← Articles</a>
 <div class="panel">
   <form method="post" action="<?= $a ? '/admin/articles/' . (int)$a['id'] : '/admin/articles' ?>" enctype="multipart/form-data">
     <?= Csrf::field() ?>
@@ -37,14 +37,14 @@ $a = $article ?? null;
       <label>Statut
         <select name="status">
           <option value="draft" <?= ($a && $a['status'] === 'draft') ? 'selected' : '' ?>>Brouillon</option>
-          <option value="published" <?= ($a && $a['status'] === 'published') ? 'selected' : '' ?>>Publi&eacute;</option>
-          <option value="archived" <?= ($a && $a['status'] === 'archived') ? 'selected' : '' ?>>Archiv&eacute;</option>
+          <option value="published" <?= ($a && $a['status'] === 'published') ? 'selected' : '' ?>>Publié</option>
+          <option value="archived" <?= ($a && $a['status'] === 'archived') ? 'selected' : '' ?>>Archivé</option>
         </select>
       </label>
-      <label class="chk"><input type="checkbox" name="is_featured" value="1" <?= ($a && $a['is_featured']) ? 'checked' : '' ?>> &Agrave; la une</label>
+      <label class="chk"><input type="checkbox" name="is_featured" value="1" <?= ($a && $a['is_featured']) ? 'checked' : '' ?>> À la une</label>
     </div>
     <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
-      <button class="btn btn-gold lg" type="submit"><?= $a ? 'Mettre &agrave; jour' : 'Enregistrer & publier' ?></button>
+      <button class="btn btn-gold lg" type="submit"><?= $a ? 'Mettre à jour' : 'Enregistrer & publier' ?></button>
       <?php if ($a): ?>
         <a href="/admin/articles/<?= (int)$a['id'] ?>/delete" class="btn btn-ghost"
            onclick="event.preventDefault();if(confirm('Archiver cet article ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t=document.createElement('input');t.type='hidden';t.name='csrf_token';t.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t);document.body.appendChild(f);f.submit();}">Supprimer</a>

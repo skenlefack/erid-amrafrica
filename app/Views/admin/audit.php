@@ -6,7 +6,7 @@ $qs = fn(array $overrides) => '?' . http_build_query(array_filter(array_merge($f
 ?>
 <div class="panel" style="margin-bottom:20px">
   <form method="get" action="/admin/audit" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
-    <label style="flex:1;min-width:140px">Entit&eacute;
+    <label style="flex:1;min-width:140px">Entité
       <select name="entity"><option value="">Toutes</option>
         <?php foreach ($entities as $ent): ?>
           <option value="<?= $e($ent) ?>" <?= ($f['entity'] ?? '') === $ent ? 'selected' : '' ?>><?= $e($ent) ?></option>
@@ -27,9 +27,9 @@ $qs = fn(array $overrides) => '?' . http_build_query(array_filter(array_merge($f
 </div>
 
 <div class="panel">
-  <p class="muted"><?= $total ?> entr&eacute;e(s) &mdash; page <?= $page ?>/<?= $totalPages ?></p>
+  <p class="muted"><?= $total ?> entrée(s) — page <?= $page ?>/<?= $totalPages ?></p>
   <table class="data-table">
-    <thead><tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Entit&eacute;</th><th>ID</th><th>IP</th><th>D&eacute;tails</th></tr></thead>
+    <thead><tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Entité</th><th>ID</th><th>IP</th><th>Détails</th></tr></thead>
     <tbody>
     <?php foreach ($logs as $l):
       $rowClass = match($l['action']) {
@@ -46,20 +46,20 @@ $qs = fn(array $overrides) => '?' . http_build_query(array_filter(array_merge($f
         <td><?= $e($l['entity']) ?></td>
         <td><?= $e($l['entity_id'] ?? '—') ?></td>
         <td><small class="muted"><?= $e($l['ip_address'] ?? '') ?></small></td>
-        <td><?php if ($l['meta_json']): ?><details><summary>voir</summary><pre style="font-size:.75rem;white-space:pre-wrap"><?= $e($l['meta_json']) ?></pre></details><?php else: ?>&mdash;<?php endif; ?></td>
+        <td><?php if ($l['meta_json']): ?><details><summary>voir</summary><pre style="font-size:.75rem;white-space:pre-wrap"><?= $e($l['meta_json']) ?></pre></details><?php else: ?>—<?php endif; ?></td>
       </tr>
     <?php endforeach; ?>
-    <?php if (!$logs): ?><tr><td colspan="7" class="muted">Aucune entr&eacute;e.</td></tr><?php endif; ?>
+    <?php if (!$logs): ?><tr><td colspan="7" class="muted">Aucune entrée.</td></tr><?php endif; ?>
     </tbody>
   </table>
 
   <?php if ($totalPages > 1): ?>
   <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
-    <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="/admin/audit<?= $qs(['page' => $page - 1]) ?>">&laquo; Pr&eacute;c.</a><?php endif; ?>
+    <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="/admin/audit<?= $qs(['page' => $page - 1]) ?>">« Préc.</a><?php endif; ?>
     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
       <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="/admin/audit<?= $qs(['page' => $i]) ?>"><?= $i ?></a>
     <?php endfor; ?>
-    <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="/admin/audit<?= $qs(['page' => $page + 1]) ?>">Suiv. &raquo;</a><?php endif; ?>
+    <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="/admin/audit<?= $qs(['page' => $page + 1]) ?>">Suiv. »</a><?php endif; ?>
   </div>
   <?php endif; ?>
 </div>

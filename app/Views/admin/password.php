@@ -11,7 +11,7 @@ $e = fn($s) => View::e($s);
     <label><?= $e(Lang::t('current_password')) ?> *
       <input type="password" name="current_password" required>
     </label>
-    <label><?= $e(Lang::t('new_password')) ?> * <small class="muted">(min. 8 caract&egrave;res)</small>
+    <label><?= $e(Lang::t('new_password')) ?> * <small class="muted">(min. 8 caractères)</small>
       <input type="password" name="new_password" required minlength="8">
     </label>
     <label><?= $e(Lang::t('confirm_password')) ?> *

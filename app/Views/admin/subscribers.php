@@ -10,7 +10,7 @@ $f = $filters;
   <div class="panel" style="flex:1;min-width:120px;text-align:center;padding:16px"><strong style="font-size:1.6rem"><?= $stats['free'] ?></strong><br><small class="muted">Free</small></div>
   <div class="panel" style="flex:1;min-width:120px;text-align:center;padding:16px"><strong style="font-size:1.6rem"><?= $stats['intel'] ?></strong><br><small class="muted">Intelligence</small></div>
   <div class="panel" style="flex:1;min-width:120px;text-align:center;padding:16px"><strong style="font-size:1.6rem"><?= $stats['enterprise'] ?></strong><br><small class="muted">Enterprise</small></div>
-  <div class="panel" style="flex:1;min-width:120px;text-align:center;padding:16px"><strong style="font-size:1.6rem"><?= $stats['total'] ? round($stats['confirmed']/$stats['total']*100) : 0 ?>%</strong><br><small class="muted">Confirm&eacute;s</small></div>
+  <div class="panel" style="flex:1;min-width:120px;text-align:center;padding:16px"><strong style="font-size:1.6rem"><?= $stats['total'] ? round($stats['confirmed']/$stats['total']*100) : 0 ?>%</strong><br><small class="muted">Confirmés</small></div>
 </div>
 
 <div class="panel" style="margin-bottom:20px">
@@ -22,7 +22,7 @@ $f = $filters;
         <?php endforeach; ?>
       </select>
     </label>
-    <label style="flex:1;min-width:140px">Confirm&eacute;
+    <label style="flex:1;min-width:140px">Confirmé
       <select name="confirmed"><option value="">Tous</option>
         <option value="1" <?= ($f['confirmed'] ?? '') === '1' ? 'selected' : '' ?>>Oui</option>
         <option value="0" <?= ($f['confirmed'] ?? '') === '0' ? 'selected' : '' ?>>Non</option>
@@ -37,7 +37,7 @@ $f = $filters;
 
 <div class="panel">
   <table class="data-table">
-    <thead><tr><th>Email</th><th>Nom</th><th>Organisation</th><th>Tier</th><th>Langue</th><th>Confirm&eacute;</th><th>Date</th><th></th></tr></thead>
+    <thead><tr><th>Email</th><th>Nom</th><th>Organisation</th><th>Tier</th><th>Langue</th><th>Confirmé</th><th>Date</th><th></th></tr></thead>
     <tbody>
     <?php foreach ($subs as $s): ?>
       <tr>
@@ -51,7 +51,7 @@ $f = $filters;
         <td><a class="link" href="/admin/subscribers/<?= (int)$s['id'] ?>">Voir</a></td>
       </tr>
     <?php endforeach; ?>
-    <?php if (!$subs): ?><tr><td colspan="8" class="muted">Aucun abonn&eacute;.</td></tr><?php endif; ?>
+    <?php if (!$subs): ?><tr><td colspan="8" class="muted">Aucun abonné.</td></tr><?php endif; ?>
     </tbody>
   </table>
 </div>

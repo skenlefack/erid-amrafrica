@@ -133,7 +133,7 @@ $isHome = ($uri === '/' || $uri === '');
         </div>
     </div>
     <div class="footer-bottom">
-        <div class="container">&copy; <?= date('Y') ?> ERID-AMRAfrica &middot; One Health Intelligence Platform &middot; <a href="/admin/login">Console</a></div>
+        <div class="container">&copy; <?= date('Y') ?> ERID-AMRAfrica · One Health Intelligence Platform · <a href="/admin/login">Console</a></div>
     </div>
 </footer>
 <script src="/assets/js/app.js"></script>

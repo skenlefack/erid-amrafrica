@@ -35,7 +35,7 @@ $block3 = array_slice($allArticles, 13, 6);
             <span class="cat-badge" style="background:<?= $e($slide['accent_color']) ?>"><?= $e($pick($slide, 'cat')) ?></span>
             <h2><?= $e($pick($slide, 'title')) ?></h2>
             <p><?= $e($pick($slide, 'excerpt')) ?></p>
-            <a class="btn btn-gold" href="/news/<?= $e($slide['slug']) ?>"><?= $e($lang === 'fr' ? 'Lire la suite' : 'Read more') ?> &rarr;</a>
+            <a class="btn btn-gold" href="/news/<?= $e($slide['slug']) ?>"><?= $e($lang === 'fr' ? 'Lire la suite' : 'Read more') ?> →</a>
           </div>
         </div>
         <?php endforeach; ?>
@@ -45,13 +45,13 @@ $block3 = array_slice($allArticles, 13, 6);
         <button class="dot <?= $idx === 0 ? 'active' : '' ?>" data-slide="<?= $idx ?>"></button>
         <?php endforeach; ?>
       </div>
-      <button class="slide-arrow slide-prev">&lsaquo;</button>
-      <button class="slide-arrow slide-next">&rsaquo;</button>
+      <button class="slide-arrow slide-prev">‹</button>
+      <button class="slide-arrow slide-next">›</button>
     </div>
 
     <!-- RIGHT: 5 dernieres publications 1/4 -->
     <div class="hero-sidebar">
-      <div class="hero-sidebar__head"><?= $e($lang === 'fr' ? 'Derni&egrave;res publications' : 'Latest articles') ?></div>
+      <div class="hero-sidebar__head"><?= $e($lang === 'fr' ? 'Dernières publications' : 'Latest articles') ?></div>
       <?php foreach ($sidebarLatest as $sa): ?>
       <a href="/news/<?= $e($sa['slug']) ?>" class="hero-sidebar__item">
         <div class="hero-sidebar__thumb" style="background-image:url('<?= $e($sa['cover_image'] ?? '') ?>')"></div>
@@ -91,7 +91,7 @@ $block3 = array_slice($allArticles, 13, 6);
     <!-- BLOCK: Veille strategique (3 colonnes, image top + titre) -->
     <?php if ($block2): ?>
     <div class="td-block">
-        <div class="block-title"><span><?= $e($lang === 'fr' ? 'Veille strat&eacute;gique' : 'Strategic intelligence') ?></span></div>
+        <div class="block-title"><span><?= $e($lang === 'fr' ? 'Veille stratégique' : 'Strategic intelligence') ?></span></div>
         <div class="module-row module-row--3">
             <?php foreach ($block2 as $a): ?>
             <article class="td-module">
@@ -99,7 +99,7 @@ $block3 = array_slice($allArticles, 13, 6);
                     <span class="cat-badge" style="background:<?= $e($a['accent_color']) ?>"><?= $e($pick($a, 'cat')) ?></span>
                 </a>
                 <h3 class="td-mod-title"><a href="/news/<?= $e($a['slug']) ?>"><?= $e($pick($a, 'title')) ?></a></h3>
-                <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> &middot; <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
+                <div class="td-mod-meta"><?= $e($a['published_at'] ? date('d M Y', strtotime($a['published_at'])) : '') ?> · <?= (int)$a['views'] ?> <?= $e(Lang::t('views')) ?></div>
             </article>
             <?php endforeach; ?>
         </div>
@@ -199,13 +199,13 @@ $catCounts = \App\Core\Database::all(
             <?php else: ?>
                 <p class="muted" style="font-size:13px;font-style:italic;margin:0"><?= $e($lang === 'fr' ? 'Interviews à venir...' : 'Coming soon...') ?></p>
             <?php endif; ?>
-            <a href="/news?cat=interviews" class="btn btn-ghost full sm" style="margin-top:10px"><?= $e($lang === 'fr' ? 'Toutes les interviews' : 'All interviews') ?> &rarr;</a>
+            <a href="/news?cat=interviews" class="btn btn-ghost full sm" style="margin-top:10px"><?= $e($lang === 'fr' ? 'Toutes les interviews' : 'All interviews') ?> →</a>
         </div>
     </div>
 
     <!-- Catégories -->
     <div class="widget">
-        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Cat&eacute;gories' : 'Categories') ?></span></div>
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Catégories' : 'Categories') ?></span></div>
         <div class="widget-body" style="padding:12px">
             <div class="cat-grid">
                 <?php foreach ($catCounts as $cc): ?>
@@ -237,7 +237,7 @@ $catCounts = \App\Core\Database::all(
     </div>
     <?php endif; ?>
 
-    <!-- R&eacute;seaux sociaux -->
+    <!-- Réseaux sociaux -->
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Suivez-nous' : 'Follow us') ?></span></div>
         <div class="widget-body">
@@ -293,14 +293,14 @@ $catCounts = \App\Core\Database::all(
                 <div class="sidebar-service__icon"><?= $pillarIcons[$s['pillar']] ?? '💡' ?></div>
                 <div class="sidebar-service__body">
                     <h4><?= $e($pick($s, 'title')) ?></h4>
-                    <p><?= $e(mb_substr($pick($s, 'summary') ?? '', 0, 80)) ?>&hellip;</p>
+                    <p><?= $e(mb_substr($pick($s, 'summary') ?? '', 0, 80)) ?>…</p>
                     <div class="sidebar-service__meta">
                         <?php if ($s['price_from_usd']): ?>
                         <span class="sidebar-service__price"><?= $e(Lang::t('from')) ?> $<?= number_format((float)$s['price_from_usd']) ?></span>
                         <?php endif; ?>
                         <span class="sidebar-service__model"><?= $e(Lang::t('model_' . $s['price_model'])) ?></span>
                     </div>
-                    <a href="/intake/<?= $e($s['pillar']) ?>" class="sidebar-service__link"><?= $e(Lang::t('request')) ?> &rarr;</a>
+                    <a href="/intake/<?= $e($s['pillar']) ?>" class="sidebar-service__link"><?= $e(Lang::t('request')) ?> →</a>
                 </div>
             </div>
             <?php endforeach; ?>
