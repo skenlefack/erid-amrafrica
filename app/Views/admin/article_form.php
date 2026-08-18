@@ -47,7 +47,7 @@ $a = $article ?? null;
       <button class="btn btn-gold lg" type="submit"><?= $a ? 'Mettre à jour' : 'Enregistrer & publier' ?></button>
       <?php if ($a): ?>
         <a href="/admin/articles/<?= (int)$a['id'] ?>/delete" class="btn btn-ghost"
-           onclick="event.preventDefault();if(confirm('Archiver cet article ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t=document.createElement('input');t.type='hidden';t.name='csrf_token';t.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t);document.body.appendChild(f);f.submit();}">Supprimer</a>
+           onclick="event.preventDefault();if(confirm('Archiver cet article ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t=document.createElement('input');t.type='hidden';t.name='_csrf';t.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t);document.body.appendChild(f);f.submit();}">Supprimer</a>
       <?php endif; ?>
     </div>
   </form>

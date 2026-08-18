@@ -84,7 +84,7 @@ final class NewsController extends Controller
         $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
 
         $this->view('public/article', [
-            'title'      => $article['title_fr'],
+            'title'      => Lang::pick($article, 'title'),
             'article'    => $article,
             'popular'    => $popular,
             'categories' => $categories,

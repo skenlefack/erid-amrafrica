@@ -1,6 +1,7 @@
 <?php
-/** @var array $items @var ?string $filter */
+/** @var array $items @var ?string $filter @var int $page @var int $totalPages */
 use App\Core\View; $e = fn($s) => View::e($s);
+$qs = fn(array $o) => '?' . http_build_query(array_filter(array_merge(['type' => $filter], $o)));
 ?>
 <div class="toolbar"><a class="btn btn-gold" href="/admin/media/new">+ Nouveau média</a></div>
 <div class="filters">
@@ -25,4 +26,13 @@ use App\Core\View; $e = fn($s) => View::e($s);
     <?php if (!$items): ?><tr><td colspan="6" class="muted">Aucun média.</td></tr><?php endif; ?>
     </tbody>
   </table>
+  <?php if ($totalPages > 1): ?>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
+    <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="/admin/media<?= $qs(['page' => $page - 1]) ?>">← Préc.</a><?php endif; ?>
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+      <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="/admin/media<?= $qs(['page' => $i]) ?>"><?= $i ?></a>
+    <?php endfor; ?>
+    <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="/admin/media<?= $qs(['page' => $page + 1]) ?>">Suiv. →</a><?php endif; ?>
+  </div>
+  <?php endif; ?>
 </div>

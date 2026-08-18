@@ -21,8 +21,12 @@ final class PublicationsController extends Controller
             $where .= ' AND pub_type = ?';
             $params[] = $filter;
         }
-        $pubs = Database::all("SELECT * FROM publications WHERE {$where} ORDER BY published_at DESC", $params);
-        $this->view('admin/publications', ['title' => 'Publications', 'publications' => $pubs, 'filter' => $filter], 'admin');
+        $page = max(1, (int) ($this->input('page') ?: 1));
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM publications WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / 20));
+        $offset = ($page - 1) * 20;
+        $pubs = Database::all("SELECT * FROM publications WHERE {$where} ORDER BY published_at DESC LIMIT 20 OFFSET {$offset}", $params);
+        $this->view('admin/publications', ['title' => 'Publications', 'publications' => $pubs, 'filter' => $filter, 'page' => $page, 'totalPages' => $totalPages], 'admin');
     }
 
     public function create(): void

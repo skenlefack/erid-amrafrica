@@ -1,5 +1,5 @@
 <?php
-/** @var array $publications @var ?string $filter */
+/** @var array $publications @var ?string $filter @var int $page @var int $totalPages */
 use App\Core\View; $e = fn($s) => View::e($s);
 $types = ['peer_reviewed'=>'Peer-reviewed','whitepaper'=>'Whitepaper','field_blog'=>'Field blog','policy_brief'=>'Policy brief'];
 ?>
@@ -28,4 +28,14 @@ $types = ['peer_reviewed'=>'Peer-reviewed','whitepaper'=>'Whitepaper','field_blo
     <?php if (!$publications): ?><tr><td colspan="7" class="muted">Aucune publication.</td></tr><?php endif; ?>
     </tbody>
   </table>
+  <?php if ($totalPages > 1): ?>
+  <?php $qs = fn(array $o) => '?' . http_build_query(array_filter(array_merge(['type' => $filter], $o))); ?>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
+    <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="/admin/publications<?= $qs(['page' => $page - 1]) ?>">← Préc.</a><?php endif; ?>
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+      <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="/admin/publications<?= $qs(['page' => $i]) ?>"><?= $i ?></a>
+    <?php endfor; ?>
+    <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="/admin/publications<?= $qs(['page' => $page + 1]) ?>">Suiv. →</a><?php endif; ?>
+  </div>
+  <?php endif; ?>
 </div>

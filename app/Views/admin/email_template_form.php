@@ -28,7 +28,7 @@ $t = $tpl ?? null;
       <button class="btn btn-gold lg" type="submit"><?= $t ? 'Mettre à jour' : 'Enregistrer' ?></button>
       <?php if ($t): ?>
         <a href="/admin/email-templates/<?= (int)$t['id'] ?>/delete" class="btn btn-ghost"
-           onclick="event.preventDefault();if(confirm('Supprimer ce template ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t2=document.createElement('input');t2.type='hidden';t2.name='csrf_token';t2.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t2);document.body.appendChild(f);f.submit();}">Supprimer</a>
+           onclick="event.preventDefault();if(confirm('Supprimer ce template ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t2=document.createElement('input');t2.type='hidden';t2.name='_csrf';t2.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t2);document.body.appendChild(f);f.submit();}">Supprimer</a>
       <?php endif; ?>
     </div>
   </form>

@@ -1,5 +1,5 @@
 <?php
-/** @var array $items @var ?string $activeType */
+/** @var array $items @var ?string $activeType @var int $page @var int $totalPages */
 use App\Core\View; use App\Core\Lang;
 $e = fn($s) => View::e($s);
 $lang = $_SESSION['locale'] ?? 'fr';
@@ -36,5 +36,15 @@ $lang = $_SESSION['locale'] ?? 'fr';
         </div>
       <?php endforeach; ?>
     </div>
+    <?php if ($totalPages > 1): ?>
+    <?php $qs = fn($p) => '/media?' . http_build_query(array_filter(['type' => $activeType, 'page' => $p])); ?>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:30px">
+      <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="<?= $qs($page - 1) ?>">← Préc.</a><?php endif; ?>
+      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="<?= $qs($i) ?>"><?= $i ?></a>
+      <?php endfor; ?>
+      <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="<?= $qs($page + 1) ?>">Suiv. →</a><?php endif; ?>
+    </div>
+    <?php endif; ?>
   <?php endif; ?>
 </div>

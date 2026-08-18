@@ -54,4 +54,14 @@ $f = $filters;
     <?php if (!$subs): ?><tr><td colspan="8" class="muted">Aucun abonné.</td></tr><?php endif; ?>
     </tbody>
   </table>
+  <?php if ($totalPages > 1): ?>
+  <?php $qs = fn(array $o) => '?' . http_build_query(array_filter(array_merge($filters, $o))); ?>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
+    <?php if ($page > 1): ?><a class="btn btn-ghost sm" href="/admin/subscribers<?= $qs(['page' => $page - 1]) ?>">← Préc.</a><?php endif; ?>
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+      <a class="btn <?= $i === $page ? 'btn-gold' : 'btn-ghost' ?> sm" href="/admin/subscribers<?= $qs(['page' => $i]) ?>"><?= $i ?></a>
+    <?php endfor; ?>
+    <?php if ($page < $totalPages): ?><a class="btn btn-ghost sm" href="/admin/subscribers<?= $qs(['page' => $page + 1]) ?>">Suiv. →</a><?php endif; ?>
+  </div>
+  <?php endif; ?>
 </div>

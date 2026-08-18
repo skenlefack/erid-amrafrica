@@ -5,6 +5,7 @@ namespace App\Controllers\Public;
 
 use App\Core\Controller;
 use App\Core\Database;
+use App\Core\Lang;
 
 final class PageController extends Controller
 {
@@ -20,7 +21,7 @@ final class PageController extends Controller
             return;
         }
         $this->view('public/page', [
-            'title' => $page['title_fr'],
+            'title' => Lang::pick($page, 'title'),
             'page'  => $page,
         ], 'public');
     }

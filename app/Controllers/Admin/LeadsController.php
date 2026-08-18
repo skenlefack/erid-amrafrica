@@ -14,19 +14,25 @@ use App\Core\Audit;
  */
 final class LeadsController extends Controller
 {
+    private const PER_PAGE = 20;
+
     public function index(): void
     {
         Auth::require(['superadmin', 'consultant', 'analyst']);
         $filter = $this->input('status');
+        $page   = max(1, (int) ($this->input('page') ?: 1));
         $params = [];
         $where  = '1=1';
         if ($filter) {
             $where .= ' AND status = ?';
             $params[] = $filter;
         }
-        $leads = Database::all("SELECT * FROM leads WHERE {$where} ORDER BY created_at DESC", $params);
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM leads WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / self::PER_PAGE));
+        $offset = ($page - 1) * self::PER_PAGE;
+        $leads = Database::all("SELECT * FROM leads WHERE {$where} ORDER BY created_at DESC LIMIT " . self::PER_PAGE . " OFFSET {$offset}", $params);
         Audit::log('read', 'lead_list');
-        $this->view('admin/leads', ['title' => 'Leads / CRM', 'leads' => $leads, 'filter' => $filter], 'admin');
+        $this->view('admin/leads', ['title' => 'Leads / CRM', 'leads' => $leads, 'filter' => $filter, 'page' => $page, 'totalPages' => $totalPages], 'admin');
     }
 
     public function show(string $id): void
@@ -69,8 +75,12 @@ final class LeadsController extends Controller
             $where .= ' AND triage_status = ?';
             $params[] = $filter;
         }
-        $rumours = Database::all("SELECT * FROM rumours WHERE {$where} ORDER BY created_at DESC LIMIT 200", $params);
-        $this->view('admin/rumours', ['title' => 'Surveillance — Rumeurs', 'rumours' => $rumours, 'filter' => $filter], 'admin');
+        $page = max(1, (int) ($this->input('page') ?: 1));
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM rumours WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / 30));
+        $offset = ($page - 1) * 30;
+        $rumours = Database::all("SELECT * FROM rumours WHERE {$where} ORDER BY created_at DESC LIMIT 30 OFFSET {$offset}", $params);
+        $this->view('admin/rumours', ['title' => 'Surveillance — Rumeurs', 'rumours' => $rumours, 'filter' => $filter, 'page' => $page, 'totalPages' => $totalPages], 'admin');
     }
 
     public function rumourDetail(string $id): void

@@ -17,11 +17,16 @@ final class PublicationsController extends Controller
             $where .= ' AND pub_type = ?';
             $params[] = $filter;
         }
-        $pubs = Database::all("SELECT * FROM publications WHERE {$where} ORDER BY published_at DESC", $params);
+        $page = max(1, (int) ($this->input('page') ?: 1));
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM publications WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / 12));
+        $offset = ($page - 1) * 12;
+        $pubs = Database::all("SELECT * FROM publications WHERE {$where} ORDER BY published_at DESC LIMIT 12 OFFSET {$offset}", $params);
         $this->view('public/publications', [
             'title'      => 'Publications — ERID-AMRAfrica',
             'publications' => $pubs,
             'activeType' => $filter,
+            'page' => $page, 'totalPages' => $totalPages,
         ], 'public');
     }
 

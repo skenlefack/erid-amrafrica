@@ -32,14 +32,14 @@ $types = ['peer_reviewed'=>'Peer-reviewed','whitepaper'=>'Whitepaper','field_blo
       <input type="file" name="file" accept="application/pdf">
     </label>
     <div class="form-grid">
-      <label>Date de publication<input type="date" name="published_at" value="<?= $e($p['published_at'] ?? '') ?>"></label>
+      <label>Date de publication<input type="date" name="published_at" value="<?= $e(substr($p['published_at'] ?? '', 0, 10)) ?>"></label>
       <label class="chk"><input type="checkbox" name="is_gated" value="1" <?= ($p && $p['is_gated']) ? 'checked' : '' ?>> Contenu premium (accès restreint)</label>
     </div>
     <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
       <button class="btn btn-gold lg" type="submit"><?= $p ? 'Mettre à jour' : 'Enregistrer' ?></button>
       <?php if ($p): ?>
         <a href="/admin/publications/<?= (int)$p['id'] ?>/delete" class="btn btn-ghost"
-           onclick="event.preventDefault();if(confirm('Supprimer ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t=document.createElement('input');t.type='hidden';t.name='csrf_token';t.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t);document.body.appendChild(f);f.submit();}">Supprimer</a>
+           onclick="event.preventDefault();if(confirm('Supprimer ?')){const f=document.createElement('form');f.method='POST';f.action=this.href;const t=document.createElement('input');t.type='hidden';t.name='_csrf';t.value='<?= $e(\App\Core\Csrf::token()) ?>';f.appendChild(t);document.body.appendChild(f);f.submit();}">Supprimer</a>
       <?php endif; ?>
     </div>
   </form>

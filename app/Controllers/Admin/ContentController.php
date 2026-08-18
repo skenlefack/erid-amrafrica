@@ -15,16 +15,35 @@ use App\Core\Audit;
  */
 final class ContentController extends Controller
 {
+    private const PER_PAGE = 20;
+
     // ---------- ARTICLES ----------
     public function articles(): void
     {
         Auth::require(['superadmin', 'editor']);
+        $filter = $this->input('status');
+        $page   = max(1, (int) ($this->input('page') ?: 1));
+        $where  = '1=1';
+        $params = [];
+        if ($filter && in_array($filter, ['draft', 'published', 'archived'], true)) {
+            $where .= ' AND a.status = ?';
+            $params[] = $filter;
+        }
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM articles a WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / self::PER_PAGE));
+        $offset = ($page - 1) * self::PER_PAGE;
         $articles = Database::all(
-            'SELECT a.*, c.slug cat_slug FROM articles a
+            "SELECT a.*, c.slug cat_slug, c.accent_color FROM articles a
                JOIN categories c ON c.id = a.category_id
-              ORDER BY a.created_at DESC'
+              WHERE {$where}
+              ORDER BY a.created_at DESC
+              LIMIT " . self::PER_PAGE . " OFFSET {$offset}",
+            $params
         );
-        $this->view('admin/articles', ['title' => 'Articles', 'articles' => $articles], 'admin');
+        $this->view('admin/articles', [
+            'title' => 'Articles', 'articles' => $articles,
+            'filter' => $filter, 'page' => $page, 'totalPages' => $totalPages, 'total' => $total,
+        ], 'admin');
     }
 
     public function createArticle(): void
@@ -98,7 +117,7 @@ final class ContentController extends Controller
         Database::exec(
             'UPDATE articles SET category_id=?, title_fr=?, title_en=?, excerpt_fr=?, excerpt_en=?,
                     body_fr=?, body_en=?, cover_image=?, status=?, is_featured=?,
-                    published_at = CASE WHEN ? = "published" AND published_at IS NULL THEN NOW() ELSE published_at END
+                    published_at = CASE WHEN ? = \'published\' AND published_at IS NULL THEN NOW() ELSE published_at END
              WHERE id=?',
             [
                 (int) $this->input('category_id', '1'),

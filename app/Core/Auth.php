@@ -15,6 +15,7 @@ final class Auth
             [$email]
         );
         if ($user && password_verify($password, $user['password_hash'])) {
+            session_regenerate_id(true);
             $_SESSION['uid']    = (int) $user['id'];
             $_SESSION['uname']  = $user['full_name'];
             $_SESSION['urole']  = $user['role'];
@@ -58,6 +59,7 @@ final class Auth
     public static function logout(): void
     {
         Audit::log('logout', 'user', (string) ($_SESSION['uid'] ?? ''));
+        session_unset();
         session_destroy();
     }
 }

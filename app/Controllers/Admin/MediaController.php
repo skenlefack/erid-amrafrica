@@ -21,8 +21,12 @@ final class MediaController extends Controller
             $where .= ' AND type = ?';
             $params[] = $filter;
         }
-        $items = Database::all("SELECT * FROM media_items WHERE {$where} ORDER BY created_at DESC", $params);
-        $this->view('admin/media', ['title' => 'Médiathèque', 'items' => $items, 'filter' => $filter], 'admin');
+        $page = max(1, (int) ($this->input('page') ?: 1));
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM media_items WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / 20));
+        $offset = ($page - 1) * 20;
+        $items = Database::all("SELECT * FROM media_items WHERE {$where} ORDER BY created_at DESC LIMIT 20 OFFSET {$offset}", $params);
+        $this->view('admin/media', ['title' => 'Médiathèque', 'items' => $items, 'filter' => $filter, 'page' => $page, 'totalPages' => $totalPages], 'admin');
     }
 
     public function create(): void

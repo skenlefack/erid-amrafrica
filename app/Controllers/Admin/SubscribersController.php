@@ -24,7 +24,11 @@ final class SubscribersController extends Controller
         if ($confirmed !== null && $confirmed !== '') { $where .= ' AND confirmed = ?'; $params[] = (int) $confirmed; }
         if ($search) { $where .= ' AND (email LIKE ? OR full_name LIKE ?)'; $params[] = "%{$search}%"; $params[] = "%{$search}%"; }
 
-        $subs = Database::all("SELECT * FROM subscribers WHERE {$where} ORDER BY created_at DESC", $params);
+        $page = max(1, (int) ($this->input('page') ?: 1));
+        $total = (int) Database::one("SELECT COUNT(*) AS c FROM subscribers WHERE {$where}", $params)['c'];
+        $totalPages = max(1, (int) ceil($total / 30));
+        $offset = ($page - 1) * 30;
+        $subs = Database::all("SELECT * FROM subscribers WHERE {$where} ORDER BY created_at DESC LIMIT 30 OFFSET {$offset}", $params);
 
         $stats = [
             'total'     => (int) Database::one('SELECT COUNT(*) c FROM subscribers')['c'],
@@ -39,6 +43,7 @@ final class SubscribersController extends Controller
             'subs'    => $subs,
             'stats'   => $stats,
             'filters' => compact('tier', 'confirmed', 'search'),
+            'page' => $page, 'totalPages' => $totalPages,
         ], 'admin');
     }
 
