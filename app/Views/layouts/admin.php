@@ -18,7 +18,7 @@ $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+3:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="/assets/css/app.css">
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body class="admin">
 <aside class="sidebar">
