@@ -297,6 +297,27 @@ code{background:#eef2ff;padding:3px 8px;font-size:.88em;border-radius:var(--radi
 .sidebar-article__text h4{font-family:var(--font-d);font-size:12.5px;font-weight:700;line-height:1.3;margin:0;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .sidebar-article:hover h4{color:var(--accent)}
 
+/* Category grid (sidebar) */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cat-card{display:flex;flex-direction:column;align-items:center;padding:14px 8px;border-radius:var(--radius-sm);background:var(--bg-alt);border-left:4px solid var(--cat-color);transition:all .3s;text-align:center}
+.cat-card:hover{background:#fff;box-shadow:var(--shadow);transform:translateY(-2px)}
+.cat-card__count{font-family:var(--font-d);font-size:24px;font-weight:900;color:var(--cat-color);line-height:1}
+.cat-card__name{font-size:11px;font-weight:600;color:var(--ink);margin-top:4px;line-height:1.2;text-transform:uppercase;letter-spacing:.3px}
+
+/* Social grid (sidebar) */
+.social-grid{display:flex;flex-direction:column;gap:6px}
+.social-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);color:#fff;font-size:12px;font-weight:700;letter-spacing:.3px;transition:all .3s}
+.social-btn:hover{transform:translateX(4px);box-shadow:var(--shadow);color:#fff}
+.social-btn--youtube{background:#FF0000}
+.social-btn--youtube:hover{background:#cc0000}
+.social-btn--x{background:#000}
+.social-btn--x:hover{background:#333}
+.social-btn--linkedin{background:#0A66C2}
+.social-btn--linkedin:hover{background:#084e96}
+.social-btn--facebook{background:#1877F2}
+.social-btn--facebook:hover{background:#1260c2}
+.social-btn svg{flex-shrink:0}
+
 .trust-list{display:flex;flex-wrap:wrap;gap:6px}
 .trust-list span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:6px 10px;border:1px solid var(--line);border-radius:20px;transition:all .3s}
 .trust-list span:hover{border-color:var(--accent);color:var(--accent);background:rgba(46,139,87,.05);transform:translateY(-2px)}

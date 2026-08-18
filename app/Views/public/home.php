@@ -152,6 +152,25 @@ $block3 = array_slice($allArticles, 13, 6);
 </div>
 
 <!-- SIDEBAR -->
+<?php
+$popularHome = \App\Core\Database::all(
+    "SELECT a.*, c.slug AS cat_slug, c.accent_color
+       FROM articles a JOIN categories c ON c.id = a.category_id
+      WHERE a.status = 'published'
+      ORDER BY a.views DESC LIMIT 5"
+);
+$interviews = \App\Core\Database::all(
+    "SELECT a.*, c.slug AS cat_slug, c.accent_color
+       FROM articles a JOIN categories c ON c.id = a.category_id
+      WHERE a.status = 'published' AND c.slug = 'interviews'
+      ORDER BY a.published_at DESC LIMIT 4"
+);
+$catCounts = \App\Core\Database::all(
+    "SELECT c.*, COUNT(a.id) AS total
+       FROM categories c LEFT JOIN articles a ON a.category_id = c.id AND a.status = 'published'
+      GROUP BY c.id ORDER BY c.sort_order"
+);
+?>
 <aside class="col-side">
     <!-- KPIs -->
     <div class="widget">
@@ -163,28 +182,43 @@ $block3 = array_slice($allArticles, 13, 6);
         </div>
     </div>
 
-    <!-- Canaux -->
+    <!-- Interviews -->
     <div class="widget">
-        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Canaux' : 'Channels') ?></span></div>
+        <div class="widget-title" style="background:#E53935"><span>Interviews</span></div>
         <div class="widget-body">
-            <?php foreach ($categories as $c): ?>
-            <a href="/news?cat=<?= $e($c['slug']) ?>" class="widget-cat" style="border-color:<?= $e($c['accent_color']) ?>">
-                <span class="cat-dot" style="background:<?= $e($c['accent_color']) ?>"></span>
-                <?= $e($pick($c, 'name')) ?>
-            </a>
-            <?php endforeach; ?>
+            <?php if ($interviews): ?>
+                <?php foreach ($interviews as $iv): ?>
+                <a href="/news/<?= $e($iv['slug']) ?>" class="sidebar-article">
+                    <div class="sidebar-article__img" style="background-image:url('<?= $e($iv['cover_image'] ?? '') ?>')"></div>
+                    <div class="sidebar-article__text">
+                        <h4><?= $e($pick($iv, 'title')) ?></h4>
+                        <span class="td-mod-meta"><?= $e($iv['published_at'] ? date('d M Y', strtotime($iv['published_at'])) : '') ?></span>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="muted" style="font-size:13px;font-style:italic;margin:0"><?= $e($lang === 'fr' ? 'Interviews à venir...' : 'Coming soon...') ?></p>
+            <?php endif; ?>
+            <a href="/news?cat=interviews" class="btn btn-ghost full sm" style="margin-top:10px"><?= $e($lang === 'fr' ? 'Toutes les interviews' : 'All interviews') ?> &rarr;</a>
         </div>
     </div>
 
-    <!-- Articles populaires -->
-    <?php
-    $popularHome = \App\Core\Database::all(
-        "SELECT a.*, c.slug AS cat_slug, c.accent_color
-           FROM articles a JOIN categories c ON c.id = a.category_id
-          WHERE a.status = 'published'
-          ORDER BY a.views DESC LIMIT 5"
-    );
-    ?>
+    <!-- Catégories -->
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Cat&eacute;gories' : 'Categories') ?></span></div>
+        <div class="widget-body" style="padding:12px">
+            <div class="cat-grid">
+                <?php foreach ($catCounts as $cc): ?>
+                <a href="/news?cat=<?= $e($cc['slug']) ?>" class="cat-card" style="--cat-color:<?= $e($cc['accent_color']) ?>">
+                    <span class="cat-card__count"><?= (int)$cc['total'] ?></span>
+                    <span class="cat-card__name"><?= $e($pick($cc, 'name')) ?></span>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Les plus lus -->
     <?php if ($popularHome): ?>
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Les plus lus' : 'Most read') ?></span></div>
@@ -202,6 +236,31 @@ $block3 = array_slice($allArticles, 13, 6);
         </div>
     </div>
     <?php endif; ?>
+
+    <!-- R&eacute;seaux sociaux -->
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Suivez-nous' : 'Follow us') ?></span></div>
+        <div class="widget-body">
+            <div class="social-grid">
+                <a href="https://www.youtube.com/@ERID-AMRAfrica" target="_blank" rel="noopener" class="social-btn social-btn--youtube">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.5 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+                    YouTube
+                </a>
+                <a href="https://x.com/eridamrafrica" target="_blank" rel="noopener" class="social-btn social-btn--x">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2.25h3.51l-7.67 8.77 9.02 11.92h-7.06l-5.54-7.24-6.34 7.24H.61l8.2-9.38L.2 2.25h7.24l5.01 6.62 5.75-6.62zm-1.23 18.56h1.94L7.16 4.23H5.08l11.89 16.58z"/></svg>
+                    X / Twitter
+                </a>
+                <a href="https://www.linkedin.com/company/erid-amrafrica" target="_blank" rel="noopener" class="social-btn social-btn--linkedin">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54A1.75 1.75 0 0 0 1.77 24h20.45A1.75 1.75 0 0 0 24 22.27V1.73A1.75 1.75 0 0 0 22.22 0z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="https://www.facebook.com/eridamrafrica" target="_blank" rel="noopener" class="social-btn social-btn--facebook">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.26h3.33l-.53 3.49h-2.8v8.44C19.61 23.08 24 18.09 24 12.07z"/></svg>
+                    Facebook
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Newsletter -->
     <div class="widget widget--dark">

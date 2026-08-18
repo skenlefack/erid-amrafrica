@@ -15,7 +15,8 @@ INSERT INTO categories (slug, name_fr, name_en, accent_color, sort_order) VALUES
 ('spillover',      'Interface Spillover',     'Spillover Interface',      '#1565C0', 1),
 ('amr_residues',   'RAM & Résidus',           'AMR & Residues',           '#00897B', 2),
 ('policy_trade',   'Politique & Sécurité commerciale', 'Policy & Trade Security', '#F9A825', 3),
-('tech_innovation','Tech & Innovation',       'Tech & Innovation',        '#43A047', 4);
+('tech_innovation','Tech & Innovation',       'Tech & Innovation',        '#43A047', 4),
+('interviews',     'Interviews',              'Interviews',               '#E53935', 5);
 
 -- Services — 3 piliers (avec packaging monétisation)
 INSERT INTO services (pillar, routing_tag, title_fr, title_en, summary_fr, summary_en, price_model, price_from_usd, sort_order) VALUES
