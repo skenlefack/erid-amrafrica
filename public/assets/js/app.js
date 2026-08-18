@@ -171,7 +171,31 @@ document.addEventListener('DOMContentLoaded', () => {
     obs.observe(el);
   });
 
-  /* ---- 8. Active sidebar link highlight ---- */
+  /* ---- 8. Modern file upload ---- */
+  document.querySelectorAll('.file-upload').forEach(zone => {
+    const input = zone.querySelector('.file-upload__input');
+    const nameEl = zone.closest('.file-upload-wrapper')?.querySelector('.file-upload__name');
+    if (!input) return;
+
+    input.addEventListener('change', () => {
+      if (input.files.length && nameEl) {
+        const f = input.files[0];
+        const size = f.size < 1048576 ? (f.size / 1024).toFixed(0) + ' Ko' : (f.size / 1048576).toFixed(1) + ' Mo';
+        nameEl.textContent = '📄 ' + f.name + ' (' + size + ')';
+      }
+    });
+
+    ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('dragover'); }));
+    ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('dragover'); }));
+    zone.addEventListener('drop', e => {
+      if (e.dataTransfer.files.length) {
+        input.files = e.dataTransfer.files;
+        input.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+
+  /* ---- 9. Active sidebar link highlight ---- */
   const currentPath = window.location.pathname;
   document.querySelectorAll('.sidebar nav a').forEach(a => {
     if (a.getAttribute('href') === currentPath) {
