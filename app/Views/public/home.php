@@ -280,6 +280,33 @@ $catCounts = \App\Core\Database::all(
         </div>
     </div>
 
+    <!-- Services / Nos expertises -->
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Nos expertises' : 'Our expertise') ?></span></div>
+        <div class="widget-body" style="padding:0">
+            <?php
+            $pillarIcons = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄'];
+            $pillarColors = ['quant' => 'var(--navy)', 'qual' => 'var(--accent)', 'systems' => 'var(--gold)'];
+            foreach ($services as $s):
+            ?>
+            <div class="sidebar-service" style="--svc-color:<?= $e($pillarColors[$s['pillar']] ?? 'var(--accent)') ?>">
+                <div class="sidebar-service__icon"><?= $pillarIcons[$s['pillar']] ?? '💡' ?></div>
+                <div class="sidebar-service__body">
+                    <h4><?= $e($pick($s, 'title')) ?></h4>
+                    <p><?= $e(mb_substr($pick($s, 'summary') ?? '', 0, 80)) ?>&hellip;</p>
+                    <div class="sidebar-service__meta">
+                        <?php if ($s['price_from_usd']): ?>
+                        <span class="sidebar-service__price"><?= $e(Lang::t('from')) ?> $<?= number_format((float)$s['price_from_usd']) ?></span>
+                        <?php endif; ?>
+                        <span class="sidebar-service__model"><?= $e(Lang::t('model_' . $s['price_model'])) ?></span>
+                    </div>
+                    <a href="/intake/<?= $e($s['pillar']) ?>" class="sidebar-service__link"><?= $e(Lang::t('request')) ?> &rarr;</a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
     <!-- Partenaires -->
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Partenaires' : 'Partners') ?></span></div>
