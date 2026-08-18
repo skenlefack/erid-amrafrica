@@ -73,19 +73,17 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
 
         <div class="intake-section">
             <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Planning & documents' : 'Timeline & documents') ?></h3>
-            <div class="form-grid">
-                <label><?= $e(Lang::t('f_timeline')) ?>
-                    <input type="date" name="timeline"></label>
-                <div class="file-upload-wrapper">
-                    <span class="file-upload-label"><?= $e(Lang::t('f_upload')) ?></span>
-                    <label class="file-upload" tabindex="0">
-                        <input type="file" name="upload" accept=".csv,.xls,.xlsx,.pdf,.doc,.docx" class="file-upload__input">
-                        <span class="file-upload__icon">📎</span>
-                        <span class="file-upload__text"><?= $e($lang === 'fr' ? 'Glissez un fichier ici ou cliquez pour parcourir' : 'Drag a file here or click to browse') ?></span>
-                        <span class="file-upload__hint">CSV, Excel, PDF, Word — max 50 Mo</span>
-                    </label>
-                    <span class="file-upload__name"></span>
-                </div>
+            <label><?= $e(Lang::t('f_timeline')) ?>
+                <input type="date" name="timeline"></label>
+            <div class="file-upload-wrapper">
+                <span class="file-upload-label"><?= $e(Lang::t('f_upload')) ?></span>
+                <label class="file-upload" tabindex="0">
+                    <input type="file" name="upload" accept=".csv,.xls,.xlsx,.pdf,.doc,.docx" class="file-upload__input">
+                    <span class="file-upload__icon">📎</span>
+                    <span class="file-upload__text"><?= $e($lang === 'fr' ? 'Glissez un fichier ici ou cliquez pour parcourir' : 'Drag a file here or click to browse') ?></span>
+                    <span class="file-upload__hint">CSV, Excel, PDF, Word — max 50 Mo</span>
+                </label>
+                <span class="file-upload__name"></span>
             </div>
         </div>
 
