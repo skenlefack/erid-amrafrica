@@ -62,15 +62,24 @@ $a = $article ?? null;
 <!-- Section: Image -->
 <div class="panel">
     <div class="panel__head"><h3>Image de couverture</h3></div>
-    <?php if ($a && $a['cover_image']): ?>
-    <div class="article-cover-preview">
-        <img src="<?= $e($a['cover_image']) ?>" alt="Cover">
+    <div class="cover-upload" style="padding:20px">
+        <div class="cover-upload__preview" id="coverPreview">
+            <?php if ($a && $a['cover_image']): ?>
+            <img src="<?= $e($a['cover_image']) ?>" alt="Cover" id="coverImg">
+            <div class="cover-upload__overlay">
+                <span>Changer l'image</span>
+            </div>
+            <?php else: ?>
+            <div class="cover-upload__empty" id="coverEmpty">
+                <span class="cover-upload__icon">🖼️</span>
+                <span class="cover-upload__text">Glissez une image ici ou cliquez pour parcourir</span>
+                <span class="cover-upload__hint">JPG, PNG ou WebP — max 5 Mo · Ratio recommandé 16:9</span>
+            </div>
+            <?php endif; ?>
+            <input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">
+        </div>
+        <div class="cover-upload__info" id="coverInfo"></div>
     </div>
-    <?php endif; ?>
-    <label style="margin-top:<?= ($a && $a['cover_image']) ? '12px' : '0' ?>">
-        <span>Sélectionner une image (JPG, PNG, WebP — max 5 Mo)</span>
-        <input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" style="margin-top:6px">
-    </label>
 </div>
 
 <!-- Actions -->
@@ -102,4 +111,46 @@ if (typeof tinymce !== 'undefined') {
         link_default_target: '_blank',
     });
 }
+
+// Cover image upload preview
+(function() {
+    const preview = document.getElementById('coverPreview');
+    const input = document.getElementById('coverInput');
+    const info = document.getElementById('coverInfo');
+    if (!preview || !input) return;
+
+    function showPreview(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" id="coverImg">'
+                + '<div class="cover-upload__overlay"><span>Changer l\'image</span></div>'
+                + '<input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">';
+            const size = file.size < 1048576 ? (file.size / 1024).toFixed(0) + ' Ko' : (file.size / 1048576).toFixed(1) + ' Mo';
+            info.innerHTML = '<span class="cover-upload__filename">📄 ' + file.name + ' (' + size + ')</span>';
+            // Re-attach event
+            document.getElementById('coverInput').addEventListener('change', function() {
+                if (this.files[0]) showPreview(this.files[0]);
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+
+    input.addEventListener('change', function() {
+        if (this.files[0]) showPreview(this.files[0]);
+    });
+
+    ['dragenter', 'dragover'].forEach(ev => preview.addEventListener(ev, function(e) {
+        e.preventDefault(); preview.classList.add('dragover');
+    }));
+    ['dragleave', 'drop'].forEach(ev => preview.addEventListener(ev, function(e) {
+        e.preventDefault(); preview.classList.remove('dragover');
+    }));
+    preview.addEventListener('drop', function(e) {
+        if (e.dataTransfer.files.length) {
+            input.files = e.dataTransfer.files;
+            showPreview(e.dataTransfer.files[0]);
+        }
+    });
+})();
 </script>

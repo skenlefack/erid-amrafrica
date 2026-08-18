@@ -554,9 +554,22 @@ body.admin{display:flex;background:#EFF2F7;font-family:var(--font-b);min-height:
 .truncate{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* Article form enhancements */
-.article-cover-preview{margin-bottom:4px}
-.article-cover-preview img{max-height:180px;border-radius:var(--radius-sm);border:1px solid #E2E8F0}
 .wysiwyg{min-height:200px}
+
+/* Cover image upload */
+.cover-upload__preview{position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;min-height:200px;background:#F7FAFC;border:2px dashed #CBD5E0;transition:all .3s}
+.cover-upload__preview:hover,.cover-upload__preview.dragover{border-color:var(--accent);background:#F0FFF4}
+.cover-upload__preview img{width:100%;max-height:320px;object-fit:cover;display:block;border-radius:var(--radius)}
+.cover-upload__overlay{position:absolute;inset:0;background:rgba(26,32,46,.6);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;border-radius:var(--radius)}
+.cover-upload__preview:hover .cover-upload__overlay{opacity:1}
+.cover-upload__overlay span{color:#fff;font-size:14px;font-weight:700;padding:10px 20px;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2)}
+.cover-upload__input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.cover-upload__empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:6px}
+.cover-upload__icon{font-size:3rem;opacity:.6}
+.cover-upload__text{font-size:14px;font-weight:600;color:#4A5568}
+.cover-upload__hint{font-size:12px;color:#A0AEC0}
+.cover-upload__info{margin-top:10px;min-height:20px}
+.cover-upload__filename{font-size:13px;font-weight:600;color:var(--accent)}
 
 /* Login */
 body.admin-blank{background:linear-gradient(135deg,#1A1F2E 0%,var(--navy-d) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center}
