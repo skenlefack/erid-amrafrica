@@ -62,6 +62,7 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
     </div>
 </div>
 <aside class="col-side">
+    <!-- Canaux -->
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Canaux' : 'Channels') ?></span></div>
         <div class="widget-body">
@@ -71,6 +72,43 @@ $pick = fn($row, $b) => Lang::pick($row, $b);
                 <?= $e($pick($c, 'name')) ?>
             </a>
             <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- Les plus lus -->
+    <?php if (!empty($popular)): ?>
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Les plus lus' : 'Most read') ?></span></div>
+        <div class="widget-body">
+            <?php foreach ($popular as $i => $p): ?>
+            <a href="/news/<?= $e($p['slug']) ?>" class="sidebar-article">
+                <span class="sidebar-article__num"><?= $i + 1 ?></span>
+                <div class="sidebar-article__img" style="background-image:url('<?= $e($p['cover_image'] ?? '') ?>')"></div>
+                <div class="sidebar-article__text">
+                    <h4><?= $e($pick($p, 'title')) ?></h4>
+                    <span class="td-mod-meta"><?= (int)$p['views'] ?> <?= $e(Lang::t('views')) ?></span>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Newsletter -->
+    <div class="widget widget--dark">
+        <div class="widget-title"><span><?= $e(Lang::t('footer_newsletter')) ?></span></div>
+        <div class="widget-body">
+            <p><?= $e($lang === 'fr' ? 'Recevez notre veille hebdomadaire.' : 'Get our weekly intelligence briefing.') ?></p>
+            <a class="btn btn-accent full" href="/pricing"><?= $e(Lang::t('subscribe')) ?></a>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Consultation' : 'Consultation') ?></span></div>
+        <div class="widget-body" style="text-align:center">
+            <p style="font-size:13px;color:var(--muted);margin:0 0 12px"><?= $e($lang === 'fr' ? 'Expertise One Health sur mesure.' : 'Tailored One Health expertise.') ?></p>
+            <a class="btn btn-gold full" href="/intake/advisory"><?= $e(Lang::t('hero_cta')) ?></a>
         </div>
     </div>
 </aside>

@@ -153,6 +153,7 @@ $block3 = array_slice($allArticles, 13, 6);
 
 <!-- SIDEBAR -->
 <aside class="col-side">
+    <!-- KPIs -->
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Tableau de bord' : 'Dashboard') ?></span></div>
         <div class="widget-body">
@@ -161,6 +162,8 @@ $block3 = array_slice($allArticles, 13, 6);
             <div class="kpi-row"><strong><?= number_format($kpis['leads']) ?></strong><span><?= $e(Lang::t('kpi_engagements')) ?></span></div>
         </div>
     </div>
+
+    <!-- Canaux -->
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Canaux' : 'Channels') ?></span></div>
         <div class="widget-body">
@@ -172,6 +175,35 @@ $block3 = array_slice($allArticles, 13, 6);
             <?php endforeach; ?>
         </div>
     </div>
+
+    <!-- Articles populaires -->
+    <?php
+    $popularHome = \App\Core\Database::all(
+        "SELECT a.*, c.slug AS cat_slug, c.accent_color
+           FROM articles a JOIN categories c ON c.id = a.category_id
+          WHERE a.status = 'published'
+          ORDER BY a.views DESC LIMIT 5"
+    );
+    ?>
+    <?php if ($popularHome): ?>
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Les plus lus' : 'Most read') ?></span></div>
+        <div class="widget-body">
+            <?php foreach ($popularHome as $i => $p): ?>
+            <a href="/news/<?= $e($p['slug']) ?>" class="sidebar-article">
+                <span class="sidebar-article__num"><?= $i + 1 ?></span>
+                <div class="sidebar-article__img" style="background-image:url('<?= $e($p['cover_image'] ?? '') ?>')"></div>
+                <div class="sidebar-article__text">
+                    <h4><?= $e($pick($p, 'title')) ?></h4>
+                    <span class="td-mod-meta"><?= (int)$p['views'] ?> <?= $e(Lang::t('views')) ?></span>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Newsletter -->
     <div class="widget widget--dark">
         <div class="widget-title"><span><?= $e(Lang::t('footer_newsletter')) ?></span></div>
         <div class="widget-body">
@@ -179,10 +211,21 @@ $block3 = array_slice($allArticles, 13, 6);
             <a class="btn btn-accent full" href="/pricing"><?= $e(Lang::t('subscribe')) ?></a>
         </div>
     </div>
+
+    <!-- CTA Consultation -->
+    <div class="widget">
+        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Consultation' : 'Consultation') ?></span></div>
+        <div class="widget-body" style="text-align:center">
+            <p style="font-size:13px;color:var(--muted);margin:0 0 12px"><?= $e($lang === 'fr' ? 'Expertise One Health sur mesure pour votre institution.' : 'Tailored One Health expertise for your institution.') ?></p>
+            <a class="btn btn-gold full" href="/intake/advisory"><?= $e(Lang::t('hero_cta')) ?></a>
+        </div>
+    </div>
+
+    <!-- Partenaires -->
     <div class="widget">
         <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Partenaires' : 'Partners') ?></span></div>
         <div class="widget-body trust-list">
-            <span>Africa CDC</span><span>WHO AFRO</span><span>AU-IBAR</span><span>FAO</span><span>Wellcome</span>
+            <span>Africa CDC</span><span>WHO AFRO</span><span>AU-IBAR</span><span>FAO</span><span>Wellcome</span><span>Institut Pasteur</span><span>KEMRI</span><span>GARDP</span>
         </div>
     </div>
 </aside>

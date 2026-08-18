@@ -41,6 +41,12 @@ final class NewsController extends Controller
         );
 
         $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
+        $popular = Database::all(
+            "SELECT a.*, c.slug AS cat_slug, c.accent_color
+               FROM articles a JOIN categories c ON c.id = a.category_id
+              WHERE a.status = 'published'
+              ORDER BY a.views DESC LIMIT 5"
+        );
 
         $this->view('public/news', [
             'title'      => 'News Hub — ERID-AMRAfrica',
@@ -49,6 +55,7 @@ final class NewsController extends Controller
             'activeCat'  => $cat,
             'page'       => $page,
             'totalPages' => $totalPages,
+            'popular'    => $popular,
         ], 'public');
     }
 
@@ -67,9 +74,20 @@ final class NewsController extends Controller
         }
         Database::exec('UPDATE articles SET views = views + 1 WHERE id = ?', [$article['id']]);
 
+        $popular = Database::all(
+            "SELECT a.*, c.slug AS cat_slug, c.accent_color
+               FROM articles a JOIN categories c ON c.id = a.category_id
+              WHERE a.status = 'published' AND a.id != ?
+              ORDER BY a.views DESC LIMIT 5",
+            [$article['id']]
+        );
+        $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
+
         $this->view('public/article', [
-            'title'   => $article['title_fr'],
-            'article' => $article,
+            'title'      => $article['title_fr'],
+            'article'    => $article,
+            'popular'    => $popular,
+            'categories' => $categories,
         ], 'public');
     }
 }
