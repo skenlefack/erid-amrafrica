@@ -42,7 +42,7 @@ final class SubscribersController extends Controller
             'title'   => 'Abonnés',
             'subs'    => $subs,
             'stats'   => $stats,
-            'filters' => compact('tier', 'confirmed', 'search'),
+            'filters' => ['tier' => $tier, 'confirmed' => $confirmed, 'q' => $search],
             'page' => $page, 'totalPages' => $totalPages,
         ], 'admin');
     }

@@ -29,7 +29,7 @@ $f = $filters;
       </select>
     </label>
     <label style="flex:2;min-width:200px">Recherche
-      <input type="text" name="q" value="<?= $e($f['search'] ?? '') ?>" placeholder="Email ou nom...">
+      <input type="text" name="q" value="<?= $e($f['q'] ?? '') ?>" placeholder="Email ou nom...">
     </label>
     <button class="btn btn-gold" type="submit">Filtrer</button>
   </form>

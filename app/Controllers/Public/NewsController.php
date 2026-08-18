@@ -5,6 +5,7 @@ namespace App\Controllers\Public;
 
 use App\Core\Controller;
 use App\Core\Database;
+use App\Core\Lang;
 
 /**
  * News Hub — taxonomie à 4 canaux, filtrage dynamique par catégorie.
