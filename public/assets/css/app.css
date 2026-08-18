@@ -423,6 +423,36 @@ code{background:#eef2ff;padding:3px 8px;font-size:.88em;border-radius:var(--radi
 .alert-success{background:#dcfce7;color:#15803d;border-left-color:#15803d}
 .alert-error{background:#fef2f2;color:#b91c1c;border-left-color:#b91c1c}
 
+/* ===== INTAKE PAGE ===== */
+.intake-layout{display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start}
+.intake-main{min-width:0}
+.intake-side{min-width:0;position:sticky;top:80px}
+
+.intake-header{display:flex;gap:16px;align-items:center;padding:20px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:24px}
+.intake-header__icon{width:48px;height:48px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;flex-shrink:0}
+.intake-header__title{font-family:var(--font-d);font-size:22px;font-weight:900;margin:0;color:var(--ink)}
+.intake-header__service{font-size:14px;color:var(--muted);margin:2px 0 6px}
+.intake-header__tag{display:inline-block;font-size:10px;font-weight:700;color:#fff;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+
+.intake-section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
+.intake-section__title{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--navy);margin:0 0 14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+
+/* Process steps */
+.process-steps{display:flex;flex-direction:column;gap:14px}
+.process-step{display:flex;gap:12px;align-items:flex-start}
+.process-step__num{width:28px;height:28px;border-radius:50%;color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.process-step strong{display:block;font-size:13px;color:var(--ink);margin-bottom:1px}
+.process-step p{font-size:12px;color:var(--muted);margin:0;line-height:1.4}
+
+/* Guarantee list */
+.guarantee-list{display:flex;flex-direction:column;gap:10px}
+.guarantee-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);font-weight:500}
+
+@media(max-width:768px){
+  .intake-layout{grid-template-columns:1fr}
+  .intake-side{position:static}
+}
+
 /* ===== FOOTER ===== */
 .site-footer{background:#1a2a44;color:rgba(200,215,230,.55);margin-top:0;position:relative;overflow:hidden}
 .footer-top{padding:44px 0 24px;border-bottom:1px solid rgba(255,255,255,.06);position:relative}

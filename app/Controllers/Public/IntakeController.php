@@ -36,11 +36,13 @@ final class IntakeController extends Controller
             return;
         }
         $service = Database::one('SELECT * FROM services WHERE pillar = ?', [$pillar]);
+        $services = Database::all('SELECT * FROM services WHERE is_active = 1 ORDER BY sort_order');
         $this->view('public/intake', [
-            'title'   => 'Demande de consultation — ERID-AMRAfrica',
-            'pillar'  => $pillar,
-            'type'    => self::PILLAR_MAP[$pillar],
-            'service' => $service,
+            'title'    => 'Demande de consultation — ERID-AMRAfrica',
+            'pillar'   => $pillar,
+            'type'     => self::PILLAR_MAP[$pillar],
+            'service'  => $service,
+            'services' => $services,
         ], 'public');
     }
 
