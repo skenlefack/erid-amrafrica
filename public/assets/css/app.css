@@ -22,7 +22,8 @@
   --shadow-hover:0 6px 24px rgba(44,62,80,.1);
 }
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;font-family:var(--font-b);color:var(--ink);background:var(--bg);line-height:1.7;font-size:15.5px;-webkit-font-smoothing:antialiased}
+html{overflow-x:hidden}
+body{margin:0;font-family:var(--font-b);color:var(--ink);background:var(--bg);line-height:1.7;font-size:15.5px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--ink);text-decoration:none;transition:color .25s}
 a:hover{color:var(--accent)}
 img{max-width:100%;display:block}
@@ -414,8 +415,8 @@ code{background:var(--bg-alt);padding:3px 8px;font-size:.88em;border-radius:var(
 
 /* ===== FOOTER ===== */
 .site-footer{background:#1A2D3D;color:rgba(200,215,230,.55);margin-top:0;position:relative}
-.footer-wave{height:40px;background:var(--bg);position:relative}
-.footer-wave::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:#1A2D3D;border-radius:50% 50% 0 0 / 100% 100% 0 0;transform:scaleX(1.5)}
+.footer-wave{height:40px;background:var(--bg);position:relative;overflow:hidden}
+.footer-wave::after{content:'';position:absolute;bottom:0;left:-5%;right:-5%;height:40px;background:#1A2D3D;border-radius:50% 50% 0 0 / 100% 100% 0 0}
 .footer-top{padding:48px 0 36px;position:relative}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.5fr;gap:28px}
 .footer-col h4{color:#fff;font-size:13px;font-weight:700;margin:0 0 18px;position:relative;padding-left:14px}
