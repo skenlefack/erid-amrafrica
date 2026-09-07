@@ -92,7 +92,7 @@ final class UsersController extends Controller
         );
 
         Audit::log('create', 'user', (string) $id, ['role' => $role]);
-        $this->redirect('/admin/users');
+        $this->redirect('/admin/users', 'Utilisateur créé avec succès.');
     }
 
     public function edit(string $id): void
@@ -165,7 +165,7 @@ final class UsersController extends Controller
         }
 
         Audit::log('update', 'user', $id, ['role' => $role, 'active' => $isActive]);
-        $this->redirect('/admin/users');
+        $this->redirect('/admin/users', 'Utilisateur mis à jour.');
     }
 
     public function toggleActive(string $id): void

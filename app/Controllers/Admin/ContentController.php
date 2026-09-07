@@ -22,12 +22,19 @@ final class ContentController extends Controller
     {
         Auth::require(['superadmin', 'editor']);
         $filter = $this->input('status');
+        $search = $this->input('q');
         $page   = max(1, (int) ($this->input('page') ?: 1));
         $where  = '1=1';
         $params = [];
         if ($filter && in_array($filter, ['draft', 'published', 'archived'], true)) {
             $where .= ' AND a.status = ?';
             $params[] = $filter;
+        }
+        if ($search) {
+            $where .= ' AND (a.title_fr LIKE ? OR a.title_en LIKE ? OR a.slug LIKE ?)';
+            $params[] = "%{$search}%";
+            $params[] = "%{$search}%";
+            $params[] = "%{$search}%";
         }
         $total = (int) Database::one("SELECT COUNT(*) AS c FROM articles a WHERE {$where}", $params)['c'];
         $totalPages = max(1, (int) ceil($total / self::PER_PAGE));
@@ -42,7 +49,7 @@ final class ContentController extends Controller
         );
         $this->view('admin/articles', [
             'title' => 'Articles', 'articles' => $articles,
-            'filter' => $filter, 'page' => $page, 'totalPages' => $totalPages, 'total' => $total,
+            'filter' => $filter, 'search' => $search, 'page' => $page, 'totalPages' => $totalPages, 'total' => $total,
         ], 'admin');
     }
 
@@ -84,7 +91,7 @@ final class ContentController extends Controller
             ]
         );
         Audit::log('create', 'article', (string) $id);
-        $this->redirect('/admin/articles');
+        $this->redirect('/admin/articles', 'Article créé avec succès.');
     }
 
     public function editArticle(string $id): void
@@ -135,7 +142,7 @@ final class ContentController extends Controller
             ]
         );
         Audit::log('update', 'article', $id);
-        $this->redirect('/admin/articles');
+        $this->redirect('/admin/articles', 'Article mis à jour.');
     }
 
     public function deleteArticle(string $id): void
@@ -152,7 +159,46 @@ final class ContentController extends Controller
     {
         Auth::require(['superadmin', 'editor']);
         $services = Database::all('SELECT * FROM services ORDER BY sort_order');
-        $this->view('admin/services', ['title' => 'Services & Tarifs', 'services' => $services], 'admin');
+        $this->view('admin/services', ['title' => 'Services', 'services' => $services], 'admin');
+    }
+
+    public function createService(): void
+    {
+        Auth::require(['superadmin']);
+        $this->view('admin/service_form', ['title' => 'Nouveau service'], 'admin');
+    }
+
+    public function storeService(): void
+    {
+        Auth::require(['superadmin']);
+        Csrf::verify();
+        $maxOrder = (int) (Database::one('SELECT MAX(sort_order) AS m FROM services')['m'] ?? 0);
+        $id = Database::exec(
+            'INSERT INTO services (pillar, routing_tag, title_fr, title_en, summary_fr, summary_en, price_model, price_from_usd, is_active, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                $this->input('pillar', 'quant'),
+                $this->input('routing_tag', 'Service_Custom'),
+                $this->input('title_fr', ''),
+                $this->input('title_en', ''),
+                $this->input('summary_fr'),
+                $this->input('summary_en'),
+                $this->input('price_model', 'quote'),
+                $this->input('price_from_usd') ?: null,
+                (int) ($this->input('is_active') ? 1 : 0),
+                $maxOrder + 1,
+            ]
+        );
+        Audit::log('create', 'service', (string) $id);
+        $this->redirect('/admin/services', 'Service créé avec succès.');
+    }
+
+    public function editService(string $id): void
+    {
+        Auth::require(['superadmin', 'editor']);
+        $service = Database::one('SELECT * FROM services WHERE id = ?', [(int) $id]);
+        if (!$service) { http_response_code(404); return; }
+        $this->view('admin/service_form', ['title' => 'Éditer le service', 'service' => $service], 'admin');
     }
 
     public function updateService(string $id): void
@@ -160,9 +206,11 @@ final class ContentController extends Controller
         Auth::require(['superadmin', 'editor']);
         Csrf::verify();
         Database::exec(
-            'UPDATE services SET title_fr=?, title_en=?, summary_fr=?, summary_en=?,
-                    price_model=?, price_from_usd=?, is_active=? WHERE id=?',
+            'UPDATE services SET pillar=?, routing_tag=?, title_fr=?, title_en=?, summary_fr=?, summary_en=?,
+                    price_model=?, price_from_usd=?, is_active=?, sort_order=? WHERE id=?',
             [
+                $this->input('pillar', 'quant'),
+                $this->input('routing_tag', 'Service_Custom'),
                 $this->input('title_fr'),
                 $this->input('title_en'),
                 $this->input('summary_fr'),
@@ -170,11 +218,21 @@ final class ContentController extends Controller
                 $this->input('price_model', 'quote'),
                 $this->input('price_from_usd') ?: null,
                 (int) ($this->input('is_active') ? 1 : 0),
+                (int) $this->input('sort_order', '0'),
                 (int) $id,
             ]
         );
         Audit::log('update', 'service', $id);
-        $this->redirect('/admin/services');
+        $this->redirect('/admin/services', 'Service mis à jour.');
+    }
+
+    public function deleteService(string $id): void
+    {
+        Auth::require(['superadmin']);
+        Csrf::verify();
+        Database::exec('DELETE FROM services WHERE id = ?', [(int) $id]);
+        Audit::log('delete', 'service', $id);
+        $this->redirect('/admin/services', 'Service supprimé.');
     }
 
     // ---------- PARAMÈTRES GLOBAUX ----------
@@ -196,7 +254,7 @@ final class ContentController extends Controller
             );
         }
         Audit::log('update', 'settings');
-        $this->redirect('/admin/settings');
+        $this->redirect('/admin/settings', 'Paramètres sauvegardés.');
     }
 
     private function uploadCover(): ?string

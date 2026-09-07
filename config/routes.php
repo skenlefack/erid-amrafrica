@@ -66,8 +66,12 @@ $router->post('/admin/articles/{id}',        [ContentController::class, 'updateA
 $router->post('/admin/articles/{id}/delete', [ContentController::class, 'deleteArticle']);
 
 // CMS — Services
-$router->get('/admin/services',           [ContentController::class, 'services']);
-$router->post('/admin/services/{id}',     [ContentController::class, 'updateService']);
+$router->get('/admin/services',              [ContentController::class, 'services']);
+$router->get('/admin/services/new',          [ContentController::class, 'createService']);
+$router->post('/admin/services',             [ContentController::class, 'storeService']);
+$router->get('/admin/services/{id}/edit',    [ContentController::class, 'editService']);
+$router->post('/admin/services/{id}',        [ContentController::class, 'updateService']);
+$router->post('/admin/services/{id}/delete', [ContentController::class, 'deleteService']);
 $router->get('/admin/settings',           [ContentController::class, 'settings']);
 $router->post('/admin/settings',          [ContentController::class, 'updateSettings']);
 
@@ -131,8 +135,12 @@ $router->post('/admin/users/{id}/toggle', [UsersController::class, 'toggleActive
 
 // CRM — pipeline commercial & surveillance
 $router->get('/admin/leads',              [LeadsController::class, 'index']);
+$router->get('/admin/leads/new',          [LeadsController::class, 'create']);
+$router->post('/admin/leads',             [LeadsController::class, 'store']);
+$router->get('/admin/leads/export',       [LeadsController::class, 'export']);
 $router->get('/admin/leads/{id}',         [LeadsController::class, 'show']);
 $router->post('/admin/leads/{id}',        [LeadsController::class, 'update']);
 $router->get('/admin/rumours',            [LeadsController::class, 'rumours']);
+$router->get('/admin/rumours/export',     [LeadsController::class, 'exportRumours']);
 $router->get('/admin/rumours/{id}',       [LeadsController::class, 'rumourDetail']);
 $router->post('/admin/rumours/{id}',      [LeadsController::class, 'updateRumour']);

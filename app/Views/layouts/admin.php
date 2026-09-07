@@ -7,6 +7,28 @@ $u = Auth::user();
 $uri = strtok($_SERVER['REQUEST_URI'] ?? '', '?');
 $isActive = fn($path) => $uri === $path ? 'active' : '';
 $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), explode(' ', $u['name'] ?? 'A')));
+
+// Breadcrumb
+$crumbs = [['Tableau de bord', '/admin']];
+$segments = array_filter(explode('/', trim($uri, '/')));
+array_shift($segments); // remove 'admin'
+$breadcrumbLabels = [
+    'articles' => 'Articles', 'media' => 'Médiathèque', 'publications' => 'Publications',
+    'pages' => 'Pages', 'courses' => 'Classroom', 'leads' => 'Leads / CRM',
+    'rumours' => 'Surveillance', 'subscribers' => 'Abonnés', 'users' => 'Utilisateurs',
+    'services' => 'Services', 'email-templates' => 'Templates email', 'audit' => 'Audit',
+    'settings' => 'Paramètres', 'new' => 'Nouveau', 'edit' => 'Éditer', 'export' => 'Export',
+    'password' => 'Mot de passe',
+];
+$path = '/admin';
+foreach ($segments as $seg) {
+    $path .= '/' . $seg;
+    $crumbs[] = [$breadcrumbLabels[$seg] ?? (is_numeric($seg) ? '#' . $seg : ucfirst($seg)), $path];
+}
+
+// Flash message
+$flash = $_SESSION['_flash'] ?? null;
+unset($_SESSION['_flash']);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -21,7 +43,11 @@ $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body class="admin">
-<aside class="sidebar">
+
+<!-- Mobile toggle -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">☰</button>
+
+<aside class="sidebar" id="adminSidebar">
     <div class="sidebar__logo">
         <a href="/admin"><img src="/assets/logo.png" alt="ERID-AMRAfrica" class="sidebar__logo-img"></a>
     </div>
@@ -66,13 +92,13 @@ $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), 
         </a>
         <?php endif; ?>
         <a href="/admin/services" class="sidebar__link <?= str_starts_with($uri, '/admin/services') ? 'active' : '' ?>">
-            <span class="sidebar__icon">🧩</span> Services & Tarifs
+            <span class="sidebar__icon">🧩</span> Services
         </a>
         <a href="/admin/email-templates" class="sidebar__link <?= str_starts_with($uri, '/admin/email-templates') ? 'active' : '' ?>">
             <span class="sidebar__icon">✉️</span> Templates email
         </a>
         <a href="/admin/audit" class="sidebar__link <?= str_starts_with($uri, '/admin/audit') ? 'active' : '' ?>">
-            <span class="sidebar__icon">🔍</span> Journal d'audit
+            <span class="sidebar__icon">🔍</span> Audit
         </a>
         <a href="/admin/settings" class="sidebar__link <?= str_starts_with($uri, '/admin/settings') ? 'active' : '' ?>">
             <span class="sidebar__icon">⚙️</span> Paramètres
@@ -95,13 +121,42 @@ $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), 
 <div class="admin-main">
     <header class="admin-top">
         <div class="admin-top__left">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+                <?php foreach ($crumbs as $i => $c): ?>
+                    <?php if ($i > 0): ?><span class="breadcrumbs__sep">/</span><?php endif; ?>
+                    <?php if ($i === count($crumbs) - 1): ?>
+                        <span class="breadcrumbs__current"><?= $e($c[0]) ?></span>
+                    <?php else: ?>
+                        <a href="<?= $e($c[1]) ?>" class="breadcrumbs__link"><?= $e($c[0]) ?></a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </nav>
             <h1><?= $e($title ?? '') ?></h1>
         </div>
         <div class="admin-top__right">
             <a class="btn btn-ghost sm" href="/" target="_blank">🌐 Voir le site</a>
         </div>
     </header>
+
+    <!-- Flash messages (toast) -->
+    <?php if ($flash): ?>
+    <div class="toast toast--<?= $e($flash['type'] ?? 'success') ?>" id="toastMsg">
+        <?= $e($flash['message'] ?? '') ?>
+    </div>
+    <?php endif; ?>
+
     <div class="admin-content"><?= $content ?></div>
 </div>
+
+<script>
+// Mobile sidebar toggle
+document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+    document.getElementById('adminSidebar').classList.toggle('open');
+});
+// Auto-dismiss toast
+const toast = document.getElementById('toastMsg');
+if (toast) { setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000); }
+</script>
 </body>
 </html>

@@ -10,8 +10,11 @@ abstract class Controller
         View::render($template, $data, $layout);
     }
 
-    protected function redirect(string $to): void
+    protected function redirect(string $to, ?string $flash = null, string $type = 'success'): void
     {
+        if ($flash) {
+            $_SESSION['_flash'] = ['message' => $flash, 'type' => $type];
+        }
         header('Location: ' . $to);
         exit;
     }

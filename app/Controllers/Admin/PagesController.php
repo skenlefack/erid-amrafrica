@@ -14,8 +14,14 @@ final class PagesController extends Controller
     public function index(): void
     {
         Auth::require(['superadmin', 'editor']);
-        $pages = Database::all('SELECT * FROM pages ORDER BY slug');
-        $this->view('admin/pages', ['title' => 'Pages CMS', 'pages' => $pages], 'admin');
+        $page = max(1, (int) ($this->input('page') ?: 1));
+        [$pages, $page, $totalPages] = Database::paginate(
+            'SELECT * FROM pages ORDER BY slug', [], $page, 20
+        );
+        $this->view('admin/pages', [
+            'title' => 'Pages CMS', 'pages' => $pages,
+            'page' => $page, 'totalPages' => $totalPages,
+        ], 'admin');
     }
 
     public function create(): void
