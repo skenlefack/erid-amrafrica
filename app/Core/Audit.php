@@ -9,7 +9,7 @@ namespace App\Core;
  */
 final class Audit
 {
-    public static function log(string $action, string $entity, ?string $entityId = null, array $meta = []): void
+    public static function log(string $action, string $entity, ?string $entityId = null, array $meta = [], bool $stripIp = false): void
     {
         Database::exec(
             'INSERT INTO audit_logs (user_id, action, entity, entity_id, ip_address, meta_json)
@@ -19,7 +19,7 @@ final class Audit
                 $action,
                 $entity,
                 $entityId,
-                $_SERVER['REMOTE_ADDR'] ?? null,
+                $stripIp ? null : ($_SERVER['REMOTE_ADDR'] ?? null),
                 $meta ? json_encode($meta, JSON_UNESCAPED_UNICODE) : null,
             ]
         );

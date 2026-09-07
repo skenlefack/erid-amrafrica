@@ -53,14 +53,17 @@ final class IntakeController extends Controller
         $pillar = $this->input('pillar', 'analytics');
         $type   = self::PILLAR_MAP[$pillar] ?? 'Data_Analytics';
 
-        // Champs spécifiques au pilier → stockés en JSON
-        $extra = [
-            'dap'           => $this->input('dap'),
-            'sectors'       => $_POST['sectors'] ?? null,
-            'methodology'   => $this->input('methodology'),
-            'timeline'      => $this->input('timeline'),
-            'deliverable'   => $this->input('deliverable'),
-        ];
+        // Champs complémentaires → stockés en JSON
+        $extra = array_filter([
+            'timeline' => $this->input('timeline'),
+        ]);
+
+        $leadName     = $this->input('lead_name', '');
+        $organisation = $this->input('organisation', '');
+        $email        = $this->input('email', '');
+        $phone        = trim($this->input('phone_code', '') . ' ' . $this->input('phone_number', ''));
+        $projectTitle = $this->input('project_title', '');
+        $description  = $this->input('description', '');
 
         $leadId = Database::exec(
             'INSERT INTO leads
@@ -68,13 +71,13 @@ final class IntakeController extends Controller
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 $type,
-                $this->input('lead_name', ''),
-                $this->input('organisation', ''),
-                $this->input('email', ''),
-                $this->input('phone'),
-                $this->input('project_title'),
-                $this->input('description'),
-                json_encode(array_filter($extra), JSON_UNESCAPED_UNICODE),
+                $leadName,
+                $organisation,
+                $email,
+                $phone ?: null,
+                $projectTitle,
+                $description,
+                $extra ? json_encode($extra, JSON_UNESCAPED_UNICODE) : null,
                 'new',
             ]
         );
@@ -85,12 +88,17 @@ final class IntakeController extends Controller
             $locale  = Lang::current();
             $subject = $tpl['subject_' . $locale];
             $body    = Mailer::fill($tpl['body_' . $locale], [
-                'lead_name'     => $this->input('lead_name', ''),
-                'project_title' => $this->input('project_title', '—'),
+                'lead_name'     => $leadName,
+                'project_title' => $projectTitle ?: '—',
             ]);
-            Mailer::send($this->input('email', ''), $subject, $body);
+            Mailer::send($email, $subject, $body);
             Database::exec('UPDATE leads SET triage_sent_at = NOW() WHERE id = ?', [$leadId]);
         }
+
+        // Notification admin → consulting@ avec CC macj@
+        $adminSubject = "[New Lead] {$type} — {$projectTitle}";
+        $adminBody    = "New intake submission\n\nType: {$type}\nName: {$leadName}\nOrganisation: {$organisation}\nEmail: {$email}\nPhone: {$phone}\nProject: {$projectTitle}\n\nDescription:\n{$description}";
+        Mailer::send('consulting@erid-amrafrica.org', $adminSubject, $adminBody, 'macj@erid-amrafrica.org');
 
         Audit::log('create', 'lead', (string) $leadId, ['type' => $type]);
 
@@ -100,23 +108,68 @@ final class IntakeController extends Controller
         ], 'public');
     }
 
+    /** Formulaire anonyme de soumission de signal (EBS). */
+    public function rumourForm(): void
+    {
+        $this->view('public/rumour', [
+            'title' => Lang::current() === 'fr' ? 'Signal anonyme — ERID-AMRAfrica' : 'Anonymous signal — ERID-AMRAfrica',
+        ], 'public');
+    }
+
     /** Rumour Management System — soumission anonyme (Event-Based Surveillance). */
     public function rumour(): void
     {
         Csrf::verify();
+
+        // Media upload (photo/audio, max 15 MB)
+        $mediaFile = null;
+        if (!empty($_FILES['media']['name']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
+            $maxSize = 15 * 1024 * 1024; // 15 MB
+            if ($_FILES['media']['size'] <= $maxSize) {
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/rumours';
+                if (!is_dir($uploadDir)) {
+                    @mkdir($uploadDir, 0775, true);
+                }
+                $ext  = pathinfo($_FILES['media']['name'], PATHINFO_EXTENSION);
+                $name = uniqid('signal_') . '.' . strtolower($ext);
+                if (move_uploaded_file($_FILES['media']['tmp_name'], $uploadDir . '/' . $name)) {
+                    $mediaFile = '/uploads/rumours/' . $name;
+                }
+            }
+        }
+
         $id = Database::exec(
-            'INSERT INTO rumours (source_channel, is_anonymous, country, sector, raw_signal)
-             VALUES (?, ?, ?, ?, ?)',
+            'INSERT INTO rumours (source_channel, is_anonymous, country, region, setting_type, sector, raw_signal, media_file)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 'web_form',
                 1,
                 $this->input('country'),
-                $this->input('sector', 'unknown'),
+                $this->input('region'),
+                $this->input('setting_type'),
+                'unknown',
                 $this->input('signal', ''),
+                $mediaFile,
             ]
         );
-        Audit::log('create', 'rumour', (string) $id);
-        $this->json(['ok' => true, 'id' => $id]);
+
+        // IP strippée pour protéger les sources
+        Audit::log('create', 'rumour', (string) $id, [], true);
+
+        // Notification admin
+        $signal = mb_substr($this->input('signal', ''), 0, 200);
+        Mailer::send(
+            'consulting@erid-amrafrica.org',
+            '[EBS Signal] New anonymous submission #' . $id,
+            "New anonymous signal received\n\nCountry: " . $this->input('country', '—') .
+            "\nRegion: " . $this->input('region', '—') .
+            "\nSetting: " . $this->input('setting_type', '—') .
+            "\n\nSignal:\n{$signal}"
+        );
+
+        $this->view('public/rumour_success', [
+            'title' => Lang::current() === 'fr' ? 'Signal reçu — ERID-AMRAfrica' : 'Signal received — ERID-AMRAfrica',
+        ], 'public');
     }
 
     /** Abonnement (monétisation : produits de données premium). */

@@ -73,6 +73,7 @@ CREATE TABLE articles (
 CREATE TABLE media_items (
     id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     type            ENUM('video','comic','podcast','image') NOT NULL,
+    sub_type        VARCHAR(40)     NULL,
     title_fr        VARCHAR(255)    NOT NULL,
     title_en        VARCHAR(255)    NOT NULL,
     description_fr  TEXT            NULL,
@@ -106,8 +107,11 @@ CREATE TABLE rumours (
     is_anonymous    TINYINT(1)      NOT NULL DEFAULT 1,
     reporter_contact VARCHAR(190)   NULL,
     country         VARCHAR(80)     NULL,
+    region          VARCHAR(120)    NULL,
+    setting_type    ENUM('farm','veterinary_clinic','open_market','community','other') NULL,
     sector          ENUM('human','animal','environment','agriculture','pharma','unknown') NOT NULL DEFAULT 'unknown',
     raw_signal      TEXT            NOT NULL,
+    media_file      VARCHAR(255)    NULL,
     -- Triage automatique (moteur de classification rule-based + NLP)
     triage_status   ENUM('new','triaged','escalated','dismissed') NOT NULL DEFAULT 'new',
     risk_score      TINYINT         NULL,            -- 0–100 calculé par le moteur
@@ -192,7 +196,31 @@ CREATE TABLE pages (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------
--- 9. MODÈLES D'E-MAIL  (triage auto white-labellé, éditables depuis l'admin)
+-- 9. CLASSROOM / ACADEMY  (formations One Health en ligne)
+-- ---------------------------------------------------------------------
+CREATE TABLE courses (
+    id               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title_fr         VARCHAR(255)    NOT NULL,
+    title_en         VARCHAR(255)    NOT NULL,
+    description_fr   TEXT            NULL,
+    description_en   TEXT            NULL,
+    instructor       VARCHAR(200)    NULL,
+    duration         VARCHAR(60)     NULL,
+    level            ENUM('beginner','intermediate','advanced') NOT NULL DEFAULT 'beginner',
+    category         VARCHAR(100)    NULL,
+    thumbnail        VARCHAR(255)    NULL,
+    schedule         VARCHAR(255)    NULL,
+    registration_url VARCHAR(500)    NULL,
+    materials_file   VARCHAR(255)    NULL,
+    status           ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
+    sort_order       SMALLINT        NOT NULL DEFAULT 0,
+    created_at       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_courses_status (status, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------
+-- 10. MODÈLES D'E-MAIL  (triage auto white-labellé, éditables depuis l'admin)
 -- ---------------------------------------------------------------------
 CREATE TABLE email_templates (
     id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

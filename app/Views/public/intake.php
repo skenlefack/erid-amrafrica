@@ -31,9 +31,8 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
         </div>
     </div>
 
-    <form class="intake-form" method="post" action="/intake" enctype="multipart/form-data">
+    <form class="intake-form" method="post" action="/intake">
         <?= Csrf::field() ?>
-        <input type="hidden" name="pillar" value="<?= $e($pillar) ?>">
 
         <div class="intake-section">
             <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Vos coordonnées' : 'Your details') ?></h3>
@@ -44,47 +43,52 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
                     <input type="text" name="organisation" required placeholder="<?= $e($lang === 'fr' ? 'Institution / Organisation' : 'Institution / Organization') ?>"></label>
                 <label><?= $e(Lang::t('f_email')) ?> *
                     <input type="email" name="email" required placeholder="email@institution.org"></label>
-                <label><?= $e(Lang::t('f_phone')) ?>
-                    <input type="text" name="phone" placeholder="+237 6xx xxx xxx (WhatsApp)"></label>
+                <label><?= $e($lang === 'fr' ? 'WhatsApp (avec indicatif pays)' : 'WhatsApp line (with country code)') ?>
+                    <div style="display:flex;gap:8px">
+                        <select name="phone_code" style="width:120px">
+                            <option value="+237">🇨🇲 +237</option>
+                            <option value="+254">🇰🇪 +254</option>
+                            <option value="+234">🇳🇬 +234</option>
+                            <option value="+27">🇿🇦 +27</option>
+                            <option value="+233">🇬🇭 +233</option>
+                            <option value="+225">🇨🇮 +225</option>
+                            <option value="+221">🇸🇳 +221</option>
+                            <option value="+243">🇨🇩 +243</option>
+                            <option value="+256">🇺🇬 +256</option>
+                            <option value="+255">🇹🇿 +255</option>
+                            <option value="+251">🇪🇹 +251</option>
+                            <option value="+212">🇲🇦 +212</option>
+                            <option value="+20">🇪🇬 +20</option>
+                            <option value="+250">🇷🇼 +250</option>
+                            <option value="+226">🇧🇫 +226</option>
+                            <option value="+229">🇧🇯 +229</option>
+                            <option value="+228">🇹🇬 +228</option>
+                            <option value="+223">🇲🇱 +223</option>
+                            <option value="+227">🇳🇪 +227</option>
+                            <option value="+235">🇹🇩 +235</option>
+                        </select>
+                        <input type="text" name="phone_number" placeholder="6xx xxx xxx" style="flex:1">
+                    </div>
+                </label>
             </div>
         </div>
 
         <div class="intake-section">
-            <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Votre projet' : 'Your project') ?></h3>
+            <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Service & projet' : 'Service & project') ?></h3>
+            <label><?= $e($lang === 'fr' ? 'Service demandé' : 'Requested service') ?> *
+                <select name="pillar" required>
+                    <option value="quant" <?= $pillar === 'quant' ? 'selected' : '' ?>>Pillar A — <?= $e($lang === 'fr' ? 'Data Science quantitative & épidémiologie spatiale' : 'Quantitative Data Science & Spatial Epidemiology') ?></option>
+                    <option value="qual" <?= $pillar === 'qual' ? 'selected' : '' ?>>Pillar B — <?= $e($lang === 'fr' ? 'Analyse qualitative & intelligence comportementale' : 'Qualitative Analysis & Behavioural Health Intelligence') ?></option>
+                    <option value="systems" <?= $pillar === 'systems' ? 'selected' : '' ?>>Pillar C — <?= $e($lang === 'fr' ? 'Pensée systémique & simulation' : 'Systems Thinking & Simulation') ?></option>
+                    <option value="advisory" <?= $pillar === 'advisory' ? 'selected' : '' ?>><?= $e($lang === 'fr' ? 'Advisory & Partenariats' : 'Advisory & Partnerships') ?></option>
+                </select>
+            </label>
             <label><?= $e(Lang::t('f_project')) ?> *
                 <input type="text" name="project_title" required placeholder="<?= $e($lang === 'fr' ? 'Titre du projet ou de la mission' : 'Project or mission title') ?>"></label>
-            <label><?= $e(Lang::t('f_desc')) ?> *
-                <textarea name="description" rows="5" required placeholder="<?= $e($lang === 'fr' ? 'Décrivez vos objectifs, le contexte et les résultats attendus...' : 'Describe your objectives, context and expected outcomes...') ?>"></textarea></label>
-
-            <?php if ($isQuant): ?>
-            <label><?= $e(Lang::t('f_dap')) ?>
-                <textarea name="dap" rows="3" placeholder="<?= $e($lang === 'fr' ? 'Décrivez votre plan d\'analyse...' : 'Describe your analysis plan...') ?>"></textarea></label>
-            <?php endif; ?>
-
-            <?php if ($isSystems): ?>
-            <fieldset class="sectors">
-                <legend><?= $e(Lang::t('f_sectors')) ?></legend>
-                <?php foreach (['human','animal','environment','agriculture','pharma'] as $sec): ?>
-                    <label class="chk"><input type="checkbox" name="sectors[]" value="<?= $sec ?>"> <?= $e(Lang::t('sector_' . $sec)) ?></label>
-                <?php endforeach; ?>
-            </fieldset>
-            <?php endif; ?>
-        </div>
-
-        <div class="intake-section">
-            <h3 class="intake-section__title"><?= $e($lang === 'fr' ? 'Planning & documents' : 'Timeline & documents') ?></h3>
+            <label><?= $e($lang === 'fr' ? 'Plan d\'analyse de données (DAP), Termes de référence (ToR), ou Narratif de projet' : 'Data Analysis Plan (DAP), Terms of Reference (ToR), or Brief Project Narrative') ?> *
+                <textarea name="description" rows="6" required placeholder="<?= $e($lang === 'fr' ? 'Décrivez vos objectifs, le contexte, la méthodologie envisagée et les résultats attendus...' : 'Describe your objectives, context, envisaged methodology and expected outcomes...') ?>"></textarea></label>
             <label><?= $e(Lang::t('f_timeline')) ?>
                 <input type="date" name="timeline"></label>
-            <div class="file-upload-wrapper">
-                <span class="file-upload-label"><?= $e(Lang::t('f_upload')) ?></span>
-                <label class="file-upload" tabindex="0">
-                    <input type="file" name="upload" accept=".csv,.xls,.xlsx,.pdf,.doc,.docx" class="file-upload__input">
-                    <span class="file-upload__icon">📎</span>
-                    <span class="file-upload__text"><?= $e($lang === 'fr' ? 'Glissez un fichier ici ou cliquez pour parcourir' : 'Drag a file here or click to browse') ?></span>
-                    <span class="file-upload__hint">CSV, Excel, PDF, Word — max 50 Mo</span>
-                </label>
-                <span class="file-upload__name"></span>
-            </div>
         </div>
 
         <button class="btn btn-gold lg full" type="submit" style="margin-top:8px"><?= $e(Lang::t('submit_request')) ?></button>
@@ -102,9 +106,6 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
         <div class="widget-body">
             <h4 style="font-family:var(--font-d);font-size:15px;margin:0 0 8px;color:var(--ink)"><?= $e($pick($service, 'title')) ?></h4>
             <p style="font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.5"><?= $e($pick($service, 'summary')) ?></p>
-            <?php if ($service['price_from_usd']): ?>
-            <div style="font-size:14px;font-weight:800;color:<?= $e($currentColor) ?>;margin-bottom:4px"><?= $e(Lang::t('from')) ?> $<?= number_format((float)$service['price_from_usd']) ?></div>
-            <?php endif; ?>
             <span class="badge"><?= $e(Lang::t('model_' . $service['price_model'])) ?></span>
         </div>
     </div>
@@ -139,8 +140,8 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
                 <div class="process-step">
                     <span class="process-step__num" style="background:<?= $e($currentColor) ?>">4</span>
                     <div>
-                        <strong><?= $e($lang === 'fr' ? 'Proposition' : 'Proposal') ?></strong>
-                        <p><?= $e($lang === 'fr' ? 'Offre technique et financière détaillée' : 'Detailed technical and financial proposal') ?></p>
+                        <strong><?= $e($lang === 'fr' ? 'Proposition technique & financière' : 'Technical & Financial Proposal') ?></strong>
+                        <p><?= $e($lang === 'fr' ? 'Proposition technique & financière / Note de cadrage partenariat' : 'Technical & Financial Proposal / Partnership Scoping Note') ?></p>
                     </div>
                 </div>
             </div>
@@ -161,9 +162,6 @@ $pillarIcons  = ['quant' => '📊', 'qual' => '🧠', 'systems' => '🔄', 'anal
                 <div class="sidebar-service__icon"><?= $svcIcons[$s['pillar']] ?? '💡' ?></div>
                 <div class="sidebar-service__body">
                     <h4><?= $e($pick($s, 'title')) ?></h4>
-                    <?php if ($s['price_from_usd']): ?>
-                    <span class="sidebar-service__price"><?= $e(Lang::t('from')) ?> $<?= number_format((float)$s['price_from_usd']) ?></span>
-                    <?php endif; ?>
                 </div>
             </a>
             <?php endforeach; ?>

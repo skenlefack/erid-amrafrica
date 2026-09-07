@@ -59,9 +59,9 @@ $isHome = ($uri === '/' || $uri === '');
                 <span class="header-banner__label">Ad</span>
                 <div class="header-banner__content">
                     <strong>ERID-AMRAfrica Intelligence</strong>
-                    <span><?= $e($lang === 'fr' ? 'Abonnez-vous aux alertes RAM en temps réel' : 'Subscribe to real-time AMR alerts') ?></span>
+                    <span><?= $e($lang === 'fr' ? 'Conseil expert & partenariats institutionnels One Health' : 'Expert advisory & institutional One Health partnerships') ?></span>
                 </div>
-                <a class="btn btn-accent sm" href="/pricing"><?= $e(Lang::t('subscribe')) ?></a>
+                <a class="btn btn-accent sm" href="/pricing"><?= $e($lang === 'fr' ? 'En savoir plus' : 'Learn more') ?></a>
             </div>
         </div>
     </div>
@@ -76,6 +76,7 @@ $isHome = ($uri === '/' || $uri === '');
             <a href="/services" <?= $uri === '/services' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_services')) ?></a>
             <a href="/media" <?= $uri === '/media' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_media')) ?></a>
             <a href="/publications" <?= $uri === '/publications' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_publications')) ?></a>
+            <a href="/classroom" <?= $uri === '/classroom' ? 'class="active"' : '' ?>><?= $e($lang === 'fr' ? 'Formation' : 'Academy') ?></a>
             <a href="/pricing" <?= $uri === '/pricing' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_pricing')) ?></a>
             <a href="/intake/advisory"><?= $e(Lang::t('cta_band_btn')) ?></a>
         </div>
@@ -142,6 +143,7 @@ $isHome = ($uri === '/' || $uri === '');
                 <a href="/services"><?= $e(Lang::t('nav_services')) ?></a>
                 <a href="/media"><?= $e(Lang::t('nav_media')) ?></a>
                 <a href="/publications"><?= $e(Lang::t('nav_publications')) ?></a>
+                <a href="/classroom"><?= $e($lang === 'fr' ? 'Formation' : 'Academy') ?></a>
                 <a href="/pricing"><?= $e(Lang::t('nav_pricing')) ?></a>
             </div>
             <div class="footer-col">

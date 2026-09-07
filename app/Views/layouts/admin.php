@@ -44,6 +44,9 @@ $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), 
         <a href="/admin/pages" class="sidebar__link <?= str_starts_with($uri, '/admin/pages') ? 'active' : '' ?>">
             <span class="sidebar__icon">📄</span> Pages
         </a>
+        <a href="/admin/courses" class="sidebar__link <?= str_starts_with($uri, '/admin/courses') ? 'active' : '' ?>">
+            <span class="sidebar__icon">🎓</span> Classroom
+        </a>
 
         <div class="sidebar__section">CRM & Surveillance</div>
         <a href="/admin/leads" class="sidebar__link <?= str_starts_with($uri, '/admin/leads') ? 'active' : '' ?>">

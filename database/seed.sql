@@ -54,8 +54,8 @@ INSERT INTO email_templates (template_key, subject_fr, subject_en, body_fr, body
 ('triage_default',
  'Accusé de réception — ERID-AMRAfrica',
  'Acknowledgement of receipt — ERID-AMRAfrica',
- 'Bonjour {{lead_name}},\n\nNous vous remercions d''avoir sollicité une consultation auprès d''ERID-AMRAfrica. Notre Consultante Principale et son équipe technique ont bien reçu vos objectifs et paramètres de projet « {{project_title}} ».\n\nNous examinons votre calendrier et reviendrons vers vous sous 48 heures ouvrées afin de planifier une session de cadrage approfondie.\n\nCordialement,\nL''équipe ERID-AMRAfrica',
- 'Dear {{lead_name}},\n\nThank you for requesting a consultation with ERID-AMRAfrica. Our Principal Consultant and technical team have received your project objectives and parameters for "{{project_title}}".\n\nWe are reviewing your timeline and will reach out within 48 business hours to schedule a deep-dive scoping session.\n\nKind regards,\nThe ERID-AMRAfrica team');
+ 'Bonjour {{lead_name}},\n\nNous vous remercions d''avoir sollicité une consultation auprès d''ERID-AMRAfrica. Notre Consultante Principale et son équipe technique ont bien reçu vos objectifs et paramètres de projet « {{project_title}} ».\n\nNous examinons votre calendrier et reviendrons vers vous sous 48 heures ouvrées afin de planifier une session de cadrage technique approfondie. Les jeux de données supplémentaires, codebooks de variables ou ToR élargis seront examinés lors de cet appel de cadrage initial.\n\nCordialement,\nL''équipe ERID-AMRAfrica',
+ 'Dear {{lead_name}},\n\nThank you for requesting a consultation with ERID-AMRAfrica. Our Principal Consultant and technical team have received your project objectives and parameters for "{{project_title}}".\n\nWe are reviewing your timeline and will reach out within 48 business hours to schedule a deep-dive technical scoping call. Supplementary datasets, variable codebooks, or expanded ToRs will be reviewed during this initial 48-hour technical scoping session.\n\nKind regards,\nThe ERID-AMRAfrica team');
 
 -- Pages CMS de base
 INSERT INTO pages (slug, title_fr, title_en, body_fr, body_en) VALUES

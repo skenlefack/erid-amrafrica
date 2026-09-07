@@ -23,10 +23,7 @@ $labels = [
                 <h2><?= $e($pick($s, 'title')) ?></h2>
                 <p><?= $e($pick($s, 'summary')) ?></p>
                 <div class="service-meta">
-                    <?php if ($s['price_from_usd']): ?>
-                        <span class="price"><?= $e(Lang::t('from')) ?> $<?= number_format((float)$s['price_from_usd']) ?>
-                        · <?= $e(Lang::t('model_' . $s['price_model'])) ?></span>
-                    <?php endif; ?>
+                    <span class="price"><?= $e(Lang::t('model_' . $s['price_model'])) ?></span>
                     <a class="btn btn-gold" href="/intake/<?= $e($s['pillar']) ?>"><?= $e(Lang::t('request')) ?></a>
                 </div>
             </div>

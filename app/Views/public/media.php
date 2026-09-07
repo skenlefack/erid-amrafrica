@@ -17,17 +17,23 @@ $lang = $_SESSION['locale'] ?? 'fr';
     <p class="muted"><?= $e($lang === 'fr' ? 'Aucun média pour le moment.' : 'No media yet.') ?></p>
   <?php else: ?>
     <div class="td-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px">
-      <?php foreach ($items as $m): ?>
+      <?php foreach ($items as $m):
+        // Auto-generate YouTube thumbnail if none provided
+        $thumb = $m['thumbnail'];
+        if (!$thumb && $m['type'] === 'video' && $m['embed_url'] && preg_match('#youtube\.com/embed/([^?&]+)#', $m['embed_url'], $ytMatch)) {
+            $thumb = 'https://img.youtube.com/vi/' . $ytMatch[1] . '/maxresdefault.jpg';
+        }
+      ?>
         <div class="td-module" style="border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08)">
-          <?php if ($m['thumbnail']): ?>
-            <div class="td-module__thumb"><img src="<?= $e($m['thumbnail']) ?>" alt="<?= $e(Lang::pick($m, 'title')) ?>" style="width:100%;height:180px;object-fit:cover"></div>
+          <?php if ($thumb): ?>
+            <div class="td-module__thumb"><img src="<?= $e($thumb) ?>" alt="<?= $e(Lang::pick($m, 'title')) ?>" loading="lazy" style="width:100%;height:180px;object-fit:cover"></div>
           <?php elseif ($m['type'] === 'video' && $m['embed_url']): ?>
-            <div style="position:relative;padding-top:56.25%"><iframe src="<?= $e($m['embed_url']) ?>" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen></iframe></div>
+            <div style="position:relative;padding-top:56.25%"><iframe src="<?= $e($m['embed_url']) ?>" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy" allowfullscreen></iframe></div>
           <?php else: ?>
             <div style="height:180px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem"><?= match($m['type']) { 'video'=>'&#9654;', 'podcast'=>'&#127911;', 'comic'=>'&#128214;', default=>'&#128247;' } ?></div>
           <?php endif; ?>
           <div style="padding:16px">
-            <span class="badge" style="margin-bottom:8px"><?= $e(ucfirst($m['type'])) ?></span>
+            <span class="badge" style="margin-bottom:8px"><?= $e(ucfirst($m['sub_type'] ?? $m['type'])) ?></span>
             <h3 style="margin:8px 0 4px;font-size:1.05rem"><?= $e(Lang::pick($m, 'title')) ?></h3>
             <?php $desc = Lang::pick($m, 'description'); if ($desc): ?>
               <p style="font-size:.9rem;color:var(--text-muted)"><?= $e(mb_substr($desc, 0, 120)) ?></p>

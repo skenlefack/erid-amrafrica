@@ -11,12 +11,24 @@ $e = fn($s) => View::e($s);
       <dt>Canal source</dt><dd><span class="badge"><?= $e($rumour['source_channel']) ?></span></dd>
       <dt>Secteur</dt><dd><?= $e($rumour['sector']) ?></dd>
       <dt>Pays</dt><dd><?= $e($rumour['country'] ?: '—') ?></dd>
+      <dt>Région / District</dt><dd><?= $e($rumour['region'] ?? '—') ?></dd>
+      <dt>Type de lieu</dt><dd><?= $e($rumour['setting_type'] ?? '—') ?></dd>
       <dt>Anonyme</dt><dd><?= $rumour['is_anonymous'] ? 'Oui' : 'Non' ?></dd>
       <?php if (!$rumour['is_anonymous'] && $rumour['reporter_contact']): ?>
         <dt>Contact</dt><dd><?= $e($rumour['reporter_contact']) ?></dd>
       <?php endif; ?>
       <dt>Date de réception</dt><dd><?= $e($rumour['created_at']) ?></dd>
       <dt>Signal brut</dt><dd style="white-space:pre-wrap"><?= $e($rumour['raw_signal']) ?></dd>
+      <?php if (!empty($rumour['media_file'])): ?>
+        <dt>Média</dt>
+        <dd>
+          <?php if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $rumour['media_file'])): ?>
+            <img src="<?= $e($rumour['media_file']) ?>" alt="Signal media" style="max-width:300px;border-radius:6px">
+          <?php else: ?>
+            <a href="<?= $e($rumour['media_file']) ?>" target="_blank" class="btn btn-ghost sm">Télécharger le fichier</a>
+          <?php endif; ?>
+        </dd>
+      <?php endif; ?>
       <?php if ($rumour['nlp_keywords']): ?>
         <dt>Mots-clés NLP</dt><dd><?= $e($rumour['nlp_keywords']) ?></dd>
       <?php endif; ?>

@@ -9,7 +9,7 @@ namespace App\Core;
  */
 final class Mailer
 {
-    public static function send(string $to, string $subject, string $body): bool
+    public static function send(string $to, string $subject, string $body, ?string $cc = null): bool
     {
         $cfg  = Config::get('mail');
         $from = $cfg['from_name'] . ' <' . $cfg['from'] . '>';
@@ -20,12 +20,14 @@ final class Mailer
             @mkdir($logDir, 0775, true);
         }
         $entry = sprintf(
-            "[%s] TO:%s\nFROM:%s\nSUBJECT:%s\n%s\n%s\n",
-            date('c'), $to, $from, $subject, str_repeat('-', 40), $body
+            "[%s] TO:%s\nFROM:%s%s\nSUBJECT:%s\n%s\n%s\n",
+            date('c'), $to, $from, $cc ? "\nCC:{$cc}" : '', $subject, str_repeat('-', 40), $body
         );
         @file_put_contents($logDir . '/mail.log', $entry . "\n", FILE_APPEND);
 
-        // mail($to, $subject, $body, "From: {$from}\r\nContent-Type: text/plain; charset=utf-8");
+        // $headers = "From: {$from}\r\nContent-Type: text/plain; charset=utf-8";
+        // if ($cc) { $headers .= "\r\nCc: {$cc}"; }
+        // mail($to, $subject, $body, $headers);
         return true;
     }
 

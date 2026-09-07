@@ -14,6 +14,7 @@ use App\Controllers\Public\IntakeController;
 use App\Controllers\Public\MediaController as PublicMediaController;
 use App\Controllers\Public\PublicationsController as PublicPublicationsController;
 use App\Controllers\Public\PageController;
+use App\Controllers\Public\ClassroomController;
 use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\ContentController;
@@ -24,6 +25,7 @@ use App\Controllers\Admin\PagesController;
 use App\Controllers\Admin\AuditController;
 use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Admin\EmailTemplatesController;
+use App\Controllers\Admin\ClassroomController as AdminClassroomController;
 
 // ----------------------- SITE PUBLIC -----------------------
 $router->get('/',                 [HomeController::class, 'index']);
@@ -35,10 +37,13 @@ $router->get('/media',            [PublicMediaController::class, 'index']);
 $router->get('/publications',     [PublicPublicationsController::class, 'index']);
 $router->get('/publications/{id}/download', [PublicPublicationsController::class, 'download']);
 $router->get('/page/{slug}',      [PageController::class, 'show']);
+$router->get('/classroom',        [ClassroomController::class, 'index']);
+$router->get('/classroom/{id}',   [ClassroomController::class, 'show']);
 
 // Portails d'intake (CTA → CRM + e-mail de triage automatique)
 $router->get('/intake/{pillar}',  [IntakeController::class, 'form']);
 $router->post('/intake',          [IntakeController::class, 'submit']);
+$router->get('/signal',           [IntakeController::class, 'rumourForm']);
 $router->post('/rumour',          [IntakeController::class, 'rumour']);
 $router->post('/subscribe',       [IntakeController::class, 'subscribe']);
 
@@ -106,6 +111,14 @@ $router->post('/admin/email-templates',             [EmailTemplatesController::c
 $router->get('/admin/email-templates/{id}/edit',    [EmailTemplatesController::class, 'edit']);
 $router->post('/admin/email-templates/{id}',        [EmailTemplatesController::class, 'update']);
 $router->post('/admin/email-templates/{id}/delete', [EmailTemplatesController::class, 'delete']);
+
+// CMS — Classroom / Academy
+$router->get('/admin/courses',              [AdminClassroomController::class, 'index']);
+$router->get('/admin/courses/new',          [AdminClassroomController::class, 'create']);
+$router->post('/admin/courses',             [AdminClassroomController::class, 'store']);
+$router->get('/admin/courses/{id}/edit',    [AdminClassroomController::class, 'edit']);
+$router->post('/admin/courses/{id}',        [AdminClassroomController::class, 'update']);
+$router->post('/admin/courses/{id}/delete', [AdminClassroomController::class, 'delete']);
 
 // CRM — pipeline commercial & surveillance
 $router->get('/admin/leads',              [LeadsController::class, 'index']);
