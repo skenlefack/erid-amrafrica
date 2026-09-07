@@ -26,6 +26,7 @@ use App\Controllers\Admin\AuditController;
 use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Admin\EmailTemplatesController;
 use App\Controllers\Admin\ClassroomController as AdminClassroomController;
+use App\Controllers\Admin\UsersController;
 
 // ----------------------- SITE PUBLIC -----------------------
 $router->get('/',                 [HomeController::class, 'index']);
@@ -119,6 +120,14 @@ $router->post('/admin/courses',             [AdminClassroomController::class, 's
 $router->get('/admin/courses/{id}/edit',    [AdminClassroomController::class, 'edit']);
 $router->post('/admin/courses/{id}',        [AdminClassroomController::class, 'update']);
 $router->post('/admin/courses/{id}/delete', [AdminClassroomController::class, 'delete']);
+
+// Gestion des utilisateurs (superadmin)
+$router->get('/admin/users',              [UsersController::class, 'index']);
+$router->get('/admin/users/new',          [UsersController::class, 'create']);
+$router->post('/admin/users',             [UsersController::class, 'store']);
+$router->get('/admin/users/{id}/edit',    [UsersController::class, 'edit']);
+$router->post('/admin/users/{id}',        [UsersController::class, 'update']);
+$router->post('/admin/users/{id}/toggle', [UsersController::class, 'toggleActive']);
 
 // CRM — pipeline commercial & surveillance
 $router->get('/admin/leads',              [LeadsController::class, 'index']);

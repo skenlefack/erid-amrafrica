@@ -79,6 +79,20 @@ $u = Auth::user();
             <span class="dash-kpi__label">Médias & Pages</span>
         </div>
     </div>
+    <div class="dash-kpi">
+        <div class="dash-kpi__icon">👤</div>
+        <div class="dash-kpi__data">
+            <span class="dash-kpi__value"><?= $stats['users_active'] ?><small> / <?= $stats['users_total'] ?></small></span>
+            <span class="dash-kpi__label">Utilisateurs actifs</span>
+        </div>
+    </div>
+    <div class="dash-kpi">
+        <div class="dash-kpi__icon">🎓</div>
+        <div class="dash-kpi__data">
+            <span class="dash-kpi__value"><?= $stats['courses_count'] ?></span>
+            <span class="dash-kpi__label">Formations</span>
+        </div>
+    </div>
 </div>
 
 <!-- Two-column layout -->

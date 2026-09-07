@@ -6,6 +6,14 @@ declare(strict_types=1);
  * Tout le trafic public et admin transite par ce fichier.
  */
 
+// Session sécurisée
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.use_strict_mode', '1');
+ini_set('session.gc_maxlifetime', '1800'); // 30 min
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    ini_set('session.cookie_secure', '1');
+}
 session_start();
 
 define('APP_ROOT', dirname(__DIR__));
@@ -28,11 +36,15 @@ use App\Core\Router;
 Config::load(APP_ROOT);
 Lang::boot();
 
-// En-têtes de sécurité de base
+// En-têtes de sécurité
 header('Content-Type: text/html; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+}
 
 $router = new Router();
 require APP_ROOT . '/config/routes.php';

@@ -19,6 +19,8 @@ CREATE TABLE users (
     role            ENUM('superadmin','editor','consultant','analyst') NOT NULL DEFAULT 'editor',
     locale          ENUM('fr','en') NOT NULL DEFAULT 'fr',
     is_active       TINYINT(1)      NOT NULL DEFAULT 1,
+    failed_attempts TINYINT         NOT NULL DEFAULT 0,
+    locked_until    DATETIME        NULL,
     last_login_at   DATETIME        NULL,
     created_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

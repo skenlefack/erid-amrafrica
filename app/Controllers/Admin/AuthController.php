@@ -26,12 +26,22 @@ final class AuthController extends Controller
         $email = $this->input('email', '');
         $pass  = $this->input('password', '');
 
-        if (Auth::attempt($email, $pass)) {
+        $result = Auth::attempt($email, $pass);
+
+        if ($result === true) {
             $this->redirect('/admin');
+            return;
         }
+
+        $error = match (true) {
+            $result === 'inactive' => 'Compte désactivé. Contactez l\'administrateur. / Account deactivated.',
+            str_starts_with((string) $result, 'locked:') => 'Compte verrouillé — réessayez dans ' . explode(':', $result)[1] . ' min. / Account locked.',
+            default => 'Identifiants invalides / Invalid credentials',
+        };
+
         $this->view('admin/login', [
             'title' => 'Connexion — Console ERID-AMRAfrica',
-            'error' => 'Identifiants invalides / Invalid credentials',
+            'error' => $error,
         ], 'admin_blank');
     }
 

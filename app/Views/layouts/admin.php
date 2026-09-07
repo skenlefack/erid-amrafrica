@@ -60,6 +60,11 @@ $initials = implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), 
         </a>
 
         <div class="sidebar__section">Système</div>
+        <?php if (($_SESSION['urole'] ?? '') === 'superadmin'): ?>
+        <a href="/admin/users" class="sidebar__link <?= str_starts_with($uri, '/admin/users') ? 'active' : '' ?>">
+            <span class="sidebar__icon">👤</span> Utilisateurs
+        </a>
+        <?php endif; ?>
         <a href="/admin/services" class="sidebar__link <?= str_starts_with($uri, '/admin/services') ? 'active' : '' ?>">
             <span class="sidebar__icon">🧩</span> Services & Tarifs
         </a>

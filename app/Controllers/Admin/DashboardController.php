@@ -28,6 +28,9 @@ final class DashboardController extends Controller
             'views_total'    => (int) (Database::one('SELECT COALESCE(SUM(views),0) n FROM articles')['n'] ?? 0),
             'media_count'    => (int) (Database::one('SELECT COUNT(*) n FROM media_items')['n'] ?? 0),
             'pages_count'    => (int) (Database::one('SELECT COUNT(*) n FROM pages')['n'] ?? 0),
+            'users_total'    => (int) (Database::one('SELECT COUNT(*) n FROM users')['n'] ?? 0),
+            'users_active'   => (int) (Database::one("SELECT COUNT(*) n FROM users WHERE is_active = 1")['n'] ?? 0),
+            'courses_count'  => (int) (Database::one("SELECT COUNT(*) n FROM courses WHERE status='published'")['n'] ?? 0),
         ];
 
         $byType = Database::all(
