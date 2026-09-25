@@ -63,8 +63,12 @@ final class NewsController extends Controller
     public function show(string $slug): void
     {
         $article = Database::one(
-            "SELECT a.*, c.slug AS cat_slug, c.accent_color
-               FROM articles a JOIN categories c ON c.id = a.category_id
+            "SELECT a.*, c.slug AS cat_slug, c.accent_color,
+                    c.name_fr AS cat_fr, c.name_en AS cat_en,
+                    u.full_name AS author_name, u.photo AS author_photo, u.affiliation AS author_affiliation
+               FROM articles a
+               JOIN categories c ON c.id = a.category_id
+               LEFT JOIN users u ON u.id = a.author_id
               WHERE a.slug = ? AND a.status = 'published'",
             [$slug]
         );
@@ -85,10 +89,12 @@ final class NewsController extends Controller
         $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
 
         $this->view('public/article', [
-            'title'      => Lang::pick($article, 'title'),
-            'article'    => $article,
-            'popular'    => $popular,
-            'categories' => $categories,
+            'title'       => Lang::pick($article, 'title'),
+            'article'     => $article,
+            'popular'     => $popular,
+            'categories'  => $categories,
+            'seoKeywords' => $article['seo_keywords'] ?? '',
+            'ogImage'     => $article['cover_image'] ?? '',
         ], 'public');
     }
 }

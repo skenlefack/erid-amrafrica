@@ -16,9 +16,12 @@ CREATE TABLE users (
     full_name       VARCHAR(150)    NOT NULL,
     email           VARCHAR(190)    NOT NULL UNIQUE,
     password_hash   VARCHAR(255)    NOT NULL,
-    role            ENUM('superadmin','editor','consultant','analyst') NOT NULL DEFAULT 'editor',
+    role            ENUM('superadmin','editor','author','consultant','analyst') NOT NULL DEFAULT 'editor',
     locale          ENUM('fr','en') NOT NULL DEFAULT 'fr',
     is_active       TINYINT(1)      NOT NULL DEFAULT 1,
+    bio             TEXT            NULL,
+    photo           VARCHAR(255)    NULL,
+    affiliation     VARCHAR(200)    NULL,
     failed_attempts TINYINT         NOT NULL DEFAULT 0,
     locked_until    DATETIME        NULL,
     last_login_at   DATETIME        NULL,
@@ -42,7 +45,7 @@ CREATE TABLE settings (
 -- ---------------------------------------------------------------------
 CREATE TABLE categories (
     id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    slug            VARCHAR(80)     NOT NULL UNIQUE,   -- spillover | amr_residues | policy_trade | tech_innovation
+    slug            VARCHAR(80)     NOT NULL UNIQUE,
     name_fr         VARCHAR(120)    NOT NULL,
     name_en         VARCHAR(120)    NOT NULL,
     accent_color    VARCHAR(9)      NOT NULL DEFAULT '#0E7C7B',
@@ -61,6 +64,7 @@ CREATE TABLE articles (
     body_fr         MEDIUMTEXT      NULL,
     body_en         MEDIUMTEXT      NULL,
     cover_image     VARCHAR(255)    NULL,
+    seo_keywords    VARCHAR(500)    NULL,
     status          ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
     is_featured     TINYINT(1)      NOT NULL DEFAULT 0,
     published_at    DATETIME        NULL,

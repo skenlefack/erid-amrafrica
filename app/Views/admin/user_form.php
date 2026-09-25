@@ -7,7 +7,7 @@ $isEdit = !empty($user['id']);
 $val = fn($k, $d = '') => $e($u[$k] ?? $d);
 ?>
 <a class="back" href="/admin/users">← Utilisateurs</a>
-<div class="panel" style="max-width:600px">
+<div class="panel" style="max-width:640px">
   <h2><?= $isEdit ? 'Éditer l\'utilisateur' : 'Nouvel utilisateur' ?></h2>
 
   <?php if (!empty($errors)): ?>
@@ -18,7 +18,7 @@ $val = fn($k, $d = '') => $e($u[$k] ?? $d);
   </div>
   <?php endif; ?>
 
-  <form method="post" action="<?= $isEdit ? '/admin/users/' . (int)$user['id'] : '/admin/users' ?>">
+  <form method="post" action="<?= $isEdit ? '/admin/users/' . (int)$user['id'] : '/admin/users' ?>" enctype="multipart/form-data">
     <?= Csrf::field() ?>
 
     <div class="form-grid">
@@ -30,7 +30,7 @@ $val = fn($k, $d = '') => $e($u[$k] ?? $d);
       </label>
       <label>Rôle *
         <select name="role" required>
-          <?php foreach (['superadmin' => 'Super Admin', 'editor' => 'Éditeur', 'consultant' => 'Consultant', 'analyst' => 'Analyste'] as $k => $label): ?>
+          <?php foreach (['superadmin' => 'Super Admin', 'editor' => 'Éditeur', 'author' => 'Auteur', 'consultant' => 'Consultant', 'analyst' => 'Analyste'] as $k => $label): ?>
             <option value="<?= $k ?>" <?= ($u['role'] ?? 'consultant') === $k ? 'selected' : '' ?>><?= $e($label) ?></option>
           <?php endforeach; ?>
         </select>
@@ -46,6 +46,23 @@ $val = fn($k, $d = '') => $e($u[$k] ?? $d);
     <label>Mot de passe <?= $isEdit ? '(laisser vide pour ne pas changer)' : '*' ?>
       <input type="password" name="password" minlength="8" <?= $isEdit ? '' : 'required' ?> placeholder="Minimum 8 caractères" autocomplete="new-password">
     </label>
+
+    <!-- Author profile fields -->
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line)">
+        <h3 style="font-size:15px;margin-bottom:12px">Profil auteur</h3>
+        <label>Affiliation / Institution
+            <input type="text" name="affiliation" value="<?= $val('affiliation') ?>" placeholder="ERID-AMRAfrica, OMS, Africa CDC...">
+        </label>
+        <label>Biographie
+            <textarea name="bio" rows="3" placeholder="Courte biographie de l'auteur..."><?= $val('bio') ?></textarea>
+        </label>
+        <label>Photo de profil <small class="muted">— JPG, PNG ou WebP — max 2 Mo</small>
+            <?php if (!empty($u['photo'])): ?>
+            <div style="margin:8px 0"><img src="<?= $e($u['photo']) ?>" alt="Photo" style="width:64px;height:64px;border-radius:50%;object-fit:cover"></div>
+            <?php endif; ?>
+            <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+        </label>
+    </div>
 
     <?php if ($isEdit): ?>
     <label>Statut du compte

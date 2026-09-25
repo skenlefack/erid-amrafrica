@@ -18,6 +18,7 @@ $isHome = ($uri === '/' || $uri === '');
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ERID-AMRAfrica">
     <?php if (!empty($ogImage)): ?><meta property="og:image" content="<?= $e($ogImage) ?>"><?php endif; ?>
+    <?php if (!empty($seoKeywords)): ?><meta name="keywords" content="<?= $e($seoKeywords) ?>"><?php endif; ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap">
@@ -79,6 +80,16 @@ $isHome = ($uri === '/' || $uri === '');
             <a href="/classroom" <?= $uri === '/classroom' ? 'class="active"' : '' ?>><?= $e($lang === 'fr' ? 'Formation' : 'Academy') ?></a>
             <a href="/pricing" <?= $uri === '/pricing' ? 'class="active"' : '' ?>><?= $e(Lang::t('nav_pricing')) ?></a>
             <a href="/intake/advisory"><?= $e(Lang::t('cta_band_btn')) ?></a>
+        </div>
+        <!-- Global search -->
+        <div class="nav-search" id="navSearch">
+            <form action="/search" method="get" class="nav-search__form" role="search">
+                <input type="search" name="q" class="nav-search__input" placeholder="<?= $e($lang === 'fr' ? 'Rechercher...' : 'Search...') ?>" aria-label="<?= $e($lang === 'fr' ? 'Rechercher' : 'Search') ?>" autocomplete="off" id="globalSearchInput">
+                <button type="submit" class="nav-search__btn" aria-label="Search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                </button>
+            </form>
+            <div class="nav-search__results" id="searchResults" style="display:none"></div>
         </div>
         <div class="menu-overlay" id="menuOverlay"></div>
     </div>
@@ -158,6 +169,10 @@ $isHome = ($uri === '/' || $uri === '');
                 <a href="/admin/login"><?= $e($lang === 'fr' ? 'Console admin' : 'Admin console') ?></a>
                 <a href="/intake/analytics"><?= $e(Lang::t('nav_cta')) ?></a>
                 <a href="/page/vision-mission"><?= $e($lang === 'fr' ? 'Vision & Mission' : 'Vision & Mission') ?></a>
+                <?php
+                    $contactEmail = \App\Core\Database::one("SELECT value_fr FROM settings WHERE setting_key = 'contact_email'")['value_fr'] ?? 'contact@erid-amrafrica.org';
+                ?>
+                <a href="mailto:<?= $e($contactEmail) ?>"><?= $e($contactEmail) ?></a>
             </div>
             <div class="footer-col footer-col--newsletter">
                 <h4><?= $e(Lang::t('footer_newsletter')) ?></h4>
@@ -184,7 +199,7 @@ $isHome = ($uri === '/' || $uri === '');
             <span>&copy; <?= date('Y') ?> ERID-AMRAfrica. <?= $e($lang === 'fr' ? 'Tous droits réservés.' : 'All rights reserved.') ?></span>
             <span class="footer-bottom__links">
                 <a href="/page/vision-mission"><?= $e($lang === 'fr' ? 'À propos' : 'About') ?></a>
-                <a href="/intake/advisory"><?= $e($lang === 'fr' ? 'Contact' : 'Contact') ?></a>
+                <a href="mailto:<?= $e($contactEmail) ?>"><?= $e($lang === 'fr' ? 'Contact' : 'Contact') ?></a>
                 <a href="/admin/login">Console</a>
             </span>
             <span class="footer-bottom__brand"><img src="/assets/logo.png" alt="ERID-AMRAfrica" class="footer-bottom__logo"></span>

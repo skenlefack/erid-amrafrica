@@ -655,6 +655,29 @@ body.admin-blank{background:linear-gradient(135deg,#1A1F2E 0%,var(--navy-d) 100%
   .news-tab{padding:8px 10px;font-size:11px}
   .brand-logo{height:44px}
 }
+/* --- Global Search Bar --- */
+.nav-search{position:relative;margin-left:auto;flex-shrink:0}
+.nav-search__form{display:flex;align-items:center;background:rgba(255,255,255,.15);border-radius:var(--radius-sm);overflow:hidden;border:1px solid rgba(255,255,255,.2);transition:background .2s,border-color .2s}
+.nav-search__form:focus-within{background:rgba(255,255,255,.95);border-color:var(--teal)}
+.nav-search__input{border:none;background:transparent;padding:7px 12px;font-size:14px;color:#fff;width:180px;outline:none;font-family:var(--font-b);transition:width .3s}
+.nav-search__form:focus-within .nav-search__input{color:var(--ink);width:260px}
+.nav-search__input::placeholder{color:rgba(255,255,255,.65);font-size:13px}
+.nav-search__form:focus-within .nav-search__input::placeholder{color:var(--muted)}
+.nav-search__btn{border:none;background:transparent;padding:6px 10px;cursor:pointer;color:rgba(255,255,255,.8);display:flex;align-items:center}
+.nav-search__form:focus-within .nav-search__btn{color:var(--teal)}
+.nav-search__results{position:absolute;top:100%;right:0;width:380px;max-height:420px;overflow-y:auto;background:var(--card);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.18);z-index:1000;margin-top:6px;border:1px solid var(--line)}
+.nav-search__item{display:flex;gap:8px;align-items:center;padding:10px 14px;font-size:14px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);transition:background .15s}
+.nav-search__item:hover{background:var(--bg-alt)}
+.nav-search__item span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-search__empty{padding:16px;text-align:center;color:var(--muted);font-size:14px}
+.nav-search__all{display:block;padding:10px 14px;text-align:center;color:var(--teal);font-weight:600;text-decoration:none;font-size:13px}
+.nav-search__all:hover{background:var(--bg-alt)}
+@media(max-width:768px){
+  .nav-search__input{width:120px}
+  .nav-search__form:focus-within .nav-search__input{width:180px}
+  .nav-search__results{width:calc(100vw - 32px);right:-16px}
+}
+
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 :focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
 a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}

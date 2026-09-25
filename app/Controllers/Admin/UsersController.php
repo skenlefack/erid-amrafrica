@@ -71,7 +71,7 @@ final class UsersController extends Controller
         if (!$name) { $errors[] = 'Le nom est requis.'; }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { $errors[] = 'Adresse e-mail invalide.'; }
         if (mb_strlen($password) < 8) { $errors[] = 'Le mot de passe doit contenir au moins 8 caractères.'; }
-        if (!in_array($role, ['superadmin', 'editor', 'consultant', 'analyst'], true)) { $errors[] = 'Rôle invalide.'; }
+        if (!in_array($role, ['superadmin', 'editor', 'author', 'consultant', 'analyst'], true)) { $errors[] = 'Rôle invalide.'; }
 
         if (Database::exists('users', 'email = ?', [$email])) {
             $errors[] = 'Cette adresse e-mail est déjà utilisée.';
@@ -86,9 +86,13 @@ final class UsersController extends Controller
             return;
         }
 
+        $bio         = trim($this->input('bio', ''));
+        $affiliation = trim($this->input('affiliation', ''));
+        $photo       = $this->uploadPhoto();
+
         $id = Database::exec(
-            'INSERT INTO users (full_name, email, password_hash, role, locale, is_active) VALUES (?, ?, ?, ?, ?, 1)',
-            [$name, $email, password_hash($password, PASSWORD_BCRYPT), $role, $locale]
+            'INSERT INTO users (full_name, email, password_hash, role, locale, is_active, bio, photo, affiliation) VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?)',
+            [$name, $email, password_hash($password, PASSWORD_BCRYPT), $role, $locale, $bio ?: null, $photo, $affiliation ?: null]
         );
 
         Audit::log('create', 'user', (string) $id, ['role' => $role]);
@@ -125,7 +129,7 @@ final class UsersController extends Controller
         $errors = [];
         if (!$name) { $errors[] = 'Le nom est requis.'; }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { $errors[] = 'Adresse e-mail invalide.'; }
-        if (!in_array($role, ['superadmin', 'editor', 'consultant', 'analyst'], true)) { $errors[] = 'Rôle invalide.'; }
+        if (!in_array($role, ['superadmin', 'editor', 'author', 'consultant', 'analyst'], true)) { $errors[] = 'Rôle invalide.'; }
 
         // Vérifier unicité email si modifié
         if ($email !== $user['email'] && Database::exists('users', 'email = ? AND id != ?', [$email, (int) $id])) {
@@ -151,9 +155,16 @@ final class UsersController extends Controller
             return;
         }
 
+        $bio         = trim($this->input('bio', ''));
+        $affiliation = trim($this->input('affiliation', ''));
+        $photo       = $this->uploadPhoto();
+        if (!$photo && $user) {
+            $photo = $user['photo'] ?? null;
+        }
+
         Database::exec(
-            'UPDATE users SET full_name=?, email=?, role=?, locale=?, is_active=? WHERE id=?',
-            [$name, $email, $role, $locale, $isActive, (int) $id]
+            'UPDATE users SET full_name=?, email=?, role=?, locale=?, is_active=?, bio=?, photo=?, affiliation=? WHERE id=?',
+            [$name, $email, $role, $locale, $isActive, $bio ?: null, $photo, $affiliation ?: null, (int) $id]
         );
 
         // Mettre à jour le mot de passe si fourni
@@ -187,5 +198,37 @@ final class UsersController extends Controller
 
         Audit::log('update', 'user', $id, ['is_active' => $newStatus]);
         $this->redirect('/admin/users');
+    }
+
+    private function uploadPhoto(): ?string
+    {
+        if (empty($_FILES['photo']['tmp_name']) || $_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+        $file = $_FILES['photo'];
+        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        if (!in_array($mime, $allowed, true) || $file['size'] > 2 * 1024 * 1024) {
+            return null;
+        }
+
+        $ext = match ($mime) {
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp',
+            default      => 'jpg',
+        };
+        $dir = APP_ROOT . '/public/uploads/authors';
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+        $filename = 'author-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $ext;
+        if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $filename)) {
+            return null;
+        }
+        return '/uploads/authors/' . $filename;
     }
 }

@@ -13,7 +13,7 @@ $crumbs = [['Tableau de bord', '/admin']];
 $segments = array_filter(explode('/', trim($uri, '/')));
 array_shift($segments); // remove 'admin'
 $breadcrumbLabels = [
-    'articles' => 'Articles', 'media' => 'Médiathèque', 'publications' => 'Publications',
+    'articles' => 'Articles', 'categories' => 'Catégories', 'media' => 'Médiathèque', 'publications' => 'Publications',
     'pages' => 'Pages', 'courses' => 'Classroom', 'leads' => 'Leads / CRM',
     'rumours' => 'Surveillance', 'subscribers' => 'Abonnés', 'users' => 'Utilisateurs',
     'services' => 'Services', 'email-templates' => 'Templates email', 'audit' => 'Audit',
@@ -61,6 +61,9 @@ unset($_SESSION['_flash']);
         <a href="/admin/articles" class="sidebar__link <?= str_starts_with($uri, '/admin/articles') ? 'active' : '' ?>">
             <span class="sidebar__icon">📰</span> Articles
         </a>
+        <a href="/admin/categories" class="sidebar__link <?= str_starts_with($uri, '/admin/categories') ? 'active' : '' ?>">
+            <span class="sidebar__icon">🏷️</span> Catégories
+        </a>
         <a href="/admin/media" class="sidebar__link <?= str_starts_with($uri, '/admin/media') ? 'active' : '' ?>">
             <span class="sidebar__icon">🎬</span> Médiathèque
         </a>
@@ -85,6 +88,7 @@ unset($_SESSION['_flash']);
             <span class="sidebar__icon">👥</span> Abonnés
         </a>
 
+        <?php if (in_array($_SESSION['urole'] ?? '', ['superadmin', 'editor'])): ?>
         <div class="sidebar__section">Système</div>
         <?php if (($_SESSION['urole'] ?? '') === 'superadmin'): ?>
         <a href="/admin/users" class="sidebar__link <?= str_starts_with($uri, '/admin/users') ? 'active' : '' ?>">
@@ -103,6 +107,7 @@ unset($_SESSION['_flash']);
         <a href="/admin/settings" class="sidebar__link <?= str_starts_with($uri, '/admin/settings') ? 'active' : '' ?>">
             <span class="sidebar__icon">⚙️</span> Paramètres
         </a>
+        <?php endif; ?>
     </nav>
 
     <div class="sidebar__user">

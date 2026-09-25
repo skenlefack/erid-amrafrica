@@ -195,7 +195,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---- 9. Active sidebar link highlight ---- */
+  /* ---- 9. Global search — live results ---- */
+  const searchInput = document.getElementById('globalSearchInput');
+  const searchResults = document.getElementById('searchResults');
+  if (searchInput && searchResults) {
+    let debounce = null;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounce);
+      const q = searchInput.value.trim();
+      if (q.length < 2) { searchResults.style.display = 'none'; return; }
+      debounce = setTimeout(async () => {
+        try {
+          const res = await fetch('/search?q=' + encodeURIComponent(q), { headers: { 'Accept': 'application/json' } });
+          const data = await res.json();
+          if (!data.results.length) {
+            searchResults.innerHTML = '<div class="nav-search__empty">Aucun résultat</div>';
+          } else {
+            searchResults.innerHTML = data.results.slice(0, 6).map(r =>
+              '<a href="' + r.url + '" class="nav-search__item">'
+              + '<span class="cat-badge cat-badge--sm" style="background:' + (r.color || '#607D8B') + '">' + (r.cat || r.type) + '</span> '
+              + '<span>' + r.title + '</span>'
+              + '</a>'
+            ).join('') + '<a href="/search?q=' + encodeURIComponent(q) + '" class="nav-search__all">Voir tous les résultats →</a>';
+          }
+          searchResults.style.display = 'block';
+        } catch(_) {}
+      }, 300);
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#navSearch')) searchResults.style.display = 'none';
+    });
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim().length >= 2) searchResults.style.display = 'block';
+    });
+  }
+
+  /* ---- 10. Active sidebar link highlight ---- */
   const currentPath = window.location.pathname;
   document.querySelectorAll('.sidebar nav a').forEach(a => {
     if (a.getAttribute('href') === currentPath) {

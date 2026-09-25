@@ -59,13 +59,23 @@ $a = $article ?? null;
     <textarea name="body_en" id="body_en" rows="14" class="wysiwyg"><?= $a['body_en'] ?? '' ?></textarea>
 </div>
 
+<!-- Section: SEO -->
+<div class="panel">
+    <div class="panel__head"><h3>SEO — Mots-clés / Tags</h3></div>
+    <div style="padding:16px 20px">
+        <label>Mots-clés cibles <small class="muted">— séparés par des virgules (ex: RAM, surveillance, Afrique)</small>
+            <input type="text" name="seo_keywords" value="<?= $e($a['seo_keywords'] ?? '') ?>" placeholder="mot-clé 1, mot-clé 2, mot-clé 3">
+        </label>
+    </div>
+</div>
+
 <!-- Section: Image -->
 <div class="panel">
     <div class="panel__head"><h3>Image de couverture</h3></div>
     <div class="cover-upload" style="padding:20px">
         <div class="cover-upload__preview" id="coverPreview">
             <?php if ($a && $a['cover_image']): ?>
-            <img src="<?= $e($a['cover_image']) ?>" alt="Cover" id="coverImg">
+            <img src="<?= $e($a['cover_image']) ?><?= str_contains($a['cover_image'], '?') ? '' : '?v=' . time() ?>" alt="Cover" id="coverImg">
             <div class="cover-upload__overlay">
                 <span>Changer l'image</span>
             </div>

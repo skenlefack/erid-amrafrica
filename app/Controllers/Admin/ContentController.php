@@ -20,7 +20,7 @@ final class ContentController extends Controller
     // ---------- ARTICLES ----------
     public function articles(): void
     {
-        Auth::require(['superadmin', 'editor']);
+        Auth::require(['superadmin', 'editor', 'author']);
         $filter = $this->input('status');
         $search = $this->input('q');
         $page   = max(1, (int) ($this->input('page') ?: 1));
@@ -55,14 +55,14 @@ final class ContentController extends Controller
 
     public function createArticle(): void
     {
-        Auth::require(['superadmin', 'editor']);
+        Auth::require(['superadmin', 'editor', 'author']);
         $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
         $this->view('admin/article_form', ['title' => 'Nouvel article', 'categories' => $categories], 'admin');
     }
 
     public function storeArticle(): void
     {
-        Auth::require(['superadmin', 'editor']);
+        Auth::require(['superadmin', 'editor', 'author']);
         Csrf::verify();
 
         $title = $this->input('title_fr', 'Sans titre');
@@ -72,8 +72,8 @@ final class ContentController extends Controller
 
         $id = Database::exec(
             'INSERT INTO articles
-                (category_id, author_id, slug, title_fr, title_en, excerpt_fr, excerpt_en, body_fr, body_en, cover_image, status, is_featured, published_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                (category_id, author_id, slug, title_fr, title_en, excerpt_fr, excerpt_en, body_fr, body_en, cover_image, seo_keywords, status, is_featured, published_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 (int) $this->input('category_id', '1'),
                 Auth::user()['id'],
@@ -85,6 +85,7 @@ final class ContentController extends Controller
                 $this->input('body_fr'),
                 $this->input('body_en'),
                 $cover,
+                $this->input('seo_keywords'),
                 $this->input('status', 'draft'),
                 (int) ($this->input('is_featured') ? 1 : 0),
                 $this->input('status') === 'published' ? date('Y-m-d H:i:s') : null,
@@ -96,7 +97,7 @@ final class ContentController extends Controller
 
     public function editArticle(string $id): void
     {
-        Auth::require(['superadmin', 'editor']);
+        Auth::require(['superadmin', 'editor', 'author']);
         $article = Database::one('SELECT * FROM articles WHERE id = ?', [(int) $id]);
         if (!$article) {
             http_response_code(404);
@@ -112,7 +113,7 @@ final class ContentController extends Controller
 
     public function updateArticle(string $id): void
     {
-        Auth::require(['superadmin', 'editor']);
+        Auth::require(['superadmin', 'editor', 'author']);
         Csrf::verify();
 
         $cover = $this->uploadCover();
@@ -123,7 +124,7 @@ final class ContentController extends Controller
 
         Database::exec(
             'UPDATE articles SET category_id=?, title_fr=?, title_en=?, excerpt_fr=?, excerpt_en=?,
-                    body_fr=?, body_en=?, cover_image=?, status=?, is_featured=?,
+                    body_fr=?, body_en=?, cover_image=?, seo_keywords=?, status=?, is_featured=?,
                     published_at = CASE WHEN ? = \'published\' AND published_at IS NULL THEN NOW() ELSE published_at END
              WHERE id=?',
             [
@@ -135,6 +136,7 @@ final class ContentController extends Controller
                 $this->input('body_fr'),
                 $this->input('body_en'),
                 $cover,
+                $this->input('seo_keywords'),
                 $this->input('status', 'draft'),
                 (int) ($this->input('is_featured') ? 1 : 0),
                 $this->input('status', 'draft'),
@@ -147,7 +149,7 @@ final class ContentController extends Controller
 
     public function deleteArticle(string $id): void
     {
-        Auth::require(['superadmin', 'editor']);
+        Auth::require(['superadmin', 'editor', 'author']);
         Csrf::verify();
         Database::exec("UPDATE articles SET status = 'archived' WHERE id = ?", [(int) $id]);
         Audit::log('delete', 'article', $id);
@@ -259,7 +261,7 @@ final class ContentController extends Controller
 
     private function uploadCover(): ?string
     {
-        if (empty($_FILES['cover_image']['tmp_name'])) {
+        if (empty($_FILES['cover_image']['tmp_name']) || $_FILES['cover_image']['error'] !== UPLOAD_ERR_OK) {
             return null;
         }
         $file = $_FILES['cover_image'];
@@ -283,8 +285,11 @@ final class ContentController extends Controller
             @mkdir($dir, 0775, true);
         }
         $filename = 'article-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $ext;
-        move_uploaded_file($file['tmp_name'], $dir . '/' . $filename);
-        return '/uploads/articles/' . $filename;
+        if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $filename)) {
+            return null;
+        }
+        // Append cache-busting version to force browser refresh
+        return '/uploads/articles/' . $filename . '?v=' . time();
     }
 
     private function slugify(string $s): string

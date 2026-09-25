@@ -14,7 +14,19 @@ $img = $article['cover_image'] ?? '';
 
     <span class="cat-badge" style="background:<?= $e($article['accent_color'] ?? 'var(--teal)') ?>;margin-bottom:12px"><?= $e($pick($article, 'cat') ?? '') ?></span>
     <h1 class="page-title" style="margin-bottom:10px"><?= $e($pick($article, 'title')) ?></h1>
-    <div class="td-mod-meta" style="margin-bottom:20px"><?= $e($article['published_at'] ? date('d M Y', strtotime($article['published_at'])) : '') ?> · <?= (int)$article['views'] ?> <?= $e(Lang::t('views')) ?></div>
+    <div class="article-byline" style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <?php if (!empty($article['author_photo'])): ?>
+        <img src="<?= $e($article['author_photo']) ?>" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover">
+        <?php endif; ?>
+        <div class="td-mod-meta" style="margin:0">
+            <?php if (!empty($article['author_name'])): ?>
+            <span style="font-weight:600;color:var(--ink)"><?= $e($lang === 'fr' ? 'Par' : 'By') ?> <?= $e($article['author_name']) ?></span>
+            <?php if (!empty($article['author_affiliation'])): ?><span style="color:var(--muted)"> · <?= $e($article['author_affiliation']) ?></span><?php endif; ?>
+            <span style="color:var(--muted)"> | </span>
+            <?php endif; ?>
+            <?= $e($lang === 'fr' ? 'Publié le' : 'Published on') ?> <?= $e($article['published_at'] ? date('d M Y', strtotime($article['published_at'])) : '') ?> · <?= (int)$article['views'] ?> <?= $e(Lang::t('views')) ?>
+        </div>
+    </div>
 
     <?php if ($img): ?>
     <div class="article-cover">

@@ -15,6 +15,7 @@ use App\Controllers\Public\MediaController as PublicMediaController;
 use App\Controllers\Public\PublicationsController as PublicPublicationsController;
 use App\Controllers\Public\PageController;
 use App\Controllers\Public\ClassroomController;
+use App\Controllers\Public\SearchController;
 use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\ContentController;
@@ -27,6 +28,7 @@ use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Admin\EmailTemplatesController;
 use App\Controllers\Admin\ClassroomController as AdminClassroomController;
 use App\Controllers\Admin\UsersController;
+use App\Controllers\Admin\CategoriesController;
 
 // ----------------------- SITE PUBLIC -----------------------
 $router->get('/',                 [HomeController::class, 'index']);
@@ -40,6 +42,7 @@ $router->get('/publications/{id}/download', [PublicPublicationsController::class
 $router->get('/page/{slug}',      [PageController::class, 'show']);
 $router->get('/classroom',        [ClassroomController::class, 'index']);
 $router->get('/classroom/{id}',   [ClassroomController::class, 'show']);
+$router->get('/search',           [SearchController::class, 'index']);
 
 // Portails d'intake (CTA → CRM + e-mail de triage automatique)
 $router->get('/intake/{pillar}',  [IntakeController::class, 'form']);
@@ -64,6 +67,14 @@ $router->post('/admin/articles',             [ContentController::class, 'storeAr
 $router->get('/admin/articles/{id}/edit',    [ContentController::class, 'editArticle']);
 $router->post('/admin/articles/{id}',        [ContentController::class, 'updateArticle']);
 $router->post('/admin/articles/{id}/delete', [ContentController::class, 'deleteArticle']);
+
+// CMS — Catégories
+$router->get('/admin/categories',              [CategoriesController::class, 'index']);
+$router->get('/admin/categories/new',          [CategoriesController::class, 'create']);
+$router->post('/admin/categories',             [CategoriesController::class, 'store']);
+$router->get('/admin/categories/{id}/edit',    [CategoriesController::class, 'edit']);
+$router->post('/admin/categories/{id}',        [CategoriesController::class, 'update']);
+$router->post('/admin/categories/{id}/delete', [CategoriesController::class, 'delete']);
 
 // CMS — Services
 $router->get('/admin/services',              [ContentController::class, 'services']);
