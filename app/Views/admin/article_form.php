@@ -86,8 +86,8 @@ $a = $article ?? null;
                 <span class="cover-upload__hint">JPG, PNG ou WebP — max 5 Mo · Ratio recommandé 16:9</span>
             </div>
             <?php endif; ?>
+            <input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">
         </div>
-        <input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">
         <div class="cover-upload__info" id="coverInfo"></div>
     </div>
 </div>
@@ -122,7 +122,8 @@ if (typeof tinymce !== 'undefined') {
     });
 }
 
-// Cover image upload preview — input file is OUTSIDE the preview div so it is never destroyed
+// Cover image upload preview
+// The <input type="file"> stays in the DOM at all times — only the img/overlay are updated.
 (function() {
     const preview = document.getElementById('coverPreview');
     const input = document.getElementById('coverInput');
@@ -133,38 +134,41 @@ if (typeof tinymce !== 'undefined') {
         if (!file || !file.type.startsWith('image/')) return;
         const reader = new FileReader();
         reader.onload = function(e) {
-            // Update preview content without touching the input element
-            let img = document.getElementById('coverImg');
-            let overlay = document.getElementById('coverOverlay');
-            let empty = document.getElementById('coverEmpty');
+            // Remove empty-state placeholder if present
+            const empty = document.getElementById('coverEmpty');
             if (empty) empty.remove();
+
+            // Create or update the preview image
+            let img = document.getElementById('coverImg');
             if (!img) {
                 img = document.createElement('img');
                 img.id = 'coverImg';
                 img.alt = 'Preview';
-                preview.prepend(img);
+                preview.insertBefore(img, input);
             }
             img.src = e.target.result;
-            if (!overlay) {
-                overlay = document.createElement('div');
+
+            // Create overlay if it doesn't exist yet
+            if (!document.getElementById('coverOverlay')) {
+                const overlay = document.createElement('div');
                 overlay.id = 'coverOverlay';
                 overlay.className = 'cover-upload__overlay';
                 overlay.innerHTML = '<span>Changer l\'image</span>';
-                preview.appendChild(overlay);
+                preview.insertBefore(overlay, input);
             }
+
             const size = file.size < 1048576 ? (file.size / 1024).toFixed(0) + ' Ko' : (file.size / 1048576).toFixed(1) + ' Mo';
             info.innerHTML = '<span class="cover-upload__filename">📄 ' + file.name + ' (' + size + ')</span>';
         };
         reader.readAsDataURL(file);
     }
 
+    // When user picks a file via the native input (click or browse)
     input.addEventListener('change', function() {
         if (this.files[0]) showPreview(this.files[0]);
     });
 
-    // Click on preview area triggers file input
-    preview.addEventListener('click', function() { input.click(); });
-
+    // Drag & drop support on the preview zone
     ['dragenter', 'dragover'].forEach(ev => preview.addEventListener(ev, function(e) {
         e.preventDefault(); preview.classList.add('dragover');
     }));
