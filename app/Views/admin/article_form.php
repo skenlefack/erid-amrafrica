@@ -76,7 +76,7 @@ $a = $article ?? null;
         <div class="cover-upload__preview" id="coverPreview">
             <?php if ($a && $a['cover_image']): ?>
             <img src="<?= $e($a['cover_image']) ?><?= str_contains($a['cover_image'], '?') ? '' : '?v=' . time() ?>" alt="Cover" id="coverImg">
-            <div class="cover-upload__overlay">
+            <div class="cover-upload__overlay" id="coverOverlay">
                 <span>Changer l'image</span>
             </div>
             <?php else: ?>
@@ -86,8 +86,8 @@ $a = $article ?? null;
                 <span class="cover-upload__hint">JPG, PNG ou WebP — max 5 Mo · Ratio recommandé 16:9</span>
             </div>
             <?php endif; ?>
-            <input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">
         </div>
+        <input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">
         <div class="cover-upload__info" id="coverInfo"></div>
     </div>
 </div>
@@ -122,7 +122,7 @@ if (typeof tinymce !== 'undefined') {
     });
 }
 
-// Cover image upload preview
+// Cover image upload preview — input file is OUTSIDE the preview div so it is never destroyed
 (function() {
     const preview = document.getElementById('coverPreview');
     const input = document.getElementById('coverInput');
@@ -133,15 +133,27 @@ if (typeof tinymce !== 'undefined') {
         if (!file || !file.type.startsWith('image/')) return;
         const reader = new FileReader();
         reader.onload = function(e) {
-            preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" id="coverImg">'
-                + '<div class="cover-upload__overlay"><span>Changer l\'image</span></div>'
-                + '<input type="file" name="cover_image" accept="image/jpeg,image/png,image/webp" class="cover-upload__input" id="coverInput">';
+            // Update preview content without touching the input element
+            let img = document.getElementById('coverImg');
+            let overlay = document.getElementById('coverOverlay');
+            let empty = document.getElementById('coverEmpty');
+            if (empty) empty.remove();
+            if (!img) {
+                img = document.createElement('img');
+                img.id = 'coverImg';
+                img.alt = 'Preview';
+                preview.prepend(img);
+            }
+            img.src = e.target.result;
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'coverOverlay';
+                overlay.className = 'cover-upload__overlay';
+                overlay.innerHTML = '<span>Changer l\'image</span>';
+                preview.appendChild(overlay);
+            }
             const size = file.size < 1048576 ? (file.size / 1024).toFixed(0) + ' Ko' : (file.size / 1048576).toFixed(1) + ' Mo';
             info.innerHTML = '<span class="cover-upload__filename">📄 ' + file.name + ' (' + size + ')</span>';
-            // Re-attach event
-            document.getElementById('coverInput').addEventListener('change', function() {
-                if (this.files[0]) showPreview(this.files[0]);
-            });
         };
         reader.readAsDataURL(file);
     }
@@ -149,6 +161,9 @@ if (typeof tinymce !== 'undefined') {
     input.addEventListener('change', function() {
         if (this.files[0]) showPreview(this.files[0]);
     });
+
+    // Click on preview area triggers file input
+    preview.addEventListener('click', function() { input.click(); });
 
     ['dragenter', 'dragover'].forEach(ev => preview.addEventListener(ev, function(e) {
         e.preventDefault(); preview.classList.add('dragover');
