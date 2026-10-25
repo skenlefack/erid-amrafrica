@@ -186,14 +186,30 @@ $isHome = ($uri === '/' || $uri === '');
             </div>
         </div>
     </div>
+    <?php
+        $__fpEnabled = \App\Core\Database::one("SELECT value_fr FROM settings WHERE setting_key = 'footer_partners_enabled'");
+        $__fpPartners = (($__fpEnabled['value_fr'] ?? '1') === '1')
+            ? \App\Core\Database::all("SELECT name, logo_path, website_url FROM partners WHERE is_active = 1 ORDER BY sort_order")
+            : [];
+    ?>
+    <?php if ($__fpPartners): ?>
     <div class="footer-mid">
         <div class="container footer-partners">
             <span class="footer-partners__label"><?= $e($lang === 'fr' ? 'Réseau & Partenaires' : 'Network & Partners') ?></span>
             <div class="footer-partners__list">
-                <span>Africa CDC</span><span>WHO AFRO</span><span>AU-IBAR</span><span>FAO</span><span>Wellcome</span><span>Institut Pasteur</span><span>KEMRI</span><span>GARDP</span>
+                <?php foreach ($__fpPartners as $__fp): ?>
+                    <?php if ($__fp['website_url']): ?><a href="<?= $e($__fp['website_url']) ?>" target="_blank" rel="noopener" title="<?= $e($__fp['name']) ?>"><?php endif; ?>
+                    <?php if ($__fp['logo_path']): ?>
+                        <img src="<?= $e($__fp['logo_path']) ?>" alt="<?= $e($__fp['name']) ?>" class="footer-partners__logo">
+                    <?php else: ?>
+                        <span><?= $e($__fp['name']) ?></span>
+                    <?php endif; ?>
+                    <?php if ($__fp['website_url']): ?></a><?php endif; ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
+    <?php endif; ?>
     <div class="footer-bottom">
         <div class="container footer-bottom__inner">
             <span>&copy; <?= date('Y') ?> ERID-AMRAfrica. <?= $e($lang === 'fr' ? 'Tous droits réservés.' : 'All rights reserved.') ?></span>

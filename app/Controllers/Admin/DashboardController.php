@@ -25,7 +25,7 @@ final class DashboardController extends Controller
             'rumours_total'  => (int) (Database::one('SELECT COUNT(*) n FROM rumours')['n'] ?? 0),
             'subscribers'    => (int) (Database::one('SELECT COUNT(*) n FROM subscribers')['n'] ?? 0),
             'articles'       => (int) (Database::one("SELECT COUNT(*) n FROM articles WHERE status='published'")['n'] ?? 0),
-            'views_total'    => (int) (Database::one('SELECT COALESCE(SUM(views),0) n FROM articles')['n'] ?? 0),
+            'views_total'    => (int) (Database::one("SELECT COALESCE(SUM(views),0) n FROM articles WHERE status != 'trashed'")['n'] ?? 0),
             'media_count'    => (int) (Database::one('SELECT COUNT(*) n FROM media_items')['n'] ?? 0),
             'pages_count'    => (int) (Database::one('SELECT COUNT(*) n FROM pages')['n'] ?? 0),
             'users_total'    => (int) (Database::one('SELECT COUNT(*) n FROM users')['n'] ?? 0),

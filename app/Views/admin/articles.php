@@ -1,6 +1,6 @@
 <?php
 /** @var array $articles @var ?string $filter @var ?string $search @var int $page @var int $totalPages @var int $total */
-use App\Core\View; $e = fn($s) => View::e($s);
+use App\Core\View; use App\Core\Csrf; $e = fn($s) => View::e($s);
 $qs = fn(array $o) => '?' . http_build_query(array_filter(array_merge(['status' => $filter, 'q' => $search], $o)));
 ?>
 <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -12,11 +12,17 @@ $qs = fn(array $o) => '?' . http_build_query(array_filter(array_merge(['status' 
   </form>
 </div>
 <div class="filters">
-  <?php foreach (['', 'draft','published','archived'] as $st): ?>
-    <a class="chip <?= ($filter ?? null) === ($st ?: null) ? 'on' : '' ?>" href="/admin/articles<?= $st ? '?status='.$st : '' ?><?= $search ? '&q='.$e($search) : '' ?>"><?= $e($st ?: 'Tous') ?></a>
+  <?php foreach (['', 'draft','published','archived','trashed'] as $st): ?>
+    <a class="chip <?= ($filter ?? null) === ($st ?: null) ? 'on' : '' ?>" href="/admin/articles<?= $st ? '?status='.$st : '' ?><?= $search ? '&q='.$e($search) : '' ?>"><?= $e($st === 'trashed' ? 'Corbeille' : ($st ?: 'Tous')) ?></a>
   <?php endforeach; ?>
   <span class="muted" style="margin-left:auto;font-size:12px"><?= $total ?> article(s)</span>
 </div>
+<?php if (($filter ?? null) === 'trashed' && $total > 0): ?>
+<form method="post" action="/admin/articles/empty-trash" style="margin:8px 0" onsubmit="return confirm('Vider la corbeille ? Tous les articles seront supprimés définitivement.')">
+    <?= Csrf::field() ?>
+    <button type="submit" class="btn btn-ghost sm" style="color:#c62828">🗑️ Vider la corbeille (<?= $total ?>)</button>
+</form>
+<?php endif; ?>
 <div class="panel">
   <table class="data-table">
     <thead><tr><th>Titre (FR)</th><th>Canal</th><th>Statut</th><th>Vues</th><th>Date</th><th></th></tr></thead>
@@ -28,7 +34,14 @@ $qs = fn(array $o) => '?' . http_build_query(array_filter(array_merge(['status' 
         <td><span class="status status-<?= $e($a['status']) ?>"><?= $e($a['status']) ?></span></td>
         <td><?= (int)$a['views'] ?></td>
         <td><?= $e(substr((string)($a['published_at'] ?? $a['created_at']), 0, 10)) ?></td>
-        <td><a href="/admin/articles/<?= (int)$a['id'] ?>/edit" class="btn btn-ghost sm">Éditer</a></td>
+        <td>
+          <?php if ($a['status'] === 'trashed'): ?>
+            <form method="post" action="/admin/articles/<?= (int)$a['id'] ?>/restore" style="display:inline"><?= Csrf::field() ?><button type="submit" class="btn btn-ghost sm" style="color:var(--teal)">Restaurer</button></form>
+            <form method="post" action="/admin/articles/<?= (int)$a['id'] ?>/permanent-delete" style="display:inline" onsubmit="return confirm('Supprimer DÉFINITIVEMENT cet article ? Cette action est irréversible.')"><?= Csrf::field() ?><button type="submit" class="btn btn-ghost sm" style="color:#c62828">Suppr. définitif</button></form>
+          <?php else: ?>
+            <a href="/admin/articles/<?= (int)$a['id'] ?>/edit" class="btn btn-ghost sm">Éditer</a>
+          <?php endif; ?>
+        </td>
       </tr>
     <?php endforeach; ?>
     <?php if (!$articles): ?><tr><td colspan="6" class="muted">Aucun article.</td></tr><?php endif; ?>

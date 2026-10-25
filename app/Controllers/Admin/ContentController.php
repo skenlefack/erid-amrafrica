@@ -26,7 +26,7 @@ final class ContentController extends Controller
         $page   = max(1, (int) ($this->input('page') ?: 1));
         $where  = '1=1';
         $params = [];
-        if ($filter && in_array($filter, ['draft', 'published', 'archived'], true)) {
+        if ($filter && in_array($filter, ['draft', 'published', 'archived', 'trashed'], true)) {
             $where .= ' AND a.status = ?';
             $params[] = $filter;
         }
@@ -151,9 +151,42 @@ final class ContentController extends Controller
     {
         Auth::require(['superadmin', 'editor', 'author']);
         Csrf::verify();
-        Database::exec("UPDATE articles SET status = 'archived' WHERE id = ?", [(int) $id]);
-        Audit::log('delete', 'article', $id);
-        $this->redirect('/admin/articles');
+        Database::exec("UPDATE articles SET status = 'trashed' WHERE id = ?", [(int) $id]);
+        Audit::log('trash', 'article', $id);
+        $this->redirect('/admin/articles', 'Article déplacé dans la corbeille.');
+    }
+
+    public function restoreArticle(string $id): void
+    {
+        Auth::require(['superadmin', 'editor']);
+        Csrf::verify();
+        Database::exec("UPDATE articles SET status = 'draft' WHERE id = ?", [(int) $id]);
+        Audit::log('restore', 'article', $id);
+        $this->redirect('/admin/articles?status=trashed', 'Article restauré (brouillon).');
+    }
+
+    public function permanentDeleteArticle(string $id): void
+    {
+        Auth::require(['superadmin']);
+        Csrf::verify();
+        $article = Database::one('SELECT id FROM articles WHERE id = ? AND status = ?', [(int) $id, 'trashed']);
+        if (!$article) {
+            $this->redirect('/admin/articles?status=trashed', 'Article introuvable ou non dans la corbeille.', 'error');
+            return;
+        }
+        Database::exec('DELETE FROM articles WHERE id = ? AND status = ?', [(int) $id, 'trashed']);
+        Audit::log('permanent_delete', 'article', $id);
+        $this->redirect('/admin/articles?status=trashed', 'Article supprimé définitivement.');
+    }
+
+    public function emptyTrash(): void
+    {
+        Auth::require(['superadmin']);
+        Csrf::verify();
+        $count = (int) (Database::one("SELECT COUNT(*) n FROM articles WHERE status = 'trashed'")['n'] ?? 0);
+        Database::exec("DELETE FROM articles WHERE status = 'trashed'");
+        Audit::log('empty_trash', 'articles');
+        $this->redirect('/admin/articles', $count . ' article(s) supprimé(s) définitivement.');
     }
 
     // ---------- SERVICES (3 piliers + monétisation) ----------

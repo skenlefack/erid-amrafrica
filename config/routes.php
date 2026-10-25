@@ -29,6 +29,9 @@ use App\Controllers\Admin\EmailTemplatesController;
 use App\Controllers\Admin\ClassroomController as AdminClassroomController;
 use App\Controllers\Admin\UsersController;
 use App\Controllers\Admin\CategoriesController;
+use App\Controllers\Admin\PartnersController;
+use App\Controllers\Admin\RssSourcesController;
+use App\Controllers\Admin\KeywordRulesController;
 
 // ----------------------- SITE PUBLIC -----------------------
 $router->get('/',                 [HomeController::class, 'index']);
@@ -67,6 +70,9 @@ $router->post('/admin/articles',             [ContentController::class, 'storeAr
 $router->get('/admin/articles/{id}/edit',    [ContentController::class, 'editArticle']);
 $router->post('/admin/articles/{id}',        [ContentController::class, 'updateArticle']);
 $router->post('/admin/articles/{id}/delete', [ContentController::class, 'deleteArticle']);
+$router->post('/admin/articles/{id}/restore',          [ContentController::class, 'restoreArticle']);
+$router->post('/admin/articles/{id}/permanent-delete',  [ContentController::class, 'permanentDeleteArticle']);
+$router->post('/admin/articles/empty-trash',            [ContentController::class, 'emptyTrash']);
 
 // CMS — Catégories
 $router->get('/admin/categories',              [CategoriesController::class, 'index']);
@@ -75,6 +81,15 @@ $router->post('/admin/categories',             [CategoriesController::class, 'st
 $router->get('/admin/categories/{id}/edit',    [CategoriesController::class, 'edit']);
 $router->post('/admin/categories/{id}',        [CategoriesController::class, 'update']);
 $router->post('/admin/categories/{id}/delete', [CategoriesController::class, 'delete']);
+
+// CMS — Partenaires
+$router->get('/admin/partners',              [PartnersController::class, 'index']);
+$router->get('/admin/partners/new',          [PartnersController::class, 'create']);
+$router->post('/admin/partners',             [PartnersController::class, 'store']);
+$router->post('/admin/partners/toggle-footer', [PartnersController::class, 'toggleFooter']);
+$router->get('/admin/partners/{id}/edit',    [PartnersController::class, 'edit']);
+$router->post('/admin/partners/{id}',        [PartnersController::class, 'update']);
+$router->post('/admin/partners/{id}/delete', [PartnersController::class, 'delete']);
 
 // CMS — Services
 $router->get('/admin/services',              [ContentController::class, 'services']);
@@ -155,3 +170,19 @@ $router->get('/admin/rumours',            [LeadsController::class, 'rumours']);
 $router->get('/admin/rumours/export',     [LeadsController::class, 'exportRumours']);
 $router->get('/admin/rumours/{id}',       [LeadsController::class, 'rumourDetail']);
 $router->post('/admin/rumours/{id}',      [LeadsController::class, 'updateRumour']);
+
+// Signal Capture — Sources RSS
+$router->get('/admin/rss-sources',              [RssSourcesController::class, 'index']);
+$router->get('/admin/rss-sources/new',          [RssSourcesController::class, 'create']);
+$router->post('/admin/rss-sources',             [RssSourcesController::class, 'store']);
+$router->get('/admin/rss-sources/{id}/edit',    [RssSourcesController::class, 'edit']);
+$router->post('/admin/rss-sources/{id}',        [RssSourcesController::class, 'update']);
+$router->post('/admin/rss-sources/{id}/delete', [RssSourcesController::class, 'delete']);
+
+// Signal Capture — Règles mots-clés
+$router->get('/admin/keyword-rules',              [KeywordRulesController::class, 'index']);
+$router->get('/admin/keyword-rules/new',          [KeywordRulesController::class, 'create']);
+$router->post('/admin/keyword-rules',             [KeywordRulesController::class, 'store']);
+$router->get('/admin/keyword-rules/{id}/edit',    [KeywordRulesController::class, 'edit']);
+$router->post('/admin/keyword-rules/{id}',        [KeywordRulesController::class, 'update']);
+$router->post('/admin/keyword-rules/{id}/delete', [KeywordRulesController::class, 'delete']);

@@ -13,9 +13,10 @@ $crumbs = [['Tableau de bord', '/admin']];
 $segments = array_filter(explode('/', trim($uri, '/')));
 array_shift($segments); // remove 'admin'
 $breadcrumbLabels = [
-    'articles' => 'Articles', 'categories' => 'Catégories', 'media' => 'Médiathèque', 'publications' => 'Publications',
+    'articles' => 'Articles', 'categories' => 'Catégories', 'partners' => 'Partenaires', 'media' => 'Médiathèque', 'publications' => 'Publications',
     'pages' => 'Pages', 'courses' => 'Classroom', 'leads' => 'Leads / CRM',
-    'rumours' => 'Surveillance', 'subscribers' => 'Abonnés', 'users' => 'Utilisateurs',
+    'rumours' => 'Surveillance', 'rss-sources' => 'Sources RSS', 'keyword-rules' => 'Mots-clés',
+    'subscribers' => 'Abonnés', 'users' => 'Utilisateurs',
     'services' => 'Services', 'email-templates' => 'Templates email', 'audit' => 'Audit',
     'settings' => 'Paramètres', 'new' => 'Nouveau', 'edit' => 'Éditer', 'export' => 'Export',
     'password' => 'Mot de passe',
@@ -64,6 +65,9 @@ unset($_SESSION['_flash']);
         <a href="/admin/categories" class="sidebar__link <?= str_starts_with($uri, '/admin/categories') ? 'active' : '' ?>">
             <span class="sidebar__icon">🏷️</span> Catégories
         </a>
+        <a href="/admin/partners" class="sidebar__link <?= str_starts_with($uri, '/admin/partners') ? 'active' : '' ?>">
+            <span class="sidebar__icon">🤝</span> Partenaires
+        </a>
         <a href="/admin/media" class="sidebar__link <?= str_starts_with($uri, '/admin/media') ? 'active' : '' ?>">
             <span class="sidebar__icon">🎬</span> Médiathèque
         </a>
@@ -83,6 +87,12 @@ unset($_SESSION['_flash']);
         </a>
         <a href="/admin/rumours" class="sidebar__link <?= str_starts_with($uri, '/admin/rumours') ? 'active' : '' ?>">
             <span class="sidebar__icon">📡</span> Surveillance
+        </a>
+        <a href="/admin/rss-sources" class="sidebar__link <?= str_starts_with($uri, '/admin/rss-sources') ? 'active' : '' ?>">
+            <span class="sidebar__icon">📡</span> Sources RSS
+        </a>
+        <a href="/admin/keyword-rules" class="sidebar__link <?= str_starts_with($uri, '/admin/keyword-rules') ? 'active' : '' ?>">
+            <span class="sidebar__icon">🔑</span> Mots-clés
         </a>
         <a href="/admin/subscribers" class="sidebar__link <?= str_starts_with($uri, '/admin/subscribers') ? 'active' : '' ?>">
             <span class="sidebar__icon">👥</span> Abonnés
