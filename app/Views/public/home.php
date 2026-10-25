@@ -74,7 +74,7 @@ $block3 = array_slice($allArticles, 15, 6);
     <?php if ($block1): ?>
     <div class="td-block">
         <div class="block-title"><span><?= $e($lang === 'fr' ? 'Dernières publications' : 'Latest articles') ?></span></div>
-        <div class="module-row module-row--3">
+        <div class="module-row">
             <?php foreach ($block1 as $a): ?>
             <article class="td-module">
                 <a href="/news/<?= $e($a['slug']) ?>" class="td-thumb" style="background-image:url('<?= $e($a['cover_image'] ?? '') ?>')">
