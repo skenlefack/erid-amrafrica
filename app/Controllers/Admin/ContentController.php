@@ -92,6 +92,7 @@ final class ContentController extends Controller
             ]
         );
         Audit::log('create', 'article', (string) $id);
+        $this->syncSecondaryCategories((int) $id);
         $this->redirect('/admin/articles', 'Article créé avec succès.');
     }
 
@@ -103,6 +104,10 @@ final class ContentController extends Controller
             http_response_code(404);
             return;
         }
+        // Load secondary category IDs as comma-separated string
+        $secCats = Database::all('SELECT category_id FROM article_categories WHERE article_id = ?', [(int) $id]);
+        $article['secondary_category_ids'] = implode(',', array_column($secCats, 'category_id'));
+
         $categories = Database::all('SELECT * FROM categories ORDER BY sort_order');
         $this->view('admin/article_form', [
             'title'      => 'Éditer l\'article',
@@ -144,6 +149,7 @@ final class ContentController extends Controller
             ]
         );
         Audit::log('update', 'article', $id);
+        $this->syncSecondaryCategories((int) $id);
         $this->redirect('/admin/articles', 'Article mis à jour.');
     }
 
@@ -290,6 +296,20 @@ final class ContentController extends Controller
         }
         Audit::log('update', 'settings');
         $this->redirect('/admin/settings', 'Paramètres sauvegardés.');
+    }
+
+    private function syncSecondaryCategories(int $articleId): void
+    {
+        Database::exec('DELETE FROM article_categories WHERE article_id = ?', [$articleId]);
+        $ids = array_map('intval', $_POST['secondary_categories'] ?? []);
+        foreach ($ids as $catId) {
+            if ($catId > 0) {
+                Database::exec(
+                    'INSERT IGNORE INTO article_categories (article_id, category_id) VALUES (?, ?)',
+                    [$articleId, $catId]
+                );
+            }
+        }
     }
 
     private function uploadCover(): ?string

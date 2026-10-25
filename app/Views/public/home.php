@@ -88,12 +88,23 @@ $block3 = array_slice($allArticles, 15, 6);
     </div>
     <?php endif; ?>
 
-    <!-- BLOCK: Veille strategique (3 colonnes, image top + titre) -->
-    <?php if ($block2): ?>
+    <!-- BLOCK: Veille strategique — chargé depuis la catégorie via table pivot -->
+    <?php
+        $veilleArticles = \App\Core\Database::all(
+            "SELECT a.*, c.slug AS cat_slug, c.name_fr AS cat_fr, c.name_en AS cat_en, c.accent_color
+               FROM articles a
+               JOIN article_categories ac ON ac.article_id = a.id
+               JOIN categories vc ON vc.id = ac.category_id AND vc.slug = 'veille_strategique'
+               JOIN categories c ON c.id = a.category_id
+              WHERE a.status = 'published'
+              ORDER BY a.published_at DESC LIMIT 6"
+        );
+    ?>
+    <?php if ($veilleArticles): ?>
     <div class="td-block">
         <div class="block-title"><span><?= $e($lang === 'fr' ? 'Veille stratégique' : 'Strategic intelligence') ?></span></div>
         <div class="module-row module-row--3">
-            <?php foreach ($block2 as $a): ?>
+            <?php foreach ($veilleArticles as $a): ?>
             <article class="td-module">
                 <a href="/news/<?= $e($a['slug']) ?>" class="td-thumb" style="background-image:url('<?= $e($a['cover_image'] ?? '') ?>')">
                     <span class="cat-badge" style="background:<?= $e($a['accent_color']) ?>"><?= $e($pick($a, 'cat')) ?></span>

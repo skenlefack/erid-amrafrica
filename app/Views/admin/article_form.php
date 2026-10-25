@@ -17,10 +17,20 @@ $a = $article ?? null;
         <label>Title (EN) *<input type="text" name="title_en" required value="<?= $e($a['title_en'] ?? '') ?>"></label>
     </div>
     <div class="form-grid" style="margin-top:12px">
-        <label>Canal / Catégorie
+        <label>Canal / Catégorie principale
             <select name="category_id">
                 <?php foreach ($categories as $c): ?>
                 <option value="<?= (int)$c['id'] ?>" <?= ($a && (int)$a['category_id'] === (int)$c['id']) ? 'selected' : '' ?>><?= $e($c['name_fr']) ?> / <?= $e($c['name_en']) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label>Catégories secondaires <small class="muted">— Ctrl+clic pour en sélectionner plusieurs</small>
+            <select name="secondary_categories[]" multiple style="height:100px">
+                <?php
+                    $secondaryIds = ($a && !empty($a['secondary_category_ids'])) ? array_map('intval', explode(',', $a['secondary_category_ids'])) : [];
+                ?>
+                <?php foreach ($categories as $c): ?>
+                <option value="<?= (int)$c['id'] ?>" <?= in_array((int)$c['id'], $secondaryIds) ? 'selected' : '' ?>><?= $e($c['name_fr']) ?></option>
                 <?php endforeach; ?>
             </select>
         </label>
