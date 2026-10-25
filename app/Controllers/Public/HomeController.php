@@ -22,7 +22,7 @@ final class HomeController extends Controller
             "SELECT a.*, c.slug AS cat_slug, c.accent_color
                FROM articles a JOIN categories c ON c.id = a.category_id
               WHERE a.status = 'published'
-              ORDER BY a.is_featured DESC, a.published_at DESC LIMIT 4"
+              ORDER BY a.is_featured DESC, a.published_at DESC LIMIT 6"
         );
 
         $services = Database::all('SELECT * FROM services WHERE is_active = 1 ORDER BY sort_order');

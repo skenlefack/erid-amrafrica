@@ -16,9 +16,9 @@ $allArticles = \App\Core\Database::all(
 );
 $hero = array_slice($allArticles, 0, 3);
 $sidebarLatest = array_slice($allArticles, 3, 5);
-$block1 = array_slice($allArticles, 3, 4);
-$block2 = array_slice($allArticles, 7, 6);
-$block3 = array_slice($allArticles, 13, 6);
+$block1 = array_slice($allArticles, 3, 6);
+$block2 = array_slice($allArticles, 9, 6);
+$block3 = array_slice($allArticles, 15, 6);
 ?>
 
 <!-- ===== HERO: Slideshow 3/4 + Sidebar latest 1/4 ===== -->
@@ -74,7 +74,7 @@ $block3 = array_slice($allArticles, 13, 6);
     <?php if ($block1): ?>
     <div class="td-block">
         <div class="block-title"><span><?= $e($lang === 'fr' ? 'Dernières publications' : 'Latest articles') ?></span></div>
-        <div class="module-row">
+        <div class="module-row module-row--3">
             <?php foreach ($block1 as $a): ?>
             <article class="td-module">
                 <a href="/news/<?= $e($a['slug']) ?>" class="td-thumb" style="background-image:url('<?= $e($a['cover_image'] ?? '') ?>')">
