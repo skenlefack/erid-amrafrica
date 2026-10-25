@@ -28,33 +28,33 @@ echo "=== ERID-AMRAfrica Deployment ==="
 echo ""
 
 # 1. Upload root .htaccess (redirect to public/)
-echo "[1/7] Root .htaccess..."
+echo "[1/8] Root .htaccess..."
 upload_file "${PROJECT_DIR}/deploy.htaccess" ".htaccess"
 
 # 2. Upload .env
-echo "[2/7] .env configuration..."
+echo "[2/8] .env configuration..."
 upload_file "${PROJECT_DIR}/.env" ".env"
 
 # 3. Upload public/ files
-echo "[3/7] Public files..."
+echo "[3/8] Public files..."
 upload_file "${PROJECT_DIR}/public/index.php" "public/index.php"
 upload_file "${PROJECT_DIR}/public/.htaccess" "public/.htaccess"
 upload_file "${PROJECT_DIR}/public/assets/css/app.css" "public/assets/css/app.css"
 upload_file "${PROJECT_DIR}/public/assets/js/app.js" "public/assets/js/app.js"
 
 # 4. Upload config/
-echo "[4/7] Config..."
+echo "[4/8] Config..."
 upload_file "${PROJECT_DIR}/config/routes.php" "config/routes.php"
 
 # 5. Upload app/Core/
-echo "[5/7] Core framework..."
+echo "[5/8] Core framework..."
 for f in "${PROJECT_DIR}"/app/Core/*.php; do
     fname=$(basename "$f")
     upload_file "$f" "app/Core/${fname}"
 done
 
 # 6. Upload app/Controllers/
-echo "[6/7] Controllers..."
+echo "[6/8] Controllers..."
 for f in "${PROJECT_DIR}"/app/Controllers/Admin/*.php; do
     fname=$(basename "$f")
     upload_file "$f" "app/Controllers/Admin/${fname}"
@@ -65,7 +65,7 @@ for f in "${PROJECT_DIR}"/app/Controllers/Public/*.php; do
 done
 
 # 7. Upload app/Views/ and app/lang/
-echo "[7/7] Views & Languages..."
+echo "[7/8] Views & Languages..."
 for f in "${PROJECT_DIR}"/app/Views/admin/*.php; do
     fname=$(basename "$f")
     upload_file "$f" "app/Views/admin/${fname}"
@@ -81,6 +81,13 @@ done
 for f in "${PROJECT_DIR}"/app/lang/*.php; do
     fname=$(basename "$f")
     upload_file "$f" "app/lang/${fname}"
+done
+
+# 8. Upload cli/ scripts
+echo "[8/8] CLI scripts..."
+for f in "${PROJECT_DIR}"/cli/*.php; do
+    fname=$(basename "$f")
+    upload_file "$f" "cli/${fname}"
 done
 
 echo ""
