@@ -15,6 +15,5 @@ $e = fn($s) => View::e($s);
             <label>Mot de passe / Password <input type="password" name="password" required></label>
             <button class="btn btn-gold lg full" type="submit">Connexion / Sign in</button>
         </form>
-        <p class="muted small center">Démo : admin@erid-amrafrica.org · ChangeMe!2026</p>
     </div>
 </div>
