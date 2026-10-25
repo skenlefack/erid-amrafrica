@@ -307,12 +307,5 @@ $catCounts = \App\Core\Database::all(
         </div>
     </div>
 
-    <!-- Partenaires -->
-    <div class="widget">
-        <div class="widget-title"><span><?= $e($lang === 'fr' ? 'Partenaires' : 'Partners') ?></span></div>
-        <div class="widget-body trust-list">
-            <span>Africa CDC</span><span>WHO AFRO</span><span>AU-IBAR</span><span>FAO</span><span>Wellcome</span><span>Institut Pasteur</span><span>KEMRI</span><span>GARDP</span>
-        </div>
-    </div>
 </aside>
 </div>
